@@ -1,0 +1,31 @@
+<div class="text-center">
+    <!-- Button HTML (to Trigger Modal) -->
+    <a href="#" class="trigger-btn" style="display: none;" data-toggle="modal" data-target="#myModal">Click to Open Confirm Modal</a>
+  </div>
+
+  <!-- Modal HTML -->
+  <div id="myModal" class="modal fade show" style="display: block;">
+    <div class="modal-dialog modal-confirm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="icon-box">
+            <i class="material-icons">&#xE5CD;</i>
+          </div>
+          <h4 class="modal-title w-100">Hata!</h4>
+        </div>
+        <div class="modal-body">
+          <p class="text-center">En az 1 tane Projeniz olmak zorunda.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-danger btn-block" data-dismiss="modal">Kapat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      // Modalı açan işlevi çağırın
+      $('#myModal').modal('show');
+    });
+  </script>

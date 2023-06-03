@@ -1,0 +1,506 @@
+<style>
+  body {
+    margin-top: 20px;
+  }
+
+  .ui-w-80 {
+    width: 80px !important;
+    height: auto;
+  }
+
+  .btn-default {
+    border-color: rgba(24, 28, 33, 0.1);
+    background: rgba(0, 0, 0, 0);
+    color: #4E5155;
+  }
+
+  label.btn {
+    margin-bottom: 0;
+  }
+
+  .btn-outline-primary {
+    border-color: #26B4FF;
+    background: transparent;
+    color: #26B4FF;
+  }
+
+  .btn {
+    cursor: pointer;
+  }
+
+  .text-light {
+    color: #babbbc !important;
+  }
+
+  .btn-facebook {
+    border-color: rgba(0, 0, 0, 0);
+    background: #3B5998;
+    color: #fff;
+  }
+
+  .btn-instagram {
+    border-color: rgba(0, 0, 0, 0);
+    background: #000;
+    color: #fff;
+  }
+
+  .card {
+    background-clip: padding-box;
+    box-shadow: 0 1px 4px rgba(24, 28, 33, 0.012);
+    padding: 30px;
+    margin: 20px;
+  }
+
+  .row-bordered {
+    overflow: hidden;
+  }
+
+  .account-settings-fileinput {
+    position: absolute;
+    visibility: hidden;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+
+  .account-settings-links .list-group-item.active {
+    font-weight: bold !important;
+  }
+
+  html:not(.dark-style) .account-settings-links .list-group-item.active {
+    background: transparent !important;
+  }
+
+  .account-settings-multiselect~.select2-container {
+    width: 100% !important;
+  }
+
+  .light-style .account-settings-links .list-group-item {
+    padding: 0.85rem 1.5rem;
+    border-color: rgba(24, 28, 33, 0.03) !important;
+  }
+
+  .light-style .account-settings-links .list-group-item.active {
+    color: #4e5155 !important;
+  }
+
+  .material-style .account-settings-links .list-group-item {
+    padding: 0.85rem 1.5rem;
+    border-color: rgba(24, 28, 33, 0.03) !important;
+  }
+
+  .material-style .account-settings-links .list-group-item.active {
+    color: #4e5155 !important;
+  }
+
+  .dark-style .account-settings-links .list-group-item {
+    padding: 0.85rem 1.5rem;
+    border-color: rgba(255, 255, 255, 0.03) !important;
+  }
+
+  .dark-style .account-settings-links .list-group-item.active {
+    color: #fff !important;
+  }
+
+  .light-style .account-settings-links .list-group-item.active {
+    color: #4E5155 !important;
+  }
+
+  .light-style .account-settings-links .list-group-item {
+    padding: 0.85rem 1.5rem;
+    border-color: rgba(24, 28, 33, 0.03) !important;
+  }
+</style>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<div class="container pt-3 pb-3 ">
+  <div class="container light-style flex-grow-1 container-p-y">
+
+    <h4 class="font-weight-bold py-3 mb-4 mt-2">
+      Meslek Hesap Ayarları
+    </h4>
+
+    <div class="card overflow-hidden">
+      <div class="row no-gutters row-bordered row-border-light">
+        <div class="col-md-3 pt-0">
+          <div class="list-group list-group-flush account-settings-links">
+            <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">Hesap
+              Bilgileri</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-change-password">Şifreyi
+              Değiştir</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-projects">Projeler</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-ref">Referanslar</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">Hakkımızda</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-social-links">Kapak
+              Fotoğrafları</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-connections">İletişim
+              Bilgileri</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-delete">Hesap
+              Düzenle</a>
+            <a class="list-group-item list-group-item-action" data-toggle="list"
+              href="#account-notifications">Bildirimler ve Ayarlar</a>
+          </div>
+        </div>
+        <div class="col-md-9">
+          <div class="tab-content">
+            <form action="/meslekPhotoUpdate?id=<%-Product[0].Meslek_URL %>" method="post" enctype="multipart/form-data"
+              class="tab-pane fade active show" id="account-general">
+
+              <div class="card-body media align-items-center">
+
+                <img src="/uploads/images/" alt="" class="d-block ui-w-80 rounded border">
+                <div class="media-body ml-4">
+                  <label class="btn btn-outline-primary">
+                    Avatar Yükle
+                    <input name="imag" type="file" class="account-settings-fileinput" multiple>
+                  </label> &nbsp;
+
+
+                  <div class="text-light small mt-1">Bu fotoğraf profil fotoğrafınız olarak görüntülenecektir.</div>
+                </div>
+              </div>
+              <hr class="border-light m-0">
+
+              <div class="card-body">
+                <div class="form-group">
+                  <label class="form-label">Adınız</label>
+                  <input type="text" class="form-control mb-1" value="<%-Product[0].isim %> <%-Product[0].soyisim %>"
+                    disabled>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">E-mail</label>
+                  <input type="text" class="form-control mb-1" value="<%-Product[0].email %>" disabled>
+
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Meslek</label>
+                  <input type="text" class="form-control mb-1" value="<%-Product[0].meslekAdi %>" disabled>
+
+                </div>
+
+              </div>
+              <div class="text-right mt-3">
+                <button type="submit" class="btn btn-secondary">Değişikleri Kaydet</button>&nbsp;
+              </div>
+            </form>
+            <div class="tab-pane fade" id="account-change-password">
+              <div class="card-body pb-2">
+
+                <div class="form-group">
+                  <label class="form-label">Güncel Şifre</label>
+                  <input class="form-control" id="guncelsifre" name="guncelsifre" type="password" placeholder="••••••">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Yeni Şifre</label>
+                  <input class="form-control" name="yenisifre" type="password" placeholder="••••••">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Şifreyi Onayla</label>
+                  <input class="form-control" name="yenisifreonay" type="password" placeholder="••••••">
+                </div>
+
+              </div>
+              <div class="text-right mt-3">
+                <button type="button" class="btn btn-secondary">Değişikleri Kaydet</button>&nbsp;
+              </div>
+            </div>
+            <form action="/addProject?id=<%-Product[0].Meslek_URL %>" method="post" enctype="multipart/form-data"
+              class="tab-pane fade" id="account-projects">
+              <div class="card-body pb-2">
+
+                <div class="form-group">
+                  <label class="form-label" style="text-align: center;">Proje Ekle</label>
+                  <div class="form-group">
+                    <label class="form-label">Proje Kapak fotoğrafları</label>
+                    <img src="/uploads/images/yapxmarketimthumb.jpg" alt="" class="d-block ui-w-120 rounded border">
+                    <div class="media-body mt-4">
+                      <label class="btn btn-outline-primary">
+                        Fotoğrafı Yükle
+                        <input name="Project_Photos" type="file" class="account-settings-fileinput" multiple>
+                      </label> &nbsp;
+
+
+                      <div class="text-light small mt-1">Projenizin Fotoğrafı olarak görüntülecektir.</div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Proje Başlık</label>
+                    <input class="form-control" name="Project_Title" type="text" placeholder="Proje Adı">
+                  </div>
+
+
+                  <label class="form-label">Proje Açıklama</label>
+                  <textarea name="Project_Content" class="form-control" rows="5"></textarea>
+                </div>
+
+
+
+
+
+              </div>
+              <hr class="border-light m-0">
+
+              <div class="text-right mt-3">
+                <button type="submit" class="btn btn-secondary">Yükle</button>&nbsp;
+              </div>
+            </form>
+
+            <form action="/addReferanceMeslek?id=<%-Product[0].Meslek_URL%>" method="post"
+              enctype="application/x-www-form-urlencoded" class="tab-pane fade" id="account-ref">
+              <div class="card-body pb-2">
+
+                <div class="form-group">
+                  <label class="form-label" style="text-align: center;">Referanslar</label>
+                  <div class="form-group">
+                    <label class="form-label">Referans Başlık</label>
+                    <input class="form-control" name="Referance_Title" type="text" placeholder="Referans Adı">
+                  </div>
+                  <label class="form-label">Referans Açıklama</label>
+                  <textarea name="Referance_Content" class="form-control" rows="5"></textarea>
+                </div>
+
+
+
+
+              </div>
+              <hr class="border-light m-0">
+
+              <div class="text-right mt-3">
+                <button type="submit" class="btn btn-secondary">Yükle</button>&nbsp;
+              </div>
+            </form>
+            <form method="post" action="/addAbout?id=<%-Product[0].Meslek_URL %>&acc=Meslek" enctype="application/x-www-form-urlencoded" class="tab-pane fade" id="account-info">
+              <div class="card-body pb-2">
+
+                <div class="form-group">
+                  <label class="form-label">Hakkımda Yazısı</label>
+                  <textarea name="Meslek_About" class="form-control" rows="5"></textarea>
+                </div>
+
+
+
+
+
+              </div>
+              <hr class="border-light m-0">
+
+              <div class="text-right mt-3">
+                <button type="submit" class="btn btn-secondary">Değişikleri Kaydet</button>&nbsp;
+              </div>
+            </form>
+            <form method="post" action="/addThumbnails?id=<%-Product[0].Meslek_URL %>&acc=Meslek" enctype="multipart/form-data"
+              class="tab-pane fade" id="account-social-links">
+              <div class="card-body pb-2">
+
+                <div class="form-group">
+                  <label class="form-label">Kapak Fotoğrafları</label>
+                  <img src="/uploads/images/yapxmarketimthumb.jpg" alt="" class="d-block ui-w-120 rounded border">
+                  <div class="media-body mt-4">
+                    <label class="btn btn-outline-primary">
+                      Kapak Fotoğrafı Yükle
+                      <input name="imag" type="file" class="account-settings-fileinput" multiple>
+                    </label> &nbsp;
+                  </div>
+                </div>
+
+                <div class="text-right mt-3">
+                  <button type="submit" class="btn btn-secondary">Değişikleri Kaydet</button>&nbsp;
+
+            </form>
+
+
+          </div>
+        </div>
+        <form method="post" action="/addContanct?id=<%-Product[0].Meslek_URL %>&acc=Meslek" enctype="application/x-www-form-urlencoded" class="tab-pane fade" id="account-connections">
+          <div class="card-body pb-2">
+
+            <div class="form-group">
+              <label class="form-label">Adres</label>
+              <input class="form-control" id="adres" name="adres" type="text"
+                placeholder="<%-Product[0].Meslek_Adres %>">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Telefon</label>
+              <input class="form-control" name="telefon" type="tel" placeholder="<%-Product[0].gsmtelefon %>">
+            </div>
+
+
+
+          </div>
+          <div class="text-right mt-3">
+            <button type="submit" class="btn btn-secondary">Değişikleri Kaydet</button>&nbsp;
+          </div>
+        </form>
+        
+        <div class="tab-pane fade" id="account-delete">
+          <% Product[0].Meslek_Thumbnails.forEach(function(Product, index) { %>
+          <div  class="card-body pb-2">
+
+
+            <div class="form-group">
+              
+                <form method="post" action="/removePhotoMeslek?index=<%-index %>&photo=Thumbnail" class="row">
+
+                  <div class="col-md-8">
+                    <hr>
+                    <h5 style="font-weight: bold; margin-bottom: 20px;">Kapak Fotoğrafı</h5>
+                    <img class="d-block w-100" style="display:flex; justify-content:center; text-align:center;"
+                      src="/uploads/images/<%-Product %>" alt="">
+
+                  </div>
+                  <div class="cold-md-4 ">
+                    <button type="submit" class="btn btn-outline-danger mt-16 ml-4"
+                      style="width: 200px; text-align: center; justify-content: center;">
+                      Fotoğrafı Sil
+                    </button>
+                  </div>
+                </form>
+
+
+            </div>
+            <% }) %>
+              <div class="form-group">
+                <% Product[0].Meslek_Photos.forEach(function(Product, index) { %>
+                  <form method="post" action="/removePhotoMeslek?index=<%-index %>&photo=Profile" class="row">
+
+                    <div class="col-md-8">
+                      <hr>
+                      <h5 style="font-weight: bold; margin-bottom: 20px;">Profil Fotoğrafı</h5>
+                      <img class="d-block w-100" style="display:flex; justify-content:center; text-align:center;"
+                        src="/uploads/images/<%-Product %>" alt="">
+
+                    </div>
+                    <div class="cold-md-4 ">
+                      <button type="submit" class="btn btn-outline-danger mt-16 ml-4"
+                        style="width: 200px; text-align: center; justify-content: center;">
+                        Fotoğrafı Sil
+                      </button>
+                    </div>
+                  </form>
+
+
+
+              </div>
+              <% }) %>
+                <div class="form-group">
+                  <% Product[0].Meslek_Referances.forEach(function(Product, index) { %>
+                    <form method="post" action="/removePhotoMeslek?index=<%-index %>&photo=Referances" class="row">
+
+                      <div class="col-md-8">
+                        <hr>
+                        <h5 style="font-weight: bold; margin-bottom: 20px;">Referans</h5>
+                        <h6>Referans Başlık: <%-Product.Referance_Title %>
+                        </h6>
+                        <h6>Referans Açıklama: <%-Product.Referance_Content %>
+                        </h6>
+
+                      </div>
+                      <div class="cold-md-4 ">
+                        <button type="submit" class="btn btn-outline-danger mt-16  ml-4"
+                          style="width: 200px; text-align: center; justify-content: center;">
+                          Referansı Sil
+                        </button>
+                      </div>
+                    </form>
+
+
+                    <% }) %>
+                      <div class="form-group">
+                        <% Product[0].Meslek_Projects.forEach(function(Product, index) { %>
+                          <form method="post" action="/removePhotoMeslek?index=<%-index %>&photo=Projects" class="row">
+
+                            <div class="col-md-8">
+                              <hr>
+                              <h5 style="font-weight: bold; margin-bottom: 20px;">Proje</h5>
+                              <h6>Proje Başlık: <%-Product.Project_Title %>
+                              </h6>
+                              <h6>Proje Açıklama: <%-Product.Project_Content %>
+                              </h6>
+
+                            </div>
+                            <div class="cold-md-4 ">
+                              <button type="submit" class="btn btn-outline-danger mt-16  ml-4"
+                                style="width: 200px; text-align: center; justify-content: center;">
+                                Projeyi Sil
+                              </button>
+                            </div>
+                          </form>
+
+
+                      </div>
+                      <% }) %>
+
+
+
+
+                </div>
+
+
+          </div>
+          <hr class="border-light m-0">
+          <div class="card-body pb-2">
+
+
+
+          </div>
+        </div>
+        <div class="tab-pane fade" id="account-notifications">
+          <div class="card-body pb-2">
+
+            <h6 class="mb-4">Bildirimler</h6>
+
+            <div class="form-group">
+              <label class="switcher">
+                <input type="checkbox" class="switcher-input" checked="">
+                <span class="switcher-indicator">
+                  <span class="switcher-yes"></span>
+                  <span class="switcher-no"></span>
+                </span>
+                <span class="switcher-label">Favori ürünlerimde fiyat değişikliğinde bana e-mail ile bildir.</span>
+              </label>
+            </div>
+
+
+          </div>
+          <hr class="border-light m-0">
+          <div class="card-body pb-2">
+
+
+
+            <div class="text-right mt-3">
+              <button type="button" class="btn btn-secondary">Değişikleri Kaydet</button>&nbsp;
+              <button type="button" class="btn btn-danger">Hesabımı Sil</button>&nbsp;
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+</div>
+</form>
+
+
+
+
+
+
+</div>
+
+<script>
+  imag.onchange = evt => {
+    const [file] = imag.files
+    if (file) {
+      blah.src = URL.createObjectURL(file)
+    }
+  }
+
+</script>

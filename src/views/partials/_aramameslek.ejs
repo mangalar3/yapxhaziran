@@ -1,0 +1,25 @@
+<% if (Product.Meslek_URL) { %>
+    <li class="col-6 col-md-3 col-wd-2gdot4 product-item">
+        <div class="product-item__outer h-100">
+            <div class="product-item__inner px-xl-4 p-3">
+                <div class="product-item__body pb-xl-2">
+                    <div class="mb-2"><a href="/meslekPage?id=<%- Product.Meslek_URL %>" class="font-size-12 text-gray-5"><%- Product.Meslek_City %></a></div>
+                    <h5 class="mb-1 product-item__title"><a href="/meslekPage?id=<%- Product.Meslek_URL %>" class="text-blue font-weight-bold"><%- Product.isim + " " + Product.soyisim %></a></h5>
+                    <div class="mb-2">
+                        <a href="/meslekPage?id=<%- Product.Meslek_URL %>" class="d-block text-center"><img class="img-fluid" src="/uploads/images/<%- Product.Meslek_Photos[0] %>" alt="<%- Product.isim %>"></a>
+                    </div> 
+                </div>
+                <div class="product-item__footer">
+                    <div class="border-top pt-2 flex-center-between flex-wrap">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </li>
+    <% } %> 
+    <style>
+    .img-fluid{
+        height: 212;
+        width: 200;
+    }
+    </style>

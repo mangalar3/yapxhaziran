@@ -1,0 +1,59 @@
+<div class="pb-4 mb-4">
+    <!-- Review Rating -->
+    <div class="d-flex justify-content-between align-items-center text-secondary font-size-1 mb-2">
+        <div class="text-warning text-ls-n2 font-size-16" style="width: 80px;">
+            <small class="fas fa-star <% if(Product.Rating>0){ %><% } else{ %>text-muted<% } %>"></small>
+            <small class="fas fa-star <% if(Product.Rating>1){ %><% } else{ %>text-muted<% } %>"></small>
+            <small class="fas fa-star <% if(Product.Rating>2){ %><% } else{ %>text-muted<% } %>"></small>
+            <small class="fas fa-star <% if(Product.Rating>3){ %><% } else{ %>text-muted<% } %>"></small>
+            <small class="fas fa-star <% if(Product.Rating>4){ %><% } else{ %>text-muted<% } %>"></small>
+        </div>
+    </div>
+    <!-- End Review Rating -->
+    <!--first arr second 1 alw-->
+
+    <p class="text-gray-90"><%-Product.Comment  %> </p>
+
+    <div class="mb-2">
+        <strong><%=Product.CommenterName %></strong>
+        <span class="font-size-13 text-gray-23">- <%- Product.Time %></span>
+        <% if (Product.CommentChild) { %>
+            <% Product.CommentChild.forEach(Product => { %>
+                <div class="mt-4 ml-16" id="yanıtlayanlar">
+                    
+                    <strong><%=Product.CommenterName %> Tarafından Yanıtlandı</strong>
+                    <span class="font-size-13 text-gray-23">- <%- Product.Time %></span>
+                    <p class="text-gray-90"><%-Product.Comment  %> </p>
+                </div>
+                <% }) %>
+        <% } %>
+        
+        <div class="mb-2">
+        <button class="btn btn-outline-secondary mt-2" onclick="toggleYanitForm('<%=Product.CommentID %>')">
+            Yanıtla
+        </button>
+        <form action="/childComment?product_id=<%-Product.CommentedProduct %>&comment_id=<%-Product.CommentID %>" method="post" enctype="application/x-www-form-urlencoded" id="yanitform_<%=Product.CommentID %>" style="display: none;">
+            <div class="js-form-message form-group mb-3 row mt-2">
+                <div class="col-md-12 col-lg-12">
+                    <textarea id="yorum_<%=Product.CommentID %>" name="yorum" class="form-control" rows="3" id="descriptionTextarea"
+                    data-msg="Please enter your message."
+                    data-error-class="u-has-error"
+                    data-success-class="u-has-success"></textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary-dark btn-wide transition-3d-hover mb-4" style="float: right;">Cevapla</button>
+        </form>  
+        </div>
+    </div>
+
+    <!-- Reviewer -->
+    
+    <!-- End Reviewer -->
+</div>
+
+<script>
+    function toggleYanitForm(CommentID) {
+        var yanitForm = document.getElementById("yanitform_" + CommentID);
+        yanitForm.style.display = yanitForm.style.display === "none" ? "block" : "none";
+    }
+</script>

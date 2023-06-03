@@ -1,0 +1,32 @@
+<li class="col-md-6 col-lg-4 col-wd-3 product-item remove-divider">
+    <div class="product-item__outer h-100 w-100 w-100 prodcut-box-shadow">
+        <div class="product-item__inner bg-white p-3">
+            <div class="product-item__body pb-xl-2">
+                <div class="mb-2"><a href="/urunler/<%- Product.product_url %>  " class="font-size-12 text-gray-5"><%- Product.product_category %></a></div>
+                <h5 class="mb-1 product-item__title"><a href="/urunler/<%- Product.product_url %>  " class="text-blue font-weight-bold"><%- Product.product_name %></a></h5>
+                <div class="mb-2">
+                    <a href="/urunler/<%- Product.product_url %>  " class="d-block text-center"><img class="img-fluid" src="/uploads/images/<%-Product.product_category3.trim() %>/<%- Product.product_photo[0] %>" alt="<%- Product.product_name %>"></a>
+                </div>
+            </div>
+            <div class="product-item__footer">
+                <div class="border-top pt-2 flex-center-between flex-wrap">
+                    <% if (myacc) { %>
+                     
+                    
+                    <% if (myacc[0].wishlist.some(item => item.product_url === Product.product_url)) { %>
+                        <a href="/isteklistesiremove/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilerden Kaldır</a>
+                    <% }else{ %>
+                    <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
+                    <% } %>
+
+                    <% }else{ %>
+                        <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
+                        <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+</li>
+<script>
+
+</script>
