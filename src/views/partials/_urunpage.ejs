@@ -43,22 +43,27 @@
         <div class="border-bottom mb-3 pb-md-1 pb-3">
             <a href="/kategori/<%-Product.product_category2  %>" class="font-size-12 text-gray-5 mb-2 d-inline-block"><%-Product.product_category2  %></a>
             <span style="float: right;"> 
-              <% if (myacc[0].userid == "3") { %>
-                <% if (!(myacc[0].dukkanurunleri.some((urun) => urun.product_url === Product.product_url))) { %>
-                  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
-                    <i class="fas fa-plus"></i> Dükkanıma Ekle
-                  </button>
-                <% } else { %>
-                  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="">
-                    Dükkanımdan Kaldır
-                  </button>
+              <% if (myacc) { %>
+                <% if (myacc[0].userid == "3") { %>
+                  <% if (!(myacc[0].dukkanurunleri.some((urun) => urun.product_url === Product.product_url))) { %>
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal">
+                      <i class="fas fa-plus"></i> Dükkanıma Ekle
+                    </button>
+                  <% } else { %>
+                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#urunuKaldir">
+                      Dükkanımdan Kaldır
+                    </button>
+                    <% } %>
                   <% } %>
-                <% } %>
+              <% } %>
+              
                 </span> 
             <h2 class="font-size-25 text-lh-1dot2"><%-Product.product_name  %> 
             </h2>
             <div class="mb-2">
-                <a class="d-inline-flex align-items-center small font-size-15 text-lh-1" href="#">
+                <a class="d-inline-flex align-items-center small font-size-15 text-lh-1"id="Jpills-four-example1-tab" data-toggle="pill" href="#Jpills-four-example1"
+                role="tab" aria-controls="Jpills-four-example1" aria-selected="false">
+                  
                     <div class="text-warning mr-2">
                         <small class="fas fa-star <% if(Product.avarage>0){ %><% } else{ %>text-muted<% } %>"></small>
                         <small class="fas fa-star <% if(Product.avarage>1){ %><% } else{ %>text-muted<% } %>"></small>
@@ -73,8 +78,23 @@
         <form id="isteklistesiekle" action="/isteklistesiekle/<%- Product.product_url %>" method="post">
             
         <div class="flex-horizontal-center flex-wrap mb-4">
-          <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
+          <% if (myacc) { %>
+            <% if (myacc) { %>
+             
             
+            <% if (myacc[0].wishlist.some(item => item.product_url === Product.product_url)) { %>
+                <a href="/isteklistesiremove/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-times-circle text-red mr-1 font-size-15"></i> Favorilerden Kaldır</a>
+            <% }else{ %>
+            <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
+            <% } %>
+
+            <% }else{ %>
+                <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
+                <% } %>
+                <% }
+                else{ %>
+                
+                <% } %>
         </div>
         </form>
         
@@ -137,7 +157,29 @@
             </div>
           <% } %>
           
-          
+          <div class="modal fade" id="urunuKaldir" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <form action="/urunukaldir/<%-Product.product_url  %>" method="post">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><%-Product.product_name  %></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    
+                        <div class="modal-body">               
+                                <div class="form-group">
+                                <label>Ürünü Kaldırmak İstediğinize Emin Misiniz?</label>
+                                </div>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                                        <button type="submit" class="btn btn-danger">Ürünü Kaldır</button>
+                        </div>           
+    
+                </div>
+            </div>
+            </form>
+          </div>
 
         </div>
         
@@ -173,4 +215,21 @@
             }
         });
     });
+        </script>
+
+        <script>
+$(document).ready(function() {
+  $("#Jpills-four-example1-tab").click(function(event) {
+    event.preventDefault(); // Varsayılan davranışı engelle
+
+    var hedefKonum = 800; // Sayfanın kaydırılacağı hedef konum (örneğin, piksel değeri)
+    var animasyonSuresi = 500; // Kaydırma animasyonunun süresi (ms cinsinden)
+
+    $("html, body").animate({ scrollTop: hedefKonum }, animasyonSuresi, function() {
+      // Kaydırma animasyonu tamamlandıktan sonra href değerine git
+      window.location.href = $("#Jpills-four-example1-tab").attr("href");
+    });
+  });
+});
+
         </script>

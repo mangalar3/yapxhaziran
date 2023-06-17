@@ -574,9 +574,127 @@ $(document).ready(function() {
                     window.history.pushState({path: newurl}, '', newurl);    
                 }
                 
-                data.forEach(Product => {
+                $.ajax({
+                  url: '/getWishList',
+                  type: 'GET',
+                  success: function (response) {
+
+                    // Favori eklendi, bağlantıyı güncelle
+                    var wish = response.data;
                     
-                    $( "#test" ).append('<li class="col-6 col-md-3 col-wd-2gdot4 product-item"><div class="product-item__outer h-100"><div class="product-item__inner px-xl-4 p-3"><div class="product-item__body pb-xl-2"><div class="mb-2"><a href="/kategori/'+Product.product_category+'" class="font-size-12 text-gray-5">'+Product.product_category+'</a></div><h5 class="mb-1 product-item__title"><a href="/urunler/'+Product.product_url+'" class="text-blue font-weight-bold">'+ Product.product_name+'</a></h5><div class="mb-2"><a href="/urunler/'+Product.product_url+'" class="d-block text-center"><img class="img-fluid" src="/uploads/images/'+Product.product_category3+'/'+Product.product_photo[0]+'" alt="'+Product.product_name+'"></a></div><div class="flex-center-between mb-1"><div class="prodcut-price"><div class="text-gray-100"></div></div></div></div><div class="product-item__footer"><div class="border-top pt-2 flex-center-between flex-wrap"><a href="/isteklistesiekle/'+Product.product_url+'" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> İstek Listesi</a></div></div></div></div></li>');
+                    data.forEach(Product => {      
+                      if(response.status){
+                    if((wish.some(item => item.product_url === Product.product_url))){
+                    $("#test").append(`
+                      <li class="col-6 col-md-3 col-wd-2gdot4 product-item">
+                        <div class="product-item__outer h-100">
+                          <div class="product-item__inner px-xl-4 p-3">
+                            <div class="product-item__body pb-xl-2">
+                              <div class="mb-2">
+                                <a href="/kategori/${Product.product_category}" class="font-size-12 text-gray-5">${Product.product_category}</a>
+                              </div>
+                              <h5 class="mb-1 product-item__title">
+                                <a href="/urunler/${Product.product_url}" class="text-blue font-weight-bold">${Product.product_name}</a>
+                              </h5>
+                              <div class="mb-2">
+                                <a href="/urunler/${Product.product_url}" class="d-block text-center">
+                                  <img class="img-fluid" src="/uploads/images/${Product.product_category3}/${Product.product_photo[0]}" alt="${Product.product_name}">
+                                </a>
+                              </div>
+                              <div class="flex-center-between mb-1">
+                                <div class="prodcut-price">
+                                  <div class="text-gray-100"></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="product-item__footer">
+                              <div class="border-top pt-2 flex-center-between flex-wrap">
+
+                                    <a href="/isteklistesiremove/${Product.product_url}" class="text-gray-6 font-size-13 add-to-favorites">
+                                      <i class="fa fa-times-circle text-red mr-1 font-size-15"></i> Favorilerden Kaldır
+                                    </a>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    `);
+                  }
+                  else{
+                    $("#test").append(`
+                          <li class="col-6 col-md-3 col-wd-2gdot4 product-item">
+                            <div class="product-item__outer h-100">
+                              <div class="product-item__inner px-xl-4 p-3">
+                                <div class="product-item__body pb-xl-2">
+                                  <div class="mb-2">
+                                    <a href="/kategori/${Product.product_category}" class="font-size-12 text-gray-5">${Product.product_category}</a>
+                                  </div>
+                                  <h5 class="mb-1 product-item__title">
+                                    <a href="/urunler/${Product.product_url}" class="text-blue font-weight-bold">${Product.product_name}</a>
+                                  </h5>
+                                  <div class="mb-2">
+                                    <a href="/urunler/${Product.product_url}" class="d-block text-center">
+                                      <img class="img-fluid" src="/uploads/images/${Product.product_category3}/${Product.product_photo[0]}" alt="${Product.product_name}">
+                                    </a>
+                                  </div>
+                                  <div class="flex-center-between mb-1">
+                                    <div class="prodcut-price">
+                                      <div class="text-gray-100"></div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="product-item__footer">
+                                  <div class="border-top pt-2 flex-center-between flex-wrap">
+                                      <a href="/isteklistesiekle/${Product.product_url}" class="text-gray-6 font-size-13 add-to-favorites">
+                                        <i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle
+                                      </a>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+  `);
+                  } 
+                  
+                }
+                else{
+                  $("#test").append(`
+                          <li class="col-6 col-md-3 col-wd-2gdot4 product-item">
+                            <div class="product-item__outer h-100">
+                              <div class="product-item__inner px-xl-4 p-3">
+                                <div class="product-item__body pb-xl-2">
+                                  <div class="mb-2">
+                                    <a href="/kategori/${Product.product_category}" class="font-size-12 text-gray-5">${Product.product_category}</a>
+                                  </div>
+                                  <h5 class="mb-1 product-item__title">
+                                    <a href="/urunler/${Product.product_url}" class="text-blue font-weight-bold">${Product.product_name}</a>
+                                  </h5>
+                                  <div class="mb-2">
+                                    <a href="/urunler/${Product.product_url}" class="d-block text-center">
+                                      <img class="img-fluid" src="/uploads/images/${Product.product_category3}/${Product.product_photo[0]}" alt="${Product.product_name}">
+                                    </a>
+                                  </div>
+                                  <div class="flex-center-between mb-1">
+                                    <div class="prodcut-price">
+                                      <div class="text-gray-100"></div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+  `);
+                }
+              });
+
+                  },
+                  error: function () {
+                    link.text(originalText); // Hata durumunda orijinal metni geri yükle
+                  }
                 });
                 
             }
@@ -603,9 +721,127 @@ $(document).ready(function() {
                     window.history.pushState({path: newurl}, '', newurl);    
                 }
                 
-                data.forEach(Product => {
+                $.ajax({
+                  url: '/getWishList',
+                  type: 'GET',
+                  success: function (response) {
+
+                    // Favori eklendi, bağlantıyı güncelle
+                    var wish = response.data;
                     
-                    $( "#test" ).append('<li class="col-6 col-md-3 col-wd-2gdot4 product-item"><div class="product-item__outer h-100"><div class="product-item__inner px-xl-4 p-3"><div class="product-item__body pb-xl-2"><div class="mb-2"><a href="/kategori/'+Product.product_category+'" class="font-size-12 text-gray-5">'+Product.product_category+'</a></div><h5 class="mb-1 product-item__title"><a href="/urunler/'+Product.product_url+'" class="text-blue font-weight-bold">'+ Product.product_name+'</a></h5><div class="mb-2"><a href="/urunler/'+Product.product_url+'" class="d-block text-center"><img class="img-fluid" src="/uploads/images/'+Product.product_category3+'/'+Product.product_photo[0]+'" alt="'+Product.product_name+'"></a></div><div class="flex-center-between mb-1"><div class="prodcut-price"><div class="text-gray-100"></div></div></div></div><div class="product-item__footer"><div class="border-top pt-2 flex-center-between flex-wrap"><a href="/isteklistesi" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> İstek Listesi</a></div></div></div></div></li>');
+                    data.forEach(Product => {      
+                      if(response.status){
+                    if((wish.some(item => item.product_url === Product.product_url))){
+                    $("#test").append(`
+                      <li class="col-6 col-md-3 col-wd-2gdot4 product-item">
+                        <div class="product-item__outer h-100">
+                          <div class="product-item__inner px-xl-4 p-3">
+                            <div class="product-item__body pb-xl-2">
+                              <div class="mb-2">
+                                <a href="/kategori/${Product.product_category}" class="font-size-12 text-gray-5">${Product.product_category}</a>
+                              </div>
+                              <h5 class="mb-1 product-item__title">
+                                <a href="/urunler/${Product.product_url}" class="text-blue font-weight-bold">${Product.product_name}</a>
+                              </h5>
+                              <div class="mb-2">
+                                <a href="/urunler/${Product.product_url}" class="d-block text-center">
+                                  <img class="img-fluid" src="/uploads/images/${Product.product_category3}/${Product.product_photo[0]}" alt="${Product.product_name}">
+                                </a>
+                              </div>
+                              <div class="flex-center-between mb-1">
+                                <div class="prodcut-price">
+                                  <div class="text-gray-100"></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="product-item__footer">
+                              <div class="border-top pt-2 flex-center-between flex-wrap">
+
+                                    <a href="/isteklistesiremove/${Product.product_url}" class="text-gray-6 font-size-13 add-to-favorites">
+                                      <i class="fa fa-times-circle text-red mr-1 font-size-15"></i> Favorilerden Kaldır
+                                    </a>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    `);
+                  }
+                  else{
+                    $("#test").append(`
+                          <li class="col-6 col-md-3 col-wd-2gdot4 product-item">
+                            <div class="product-item__outer h-100">
+                              <div class="product-item__inner px-xl-4 p-3">
+                                <div class="product-item__body pb-xl-2">
+                                  <div class="mb-2">
+                                    <a href="/kategori/${Product.product_category}" class="font-size-12 text-gray-5">${Product.product_category}</a>
+                                  </div>
+                                  <h5 class="mb-1 product-item__title">
+                                    <a href="/urunler/${Product.product_url}" class="text-blue font-weight-bold">${Product.product_name}</a>
+                                  </h5>
+                                  <div class="mb-2">
+                                    <a href="/urunler/${Product.product_url}" class="d-block text-center">
+                                      <img class="img-fluid" src="/uploads/images/${Product.product_category3}/${Product.product_photo[0]}" alt="${Product.product_name}">
+                                    </a>
+                                  </div>
+                                  <div class="flex-center-between mb-1">
+                                    <div class="prodcut-price">
+                                      <div class="text-gray-100"></div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="product-item__footer">
+                                  <div class="border-top pt-2 flex-center-between flex-wrap">
+                                      <a href="/isteklistesiekle/${Product.product_url}" class="text-gray-6 font-size-13 add-to-favorites">
+                                        <i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle
+                                      </a>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+  `);
+                  } 
+                  
+                }
+                else{
+                  $("#test").append(`
+                          <li class="col-6 col-md-3 col-wd-2gdot4 product-item">
+                            <div class="product-item__outer h-100">
+                              <div class="product-item__inner px-xl-4 p-3">
+                                <div class="product-item__body pb-xl-2">
+                                  <div class="mb-2">
+                                    <a href="/kategori/${Product.product_category}" class="font-size-12 text-gray-5">${Product.product_category}</a>
+                                  </div>
+                                  <h5 class="mb-1 product-item__title">
+                                    <a href="/urunler/${Product.product_url}" class="text-blue font-weight-bold">${Product.product_name}</a>
+                                  </h5>
+                                  <div class="mb-2">
+                                    <a href="/urunler/${Product.product_url}" class="d-block text-center">
+                                      <img class="img-fluid" src="/uploads/images/${Product.product_category3}/${Product.product_photo[0]}" alt="${Product.product_name}">
+                                    </a>
+                                  </div>
+                                  <div class="flex-center-between mb-1">
+                                    <div class="prodcut-price">
+                                      <div class="text-gray-100"></div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+  `);
+                }
+              });
+
+                  },
+                  error: function () {
+                    link.text(originalText); // Hata durumunda orijinal metni geri yükle
+                  }
                 });
                 
             }
@@ -650,11 +886,128 @@ $(document).ready(function() {
                         console.log(newurl)
                         window.history.pushState({path: newurl}, '', newurl);    
                     }
-                    $( "#test" ).empty();
-                    data.forEach(Product => {
-                        
-                        $( "#test" ).append('<li class="col-6 col-md-3 col-wd-2gdot4 product-item"><div class="product-item__outer h-100"><div class="product-item__inner px-xl-4 p-3"><div class="product-item__body pb-xl-2"><div class="mb-2"><a href="/kategori/'+Product.product_category+'" class="font-size-12 text-gray-5">'+Product.product_category+'</a></div><h5 class="mb-1 product-item__title"><a href="/urunler/'+Product.product_url+'" class="text-blue font-weight-bold">'+ Product.product_name+'</a></h5><div class="mb-2"><a href="/urunler/'+Product.product_url+'" class="d-block text-center"><img class="img-fluid" src="/uploads/images/'+Product.product_category3+'/'+Product.product_photo[0]+'" alt="'+Product.product_name+'"></a></div><div class="flex-center-between mb-1"><div class="prodcut-price"><div class="text-gray-100"></div></div></div></div><div class="product-item__footer"><div class="border-top pt-2 flex-center-between flex-wrap"><a href="/isteklistesi" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> İstek Listesi</a></div></div></div></div></li>');
-                    });
+                    $.ajax({
+                  url: '/getWishList',
+                  type: 'GET',
+                  success: function (response) {
+
+                    // Favori eklendi, bağlantıyı güncelle
+                    var wish = response.data;
+                    $("#test").empty();
+                    data.forEach(Product => {      
+                      if(response.status){
+                    if((wish.some(item => item.product_url === Product.product_url))){
+                    $("#test").append(`
+                      <li class="col-6 col-md-3 col-wd-2gdot4 product-item">
+                        <div class="product-item__outer h-100">
+                          <div class="product-item__inner px-xl-4 p-3">
+                            <div class="product-item__body pb-xl-2">
+                              <div class="mb-2">
+                                <a href="/kategori/${Product.product_category}" class="font-size-12 text-gray-5">${Product.product_category}</a>
+                              </div>
+                              <h5 class="mb-1 product-item__title">
+                                <a href="/urunler/${Product.product_url}" class="text-blue font-weight-bold">${Product.product_name}</a>
+                              </h5>
+                              <div class="mb-2">
+                                <a href="/urunler/${Product.product_url}" class="d-block text-center">
+                                  <img class="img-fluid" src="/uploads/images/${Product.product_category3}/${Product.product_photo[0]}" alt="${Product.product_name}">
+                                </a>
+                              </div>
+                              <div class="flex-center-between mb-1">
+                                <div class="prodcut-price">
+                                  <div class="text-gray-100"></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="product-item__footer">
+                              <div class="border-top pt-2 flex-center-between flex-wrap">
+
+                                    <a href="/isteklistesiremove/${Product.product_url}" class="text-gray-6 font-size-13 add-to-favorites">
+                                      <i class="fa fa-times-circle text-red mr-1 font-size-15"></i> Favorilerden Kaldır
+                                    </a>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    `);
+                  }
+                  else{
+                    $("#test").append(`
+                          <li class="col-6 col-md-3 col-wd-2gdot4 product-item">
+                            <div class="product-item__outer h-100">
+                              <div class="product-item__inner px-xl-4 p-3">
+                                <div class="product-item__body pb-xl-2">
+                                  <div class="mb-2">
+                                    <a href="/kategori/${Product.product_category}" class="font-size-12 text-gray-5">${Product.product_category}</a>
+                                  </div>
+                                  <h5 class="mb-1 product-item__title">
+                                    <a href="/urunler/${Product.product_url}" class="text-blue font-weight-bold">${Product.product_name}</a>
+                                  </h5>
+                                  <div class="mb-2">
+                                    <a href="/urunler/${Product.product_url}" class="d-block text-center">
+                                      <img class="img-fluid" src="/uploads/images/${Product.product_category3}/${Product.product_photo[0]}" alt="${Product.product_name}">
+                                    </a>
+                                  </div>
+                                  <div class="flex-center-between mb-1">
+                                    <div class="prodcut-price">
+                                      <div class="text-gray-100"></div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="product-item__footer">
+                                  <div class="border-top pt-2 flex-center-between flex-wrap">
+                                      <a href="/isteklistesiekle/${Product.product_url}" class="text-gray-6 font-size-13 add-to-favorites">
+                                        <i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle
+                                      </a>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+  `);
+                  } 
+                  
+                }
+                else{
+                  $("#test").append(`
+                          <li class="col-6 col-md-3 col-wd-2gdot4 product-item">
+                            <div class="product-item__outer h-100">
+                              <div class="product-item__inner px-xl-4 p-3">
+                                <div class="product-item__body pb-xl-2">
+                                  <div class="mb-2">
+                                    <a href="/kategori/${Product.product_category}" class="font-size-12 text-gray-5">${Product.product_category}</a>
+                                  </div>
+                                  <h5 class="mb-1 product-item__title">
+                                    <a href="/urunler/${Product.product_url}" class="text-blue font-weight-bold">${Product.product_name}</a>
+                                  </h5>
+                                  <div class="mb-2">
+                                    <a href="/urunler/${Product.product_url}" class="d-block text-center">
+                                      <img class="img-fluid" src="/uploads/images/${Product.product_category3}/${Product.product_photo[0]}" alt="${Product.product_name}">
+                                    </a>
+                                  </div>
+                                  <div class="flex-center-between mb-1">
+                                    <div class="prodcut-price">
+                                      <div class="text-gray-100"></div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+  `);
+                }
+              });
+
+                  },
+                  error: function () {
+                    link.text(originalText); // Hata durumunda orijinal metni geri yükle
+                  }
+                });
                 }})
             }
             else{
@@ -681,11 +1034,128 @@ $(document).ready(function() {
                         let newurl = window.location.protocol + "//" + window.location.host + "/arama?"+  search_params.toString();
                         window.history.pushState({path: newurl}, '', newurl);    
                     }
-                    $( "#test" ).empty();
-                    data.forEach(Product => {
-                        
-                        $( "#test" ).append('<li class="col-6 col-md-3 col-wd-2gdot4 product-item"><div class="product-item__outer h-100"><div class="product-item__inner px-xl-4 p-3"><div class="product-item__body pb-xl-2"><div class="mb-2"><a href="/kategori/'+Product.product_category+'" class="font-size-12 text-gray-5">'+Product.product_category+'</a></div><h5 class="mb-1 product-item__title"><a href="/urunler/'+Product.product_url+'" class="text-blue font-weight-bold">'+ Product.product_name+'</a></h5><div class="mb-2"><a href="/urunler/'+Product.product_url+'" class="d-block text-center"><img class="img-fluid" src="/uploads/images/'+Product.product_category3+'/'+Product.product_photo[0]+'" alt="'+Product.product_name+'"></a></div><div class="flex-center-between mb-1"><div class="prodcut-price"><div class="text-gray-100"></div></div></div></div><div class="product-item__footer"><div class="border-top pt-2 flex-center-between flex-wrap"><a href="/isteklistesi" class="text-gray-6 font-size-13"><i class="ec ec-favorites mr-1 font-size-15"></i> İstek Listesi</a></div></div></div></div></li>');
-                    });
+                    $.ajax({
+                  url: '/getWishList',
+                  type: 'GET',
+                  success: function (response) {
+
+                    // Favori eklendi, bağlantıyı güncelle
+                    var wish = response.data;
+                    $("#test").empty();
+                    data.forEach(Product => {      
+                      if(response.status){
+                    if((wish.some(item => item.product_url === Product.product_url))){
+                    $("#test").append(`
+                      <li class="col-6 col-md-3 col-wd-2gdot4 product-item">
+                        <div class="product-item__outer h-100">
+                          <div class="product-item__inner px-xl-4 p-3">
+                            <div class="product-item__body pb-xl-2">
+                              <div class="mb-2">
+                                <a href="/kategori/${Product.product_category}" class="font-size-12 text-gray-5">${Product.product_category}</a>
+                              </div>
+                              <h5 class="mb-1 product-item__title">
+                                <a href="/urunler/${Product.product_url}" class="text-blue font-weight-bold">${Product.product_name}</a>
+                              </h5>
+                              <div class="mb-2">
+                                <a href="/urunler/${Product.product_url}" class="d-block text-center">
+                                  <img class="img-fluid" src="/uploads/images/${Product.product_category3}/${Product.product_photo[0]}" alt="${Product.product_name}">
+                                </a>
+                              </div>
+                              <div class="flex-center-between mb-1">
+                                <div class="prodcut-price">
+                                  <div class="text-gray-100"></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="product-item__footer">
+                              <div class="border-top pt-2 flex-center-between flex-wrap">
+
+                                    <a href="/isteklistesiremove/${Product.product_url}" class="text-gray-6 font-size-13 add-to-favorites">
+                                      <i class="fa fa-times-circle text-red mr-1 font-size-15"></i> Favorilerden Kaldır
+                                    </a>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                    `);
+                  }
+                  else{
+                    $("#test").append(`
+                          <li class="col-6 col-md-3 col-wd-2gdot4 product-item">
+                            <div class="product-item__outer h-100">
+                              <div class="product-item__inner px-xl-4 p-3">
+                                <div class="product-item__body pb-xl-2">
+                                  <div class="mb-2">
+                                    <a href="/kategori/${Product.product_category}" class="font-size-12 text-gray-5">${Product.product_category}</a>
+                                  </div>
+                                  <h5 class="mb-1 product-item__title">
+                                    <a href="/urunler/${Product.product_url}" class="text-blue font-weight-bold">${Product.product_name}</a>
+                                  </h5>
+                                  <div class="mb-2">
+                                    <a href="/urunler/${Product.product_url}" class="d-block text-center">
+                                      <img class="img-fluid" src="/uploads/images/${Product.product_category3}/${Product.product_photo[0]}" alt="${Product.product_name}">
+                                    </a>
+                                  </div>
+                                  <div class="flex-center-between mb-1">
+                                    <div class="prodcut-price">
+                                      <div class="text-gray-100"></div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="product-item__footer">
+                                  <div class="border-top pt-2 flex-center-between flex-wrap">
+                                      <a href="/isteklistesiekle/${Product.product_url}" class="text-gray-6 font-size-13 add-to-favorites">
+                                        <i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle
+                                      </a>
+
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+  `);
+                  } 
+                  
+                }
+                else{
+                  $("#test").append(`
+                          <li class="col-6 col-md-3 col-wd-2gdot4 product-item">
+                            <div class="product-item__outer h-100">
+                              <div class="product-item__inner px-xl-4 p-3">
+                                <div class="product-item__body pb-xl-2">
+                                  <div class="mb-2">
+                                    <a href="/kategori/${Product.product_category}" class="font-size-12 text-gray-5">${Product.product_category}</a>
+                                  </div>
+                                  <h5 class="mb-1 product-item__title">
+                                    <a href="/urunler/${Product.product_url}" class="text-blue font-weight-bold">${Product.product_name}</a>
+                                  </h5>
+                                  <div class="mb-2">
+                                    <a href="/urunler/${Product.product_url}" class="d-block text-center">
+                                      <img class="img-fluid" src="/uploads/images/${Product.product_category3}/${Product.product_photo[0]}" alt="${Product.product_name}">
+                                    </a>
+                                  </div>
+                                  <div class="flex-center-between mb-1">
+                                    <div class="prodcut-price">
+                                      <div class="text-gray-100"></div>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                </div>
+                              </div>
+                            </div>
+                          </li>
+  `);
+                }
+              });
+
+                  },
+                  error: function () {
+                    link.text(originalText); // Hata durumunda orijinal metni geri yükle
+                  }
+                });
                     
                 }
                 });
@@ -693,38 +1163,42 @@ $(document).ready(function() {
 });
 </script>
 <script>
-    document.getElementById('filtreButton').addEventListener('click', function() {
-        document.getElementById('filtreMenu').style.display = 'block';
-    });
+ 
+ $(document).ready(function () {
+        // Favori ekleme işlemi
+        $(document).on('click', '.add-to-favorites', function (e) {
+          e.preventDefault();
+          var link = $(this);
+          var originalText = link.text();
+          var href = link.attr('href');
 
-    document.getElementById('filtreClose').addEventListener('click', function() {
-        document.getElementById('filtreMenu').style.display = 'none';
-    });
-    document.getElementById('filtreClosez').addEventListener('click', function() {
-        document.getElementById('filtreMenu').style.display = 'none';
-    });
-</script>
-<script>
-     // AJAX ile favorilere ekleme işlemi
-     $(document).on('click', '.add-to-favorites', function (e) {
-        e.preventDefault();
-        var link = $(this);
-        var originalText = link.text();
-        
-        // Add loading animation
-        link.html('<i class="fa fa-spinner fa-spin"></i> Yükleniyor...');
-        
-        $.ajax({
-            url: link.attr('href'),
+          // Add loading animation
+          link.html('<i class="fa fa-spinner fa-spin"></i> Yükleniyor...');
+
+          $.ajax({
+            url: href,
             type: 'GET',
             success: function (response) {
-                if(response.status){
-                link.html('<i class="fa fa-check-circle text-success"></i> Favorilere Eklendi').addClass('favorited');
-                }
+              if (response.status) {
+                // Favori eklendi, bağlantıyı güncelle
+                link.html('<i class="fa fa-times-circle text-red"></i> Favorilerden Kaldır').addClass('favorited');
+                link.attr('href', '/isteklistesiremove/' + extractProductUrl(href));
+              } else {
+                // Favori kaldırıldı, bağlantıyı güncelle
+                link.html('<i class="fa fa-heart"></i> Favorilere Ekle').removeClass('favorited');
+                link.attr('href', '/isteklistesiekle/' + extractProductUrl(href));
+              }
             },
             error: function () {
-                link.text(originalText); // Restore original text if there is an error
+              link.text(originalText); // Hata durumunda orijinal metni geri yükle
             }
+          });
         });
-    });
+
+        // Yardımcı fonksiyon: Ürün URL'sini çıkarma
+        function extractProductUrl(url) {
+          var parts = url.split('/');
+          return parts[parts.length - 1];
+        }
+      });
 </script>

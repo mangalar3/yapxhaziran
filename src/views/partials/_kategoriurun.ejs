@@ -43,31 +43,27 @@
             </div>
             <div class="product-item__footer">
                 <div class="border-top pt-2 flex-center-between flex-wrap">
-                    <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
+                    <% if (myacc) { %>
+                        <% if (myacc) { %>
+                         
+                        
+                        <% if (myacc[0].wishlist.some(item => item.product_url === Product.product_url)) { %>
+                            <a href="/isteklistesiremove/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-times-circle text-red mr-1 font-size-15"></i> Favorilerden Kaldır</a>
+                        <% }else{ %>
+                        <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
+                        <% } %>
+    
+                        <% }else{ %>
+                            <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
+                            <% } %>
+                            <% }
+                            else{ %>
+                            
+                            <% } %>
                 </div>
             </div>
         </div>
     </div>
 </li>
 <script>
-        // AJAX ile favorilere ekleme işlemi
-        $('.add-to-favorites').click(function (e) {
-        e.preventDefault();
-        var link = $(this);
-        var originalText = link.text();
-        
-        // Add loading animation
-        link.html('<i class="fa fa-spinner fa-spin"></i> Yükleniyor...');
-        
-        $.ajax({
-            url: link.attr('href'),
-            type: 'GET',
-            success: function (response) {
-                link.html('<i class="fa fa-check-circle text-success"></i> Favorilere Eklendi').addClass('favorited');
-            },
-            error: function () {
-                link.text(originalText); // Restore original text if there is an error
-            }
-        });
-    });
 </script>

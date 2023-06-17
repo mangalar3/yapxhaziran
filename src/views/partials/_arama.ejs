@@ -3,7 +3,7 @@
     <div class="product-item__outer h-100">
         <div class="product-item__inner px-xl-4 p-3">
             <div class="product-item__body pb-xl-2">
-                <div class="mb-2"><a href="/urunler/<%- Product.product_url %>" class="font-size-12 text-gray-5"><%- Product.product_category %></a></div>
+                <div class="mb-2"><a href="/kategori/<%- Product.product_category %>" class="font-size-12 text-gray-5"><%- Product.product_category %></a></div>
                 <h5 class="mb-1 product-item__title"><a href="/urunler/<%- Product.product_url %>" class="text-blue font-weight-bold"><%- Product.product_name %></a></h5>
                 <div class="mb-2">
                     <a href="/urunler/<%- Product.product_url %>" class="d-block text-center"><img class="img-fluid" src="/uploads/images/<%-Product.product_category3.trim() %>/<%- Product.product_photo[0] %>" alt="<%- Product.product_name %>"></a>
@@ -11,18 +11,23 @@
             </div>
             <div class="product-item__footer">
                 <div class="border-top pt-2 flex-center-between flex-wrap">
-                    <% if (myacc.length > 0) { %>
-                     
-                    
-                    <% if (myacc[0].wishlist.some(item => item.product_url === Product.product_url)) { %>
-                        <a href="/isteklistesiremove/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilerden Kaldır</a>
-                    <% }else{ %>
-                    <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
-                    <% } %>
-
-                    <% }else{ %>
+                    <% if (myacc) { %>
+                        <% if (myacc) { %>
+                         
+                        
+                        <% if (myacc[0].wishlist.some(item => item.product_url === Product.product_url)) { %>
+                            <a href="/isteklistesiremove/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-times-circle text-red mr-1 font-size-15"></i> Favorilerden Kaldır</a>
+                        <% }else{ %>
                         <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
                         <% } %>
+    
+                        <% }else{ %>
+                            <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
+                            <% } %>
+                            <% }
+                            else{ %>
+                            
+                            <% } %>
                 </div>
             </div>
         </div>
@@ -41,17 +46,22 @@
                 </div>
                 <div class="product-item__footer">
                     <div class="border-top pt-2 flex-center-between flex-wrap">
-                        <% if (myacc.length > 0) { %>
+                        <% if (myacc) { %>
+                        <% if (myacc) { %>
                          
                         
-                        <% if (myacc[0].wishlist_Shop.some(item => item.dukkanurl === Product.dukkanurl)) { %>
-                            <a href="/isteklistesiekleDukkanRemove/<%- Product.dukkanurl %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilerden Kaldır</a>
+                        <% if (myacc[0].wishlist.some(item => item.dukkanurl === Product.dukkanurl)) { %>
+                            <a href="/isteklistesiremove/<%- Product.dukkanurl %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-times-circle text-red mr-1 font-size-15"></i> Favorilerden Kaldır</a>
                         <% }else{ %>
-                        <a href="/isteklistesiekleDukkan/<%- Product.dukkanurl %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
+                        <a href="/isteklistesiekle/<%- Product.dukkanurl %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
                         <% } %>
     
                         <% }else{ %>
-                            <a href="/isteklistesiekleDukkan/<%- Product.dukkanurl %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
+                            <a href="/isteklistesiekle/<%- Product.dukkanurl %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
+                            <% } %>
+                            <% }
+                            else{ %>
+                            
                             <% } %>
                     </div>
                 </div>

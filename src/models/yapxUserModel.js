@@ -24,6 +24,9 @@ const UserSchema = new Schema({
     wishlist_Shop: {
         type: Array,
     },
+    wishlist_Meslek: {
+        type: Array,
+    },
     sabittelefon:{
         type: String,
     },
@@ -109,7 +112,8 @@ const UserSchema = new Schema({
         type:Array
     },
     dukkanoysayisi:{
-        type:String
+        type:Number,
+        default: 0
     },
     dukkan_star:{
         type:Array
@@ -154,7 +158,7 @@ const UserSchema = new Schema({
         type:String
     },
     dukkan_av:{
-        type:String
+        type:Number
     },
     User_Status:{
         type:String
@@ -165,8 +169,11 @@ const UserSchema = new Schema({
     Unreaded_MessageCount: {
         type:Number,
         default: 0,
-    }
-    
+    },
+    Email_Permission:{
+        type:Boolean,
+        default:false
+    },
    
 }, { collection: 'kullanicilar',locale: 'tr', timestamps: true });
 

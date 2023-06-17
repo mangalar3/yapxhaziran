@@ -57,7 +57,6 @@
 }
 </style>
         
-        
         <!-- ========== END HEADER ========== -->        <!-- ========== MAIN CONTENT ========== -->
         <main id="content" role="main" class="cart-page">
             <!-- breadcrumb -->
@@ -81,19 +80,12 @@
                       
                         <li id="favori-urundiv" style="background-color: #fed40076;"><i class="fa fa-shopping-cart mr-2"></i> Favori Ürünler</li>
                         <li id="favori-dukkandiv"><i class="fa fa-store mr-2"></i> Favori Dükkanlar</li>
+                        <li id="favori-meslekdiv"><i class="fa fa-user mr-2"></i> Favori Meslekler</li>
                     </ul>
                 </div>
                 <div class="content" style="margin-top: 30px;">
-                  <div style="float: right; border-radius: 0px;">
-                    <select class="js-select selectpicker dropdown-select  right-dropdown-0 px-2 px-xl-0"
-                    data-style="btn-sm bg-white font-weight-normal py-2 border text-gray-20 bg-lg-down-transparent border-lg-down-0">
-                    <option value="one" selected>Kategori</option>
-                    <option value="two">A-Z'ye göre listele</option>
-                    <option value="two">A-Z'ye göre listele</option>
-                    <option value="two">A-Z'ye göre listele</option>
-                    <option value="two">A-Z'ye göre listele</option>
-                    
-                </select>
+                  <div class=" text-gray-20" style="float: right; ">
+                    <span style="text-align: center; justify-content: center;  font-size: 12px; color: gray; margin-right: 5px;">Favori ürün sayısı: <span style="font-weight: bold;"><%- wishListElementCount %></span> </span>
                   </div>
 
                   
@@ -193,10 +185,10 @@
       
       </div>
       <div style=" margin-top: 20px; ">
-        <div style="text-align: center; justify-content: center;">
-          
-        <button class="btn btn-secondary mr-2">1</button><button class="btn btn-outline-secondary">2</button>
-        </div>
+        <div class="row" id="paginationContainer" style="background: none;  text-align: center; justify-content: center; padding-top: 10px; padding-bottom: 10px;">
+          <button class="btn btn-secondary mr-2" id="geriDugmesi">Geri</button>
+          <span class="btn btn-secondary mr-2" id="sayfaNumarasi" style="color: white; font-weight: bold; background-color: #395FA9;"></span>
+          <button class="btn btn-secondary mr-2" id="ileriDugmesi">İleri</button>
       </div>                        
 
                                      
@@ -242,6 +234,7 @@
                                         </div>
                               
                                       </div>
+                                      
                               
                                     </div>
                                     
@@ -294,17 +287,113 @@
     
     </div>
     <div style=" margin-top: 20px; ">
-      <div style="text-align: center; justify-content: center; display: none;">
-        
-      <button class="btn btn-secondary mr-2">1</button><button class="btn btn-outline-secondary">2</button>
-      </div>
+      
     </div>       
 
 
 
 
                     </ul>
+                  </ul>
+                  <ul id="favori-listesi-3" style="display: none;">
 
+                    <div class="row" style="margin-top: 10px;">
+                      <div>
+                        
+                      <h6 style="font-weight: bold;">Favori Meslek Listem</h6>
+                      </div>
+                      
+                        
+                    
+                      </div>
+                        <ul class="row list-unstyled products-group no-gutters">
+                            <div class="container">
+                                  <div class="row" style="background: rgb(248, 245, 245); margin-top: 20px; border: 1px solid whitesmoke;">
+                                    <div class="col-md-8">
+                                      <div style="text-align: center; padding: 5px; ">
+                                        <div style="color: #666666; font-size: 12px; font-weight: bold;  padding: 5px;">Meslek Başlığı</div>
+                                        
+                                      </div>
+                                    </div>
+                                    
+                                    
+                                    
+                                    
+                                    <div class="col-md-2">
+                                      <div style="text-align: center; padding: 5px;">
+                                        <div style="color: #666666; font-size: 12px; font-weight: bold; padding: 5px;"></div>
+                                        
+                                      </div>
+                            
+                                    </div>
+                                    <div class="col-md-2">
+                                      <div style="text-align: center; padding: 5px;">
+                                        <div style="color: #666666; font-size: 12px; font-weight: bold; padding: 5px;"></div>
+                                        
+                                      </div>
+                            
+                                    </div>
+                                    
+                            
+                                  </div>
+                                  
+<div id="mesleklertable" style="">
+  <% myacc[0].wishlist_Meslek.forEach(Product => { %>
+    <div class="row" style="background: rgb(248, 245, 245); margin-top: 0px; border-top: 1px solid rgb(207, 207, 207); border-bottom: 1px solid rgb(207, 207, 207) ;">
+      <div class="col-md-2">
+        <div style=" text-align: center;">
+          <div style="padding: 10px;"><img src='/uploads/images/<%- Product.Meslek_Photos[0] %>' alt="" width="80"></div>
+          
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div style="  text-align:start; padding: 10px;">
+          <div style="color: #038; font-size: 14px; font-weight: bold; padding: 10px;"><a href="/meslekPage?id=<%- Product.Meslek_URL %>" style="color: #038;"><%- Product.isim + " " + Product.soyisim %></a> </div>
+          
+        </div>
+      </div>
+      <div class="col-md-2">
+        <div style="  text-align: center; padding: 10px;">
+          
+          
+        </div>
+      </div>
+     
+      <div class="col-md-2">
+        <div style="  text-align: center; padding: 10px;">
+          <div style="color: #F0F1F6; font-size: 14px; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; padding: 0px;">
+            <div class="dropdown">
+              <button class="btn btn-outline-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="border: none;">
+                <i class="fa fa-ellipsis-v"></i>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="/isteklistesiekleMeslekRemove/<%- Product.Meslek_URL %>" style="color: red;">Favorilerimden Çıkar</a>
+              </div>
+            </div>
+          
+          </div>
+
+          
+        </div>
+
+      </div>
+
+    </div>  
+   <% }) %>
+  
+   
+  
+    
+  
+  </div>
+  <div style=" margin-top: 20px; ">
+    
+  </div>       
+
+
+
+
+                  </ul>
 
                 </div>
             </div>
@@ -335,22 +424,88 @@
 </html>
 <script>
 const favoriDukkanDiv = document.getElementById("favori-dukkandiv");
+const favoriMeslekDiv = document.getElementById("favori-meslekdiv");
 const favoriUrunDiv = document.getElementById("favori-urundiv");
 const favoriListesiDiv = document.getElementById("favori-listesi");
 const favoriListesi2Div = document.getElementById("favori-listesi-2");
+const favoriListesi3Div = document.getElementById("favori-listesi-3");
 
 favoriDukkanDiv.addEventListener("click", () => {
   favoriListesiDiv.style.display = "none";
+  favoriListesi3Div.style.display = "none";
   favoriListesi2Div.style.display = "block";
   favoriDukkanDiv.style.backgroundColor = "#fed40076";
+  favoriUrunDiv.style.backgroundColor = "#fff";
+  favoriMeslekDiv.style.backgroundColor = "#fff";
+});
+favoriMeslekDiv.addEventListener("click", () => {
+  favoriListesiDiv.style.display = "none";
+  favoriListesi2Div.style.display = "none";
+  favoriListesi3Div.style.display = "block";
+  favoriMeslekDiv.style.backgroundColor = "#fed40076";
+  favoriDukkanDiv.style.backgroundColor = "#fff";
   favoriUrunDiv.style.backgroundColor = "#fff";
 });
 favoriUrunDiv.addEventListener("click", () => {
   favoriListesi2Div.style.display = "none";
+  favoriListesi3Div.style.display = "none";
   favoriListesiDiv.style.display = "block";
   favoriUrunDiv.style.backgroundColor = "#fed40076";
+  favoriMeslekDiv.style.backgroundColor = "#fff";
   favoriDukkanDiv.style.backgroundColor = "#fff";
 });
 
 
 </script>
+
+<script>
+  $(document).ready(function() {
+    // Sayfa numarasını al
+    var sayfaNumarasi = getUrlParameter('pg') || 1;
+  
+    // Sayfa numarasını güncelleyen bir fonksiyon
+    function sayfaDegistir(yeniSayfaNumarasi) {
+      // Geçerli URL'yi al
+      var url = window.location.href;
+  
+      // URL'deki mevcut parametreleri ayrıştır
+      var urlParams = new URLSearchParams(window.location.search);
+  
+      // pg parametresini güncelle veya ekle
+      urlParams.set('pg', yeniSayfaNumarasi);
+  
+      // Yeni parametreleri URL'ye ekle
+      var yeniURL = window.location.origin + window.location.pathname + '?' + urlParams.toString();
+  
+      // Sayfayı yeniden yönlendir
+      window.location.href = yeniURL;
+    }
+  
+    // İleri düğmesine tıklama olayı
+    $('#ileriDugmesi').on('click', function() {
+      sayfaNumarasi++;
+      sayfaDegistir(sayfaNumarasi);
+    });
+  
+    // Geri düğmesine tıklama olayı
+    $('#geriDugmesi').on('click', function() {
+      if (sayfaNumarasi > 1) {
+        sayfaNumarasi--;
+        sayfaDegistir(sayfaNumarasi);
+      }
+    });
+    
+    // Sayfa numarasını göster
+    $('#sayfaNumarasi').text('Sayfa ' + sayfaNumarasi);
+    
+    // URL'den parametre değerini almak için yardımcı bir fonksiyon
+    function getUrlParameter(name) {
+      name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
+      var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+      var results = regex.exec(window.location.search);
+      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+  });
+  
+  
+  </script>

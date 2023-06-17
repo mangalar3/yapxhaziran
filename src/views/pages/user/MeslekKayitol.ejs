@@ -251,12 +251,18 @@ select {
             </div>
             <div class="input-box">
               <span class="details">Sabit Telefon</span>
-              <input name="sabittelefon" type="text" placeholder="02164426598" required>
+              <input name="sabittelefon" type="text" placeholder="02164426598">
             </div>
             
             <div class="input-box">
               <span class="details">Email</span>
               <input name="email" type="email" placeholder="ornek@hotmail.com" required>
+            </div>
+            
+            
+            <div class="input-box">
+              <span class="details">TC Kimlik No</span>
+              <input name="TcKimlik" type="text" placeholder="5385553856" required>
             </div>
             <div class="input-box">
               <span class="details">Şifre</span>
@@ -267,10 +273,6 @@ select {
               <input name="rePassword" type="password" placeholder="Sifre tekrarı" required>
             </div>
             <div class="input-box">
-              <span class="details">TC Kimlik No</span>
-              <input name="TcKimlik" type="text" placeholder="5385553856" required>
-            </div>
-            <div class="input-box">
               <span class="details">Meslek Tanımı</span>
               <div>
                 <label for="category">Meslek Bölüm:</label>
@@ -279,7 +281,7 @@ select {
                   <option value="Mimarlik">Mimarlık</option>
                   <option value="Mühendislik">Mühendislik</option>
                   <option value="Ressamlar">Ressamlık</option>
-                  <option value="Ustalar">Ustalık</option>
+                  <option value="Ustalık">Ustalık</option>
                 </select>
               </div>
               
@@ -293,14 +295,19 @@ select {
             </div>
             
             <div class="input-box">
-              <span class="details">İl</span>
-              <select name="City" class="selectbox" name="Iller" id="Iller">
+              <span class="details">İl ve İlçe</span>
+              <div>
+              <label>İl:</label>
+              <select name="City" class="" name="Iller" id="Iller">
                 <option option value="0" selected> Şehir Seçiniz! </option>
               </select>
-              <span class="details">İlçe</span>
-              <select name="Country" class="selectbox" name="Ilceler" id="Ilceler" disabled="disabled">
+              </div>
+              <div>
+              <label>İlçe:</label>
+              <select name="Country" class="" name="Ilceler" id="Ilceler" disabled="disabled">
                 <option option value="0" selected> Lütfen Önce bir İl seçiniz </option>
               </select>
+              </div>
             </div>
             <div class="input-box">
               <span class="details">Adres</span>
@@ -396,6 +403,24 @@ select {
     
     
       </script>
+      <script>
+        $(document).ready(function() {
+          // E-posta inputunun değişikliğini yakalama
+          $("input[name='email']").on("input", function() {
+            // E-posta adresini al
+            var email = $(this).val();
+    
+            // E-posta adresini post et
+            $.post("/checkEmail", { Email: email }, function(response) {
+              // Yanıtı kontrol et
+              console.log(response);
+              if (!response.status) {
+                alert("Bu eposta zaten kayıtlı!");
+              }
+            });
+          });
+        });
+      </script>
 
 
 <script>
@@ -454,7 +479,7 @@ const subcategoryOptions = {
     "Çelik Yapı Teknik Ressamlığı",
     
   ],
-  Ustalar: [
+  Ustalık: [
   "Ahşap Doğrama Ustalığı",
     "PVC Doğrama Ustalığı",
     "Betonarme Bina ve Demir Ustalığı",

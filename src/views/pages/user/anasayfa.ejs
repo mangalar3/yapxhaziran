@@ -113,7 +113,7 @@ function changeSectionTitle(newTitle) {
                         </div>
                         <div class="tab-pane fade pt-2" id="pills-three-example1" role="tabpanel" aria-labelledby="pills-three-example1-tab" data-target-group="groups">
                             <ul class="row list-unstyled products-group no-gutters">
-                                <% encokoyalanurunler.forEach(Product => { %>
+                                <% encokoyalanurunler.slice(0, 6).forEach(Product => { %>
                                     <%- include('../../partials/_onurunler', {Product}) %> 
                                 <% }) %>
                             </ul>
@@ -1425,30 +1425,45 @@ function changeSectionTitle(newTitle) {
 
     </body>
 </html>
-<script>
-        // AJAX ile favorilere ekleme işlemi
-        $('.add-to-favorites').click(function (e) {
-        e.preventDefault();
-        var link = $(this);
-        var originalText = link.text();
-        
-        // Add loading animation
-        link.html('<i class="fa fa-spinner fa-spin"></i> Yükleniyor...');
-        
-        $.ajax({
-            url: link.attr('href'),
+
+   <script>
+    
+    $(document).ready(function () {
+        // Favori ekleme işlemi
+        $(document).on('click', '.add-to-favorites', function (e) {
+          e.preventDefault();
+          var link = $(this);
+          var originalText = link.text();
+          var href = link.attr('href');
+
+          // Add loading animation
+          link.html('<i class="fa fa-spinner fa-spin"></i> Yükleniyor...');
+
+          $.ajax({
+            url: href,
             type: 'GET',
             success: function (response) {
-                if(response.status){
-                    link.html('<i class="fa fa-check-circle text-success"></i> Favorilere Eklendi').addClass('favorited');
-                }
-                else{
-                    window.location.href = "/giris";
-                }
+              if (response.status) {
+                // Favori eklendi, bağlantıyı güncelle
+                link.html('<i class="fa fa-times-circle text-red"></i> Favorilerden Kaldır').addClass('favorited');
+                link.attr('href', '/isteklistesiremove/' + extractProductUrl(href));
+              } else {
+                // Favori kaldırıldı, bağlantıyı güncelle
+                link.html('<i class="fa fa-heart"></i> Favorilere Ekle').removeClass('favorited');
+                link.attr('href', '/isteklistesiekle/' + extractProductUrl(href));
+              }
             },
             error: function () {
-                link.text(originalText); // Restore original text if there is an error
+              link.text(originalText); // Hata durumunda orijinal metni geri yükle
             }
+          });
         });
-    });
+
+        // Yardımcı fonksiyon: Ürün URL'sini çıkarma
+        function extractProductUrl(url) {
+          var parts = url.split('/');
+          return parts[parts.length - 1];
+        }
+      });
 </script>
+

@@ -78,64 +78,77 @@
 
 <div class="container mt-16 mb-16">
     <div class="row">
-      <div class="col-md-4">
-        <div class="card">
-          <div class="card-body">
-            <a href="
-            /arama?arananDeger=<%-SearchedValue%>&q=urunara">
-            <div class="icon-wrapper">
-              <div id="iconArama">
-                <i class="iconaramaici fa fa-shopping-cart" aria-hidden="true"></i>
-              </div>
+       <% if (UrunCount > 0) { %>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <a href="/arama?arananDeger=<%-SearchedValue%>&q=urunara">
+                <div class="icon-wrapper">
+                  <div id="iconArama">
+                    <i class="iconaramaici fa fa-shopping-cart" aria-hidden="true"></i>
+                  </div>
+                </div>
+                
+                <div class="category-info">
+                  <p class="category-name">Ürünler</p>
+                  <p class="category-count"> <span style="font-weight: bold; font-size: 20px;"><%- UrunCount %></span>  ürün bulundu. </p>
+                </div>
+              </a>
             </div>
-            
-            <div class="category-info">
-              <p class="category-name">Ürünler</p>
-              <p class="category-count"> <span style="font-weight: bold; font-size: 20px;"><%- UrunCount %></span>  ürün bulundu. </p>
-            
-            </div>
-            </a>
           </div>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card">
-          <div class="card-body">
-            <a href="
-            /arama?arananDeger=<%-SearchedValue%>&q=dukkanara">
-            <div class="icon-wrapper">
-              <div id="iconArama2">
-                <i class="iconaramaici fa fa-store" aria-hidden="true"></i>
-              </div>
+        <% } %>
+    
+        <% if (DukkanCount > 0) { %>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <a href="/arama?arananDeger=<%-SearchedValue%>&q=dukkanara">
+                <div class="icon-wrapper">
+                  <div id="iconArama2">
+                    <i class="iconaramaici fa fa-store" aria-hidden="true"></i>
+                  </div>
+                </div>
+                
+                <div class="category-info">
+                  <p class="category-name">Dükkanlar</p>
+                  <p class="category-count"> <span style="font-weight: bold; font-size: 20px;"><%- DukkanCount %></span> dükkan bulundu. </p>
+                </div>
+              </a>
             </div>
-            
-            <div class="category-info">
-              <p class="category-name">Dükkanlar</p>
-              <p class="category-count"> <span style="font-weight: bold; font-size: 20px;"><%- DukkanCount %></span> dükkan bulundu. </p>
-            </div>
-            </a>
           </div>
         </div>
-      </div>
-      <div class="col-md-4">
-        <div class="card">
-          <div class="card-body">
-            <a href="
-            /arama?arananDeger=<%-SearchedValue%>&q=meslekara">
-            <div class="icon-wrapper">
-              <div id="iconArama3">
-                <i class="iconaramaici fa fa-briefcase" aria-hidden="true"></i>
-              </div>
+        <% } %>
+    
+        <% if (MeslekCount > 0) { %>
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+              <a href="/arama?arananDeger=<%-SearchedValue%>&q=meslekara">
+                <div class="icon-wrapper">
+                  <div id="iconArama3">
+                    <i class="iconaramaici fa fa-briefcase" aria-hidden="true"></i>
+                  </div>
+                </div>
+                
+                <div class="category-info">
+                  <p class="category-name">Meslekler</p>
+                  <p class="category-count"> <span style="font-weight: bold; font-size: 20px;"><%- MeslekCount %></span> meslek bulundu. </p>
+                </div>
+              </a>
             </div>
-            
-            <div class="category-info">
-              <p class="category-name">Meslekler</p>
-              <p class="category-count"> <span style="font-weight: bold; font-size: 20px;"><%- MeslekCount %></span> meslek bulundu. </p>
-            </div>
-            </a>
           </div>
         </div>
-      </div>
+        <% } %>
+        <% if (UrunCount === 0 && DukkanCount === 0 && MeslekCount === 0) { %>
+          <div class="col-md-12">
+            <div style=" text-align: center; color: gray; margin-top: 30px; margin-bottom: 30px;">
+              
+              <i class="fas fa-frown" aria-hidden="true" style="font-size: 80px;"></i>
+              <h3 style="margin-top: 25px;">Aradığınız kelimede herhangi bir şey bulunamadı. </h3>
+            </div>
+          </div>
+          <% } %>
     </div>
   </div>
   

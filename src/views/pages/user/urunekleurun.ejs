@@ -308,6 +308,7 @@ outline: 0;
       <input name="url" value="<%-Product.product_url %>" hidden>
       <input name="status" value="urunekle" hidden>
     </form>
+    
     <% }) %>
     <% } else { %>
       <div class="row" style="background: #384359; margin-top: 0px; border-top: 1px solid white; border-bottom: 1px solid white ;">
@@ -321,6 +322,13 @@ outline: 0;
       
       </div>
       <% } %>
+
+      <div class="row" id="paginationContainer" style="background: #384359;  text-align: center; justify-content: center; padding-top: 10px; padding-bottom: 10px;">
+        <button class="btn btn-secondary mr-2" id="geriDugmesi">Geri</button>
+        <span class="btn btn-secondary mr-2" id="sayfaNumarasi" style="color: white; font-weight: bold; background-color: #395FA9;"></span>
+        <button class="btn btn-secondary mr-2" id="ileriDugmesi">İleri</button>
+
+    </div>
     </div>
     
     
@@ -432,6 +440,9 @@ outline: 0;
 </div>
 
 
+<script>
+  
+</script>
 
 
 
@@ -590,7 +601,6 @@ $(document).on('submit', 'form:not(#urunbul,#urunara,#aramakutusu,#aramamobil)',
   });
 
 </script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   $(document).ready(function() {
     $("#dukkanurunleri").click(function() {
@@ -619,5 +629,90 @@ $(document).on('submit', 'form:not(#urunbul,#urunara,#aramakutusu,#aramamobil)',
       }, 5000); // 5 saniye
     });
 </script>
-<!-- ========== END FOOTER ========== -->
 
+<script>
+  $(document).ready(function() {
+      // Set the number of items per page
+      var itemsPerPage = 10; // Change this value as needed
+
+      // Calculate the number of pages
+      var totalPages = Math.ceil( Product.length / itemsPerPage);
+
+      // Generate pagination links
+      for (var i = 1; i <= totalPages; i++) {
+          var link = $('<a href="#" class="pagination-link">' + i + '</a>');
+          $('#paginationContainer').append(link);
+      }
+
+      // Handle click event for pagination links
+      $('#paginationContainer').on('click', '.pagination-link', function(e) {
+          e.preventDefault();
+
+          // Get the selected page number
+          var page = parseInt($(this).text());
+
+          // Calculate the start and end indices of the displayed items
+          var startIndex = (page - 1) * itemsPerPage;
+          var endIndex = startIndex + itemsPerPage;
+
+          // Hide all items
+          $('.row[data-product]').hide();
+
+          // Show the items for the selected page
+          $('.row[data-product]').slice(startIndex, endIndex).show();
+      });
+  });
+</script>
+
+<script>
+$(document).ready(function() {
+  // Sayfa numarasını al
+  var sayfaNumarasi = getUrlParameter('pg') || 1;
+
+  // Sayfa numarasını güncelleyen bir fonksiyon
+  function sayfaDegistir(yeniSayfaNumarasi) {
+    // Geçerli URL'yi al
+    var url = window.location.href;
+
+    // URL'deki mevcut parametreleri ayrıştır
+    var urlParams = new URLSearchParams(window.location.search);
+
+    // pg parametresini güncelle veya ekle
+    urlParams.set('pg', yeniSayfaNumarasi);
+
+    // Yeni parametreleri URL'ye ekle
+    var yeniURL = window.location.origin + window.location.pathname + '?' + urlParams.toString();
+
+    // Sayfayı yeniden yönlendir
+    window.location.href = yeniURL;
+  }
+
+  // İleri düğmesine tıklama olayı
+  $('#ileriDugmesi').on('click', function() {
+    sayfaNumarasi++;
+    sayfaDegistir(sayfaNumarasi);
+  });
+
+  // Geri düğmesine tıklama olayı
+  $('#geriDugmesi').on('click', function() {
+    if (sayfaNumarasi > 1) {
+      sayfaNumarasi--;
+      sayfaDegistir(sayfaNumarasi);
+    }
+  });
+  
+  // Sayfa numarasını göster
+  $('#sayfaNumarasi').text('Sayfa ' + sayfaNumarasi);
+  
+  // URL'den parametre değerini almak için yardımcı bir fonksiyon
+  function getUrlParameter(name) {
+    name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
+    var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+    var results = regex.exec(window.location.search);
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+  }
+});
+
+
+</script>
+<!-- ========== END FOOTER ========== -->

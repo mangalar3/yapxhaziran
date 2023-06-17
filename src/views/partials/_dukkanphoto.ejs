@@ -45,15 +45,13 @@
         
         <div id="carouselExampleControls" class="carousel slide row" data-ride="carousel">
           <div class="carousel-inner">
-            <div class="carousel-item active">
-              <img class="d-block w-100" style="width: 100%; height: 400px; margin-left: 5px; z-index: -999;" src="/uploads/images/yapxmarketimthumb.jpg" alt="<%- Product.dukkanadi %>">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" style="width: 100%; height: 400px; margin-left: 5px; z-index: -999;" src="/uploads/images/yapxmarketimthumb.jpg" alt="<%- Product.dukkanadi %>">
-            </div>
-            <div class="carousel-item">
-              <img class="d-block w-100" style="width: 100%; height: 400px; margin-left: 5px; z-index: -999;" src="/uploads/images/yapxmarketimthumb.jpg" alt="<%- Product.dukkanadi %>">
-            </div>
+            <% Product.Dukkan_Thumbnails.forEach(function(Product, index) { %>
+              <div class="carousel-item <% if (index == 0) { %>
+              active
+              <% } %>" >
+                <img class="d-block w-100" style="width:100%; height:450px; display:fleMeslekUserx; justify-content:center; align-items:center;" src="/uploads/images/<%-Product %>" alt="">
+              </div>
+            <% }) %>
           </div>
           <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -66,13 +64,21 @@
         </div>
         <div class="row col-md-12" style="padding:20px;">
           <div class="row" style="width: 100%;">
-          <img class="img-fluid" height="300" width="300" style="border-radius: 50%; border: 1px solid black; position: relative; top: -100px; left: 30px; margin-right: 50px; height: 200px; width: 200px;" src="/uploads/images/<%- Product.dukkanphoto %>" alt="<%- Product.dukkanadi %>">
-            <div class="col-lg">
+            <% if (Product.dukkanphoto.length == 0) { %>
+              <img class="img-fluid" height="300" width="300" style="border-radius: 50%; border: 1px solid black; position: relative; top: -100px; left: 30px; margin-right: 50px; height: 200px; width: 200px;" src="/uploads/images/test.png" alt="">
+            <% }else{ %>
+                <img class="img-fluid" height="300" width="300" style="border-radius: 50%; border: 1px solid black; position: relative; top: -100px; left: 30px; margin-right: 50px; height: 200px; width: 200px;" src="/uploads/images/<%-Product.dukkanphoto %>" alt="">
+                <% }  %> 
+          <div class="col-lg">
 
             
             <h2 class="font-size-25 text-lh-1dot2 d-inline-flex align-items-baseline small font-size-15 text-lh-1 mr-2 "><%-Product.dukkanadi  %></h2>
             <div class="mt-1 mb-3">
-              <a style="" class="d-inline-flex align-items-center small font-size-15 text-lh-1" href="#">
+              <a style="" class="d-inline-flex align-items-center small font-size-15 text-lh-1" id="pills-four-example1-tab" data-toggle="pill" href="#pills-four-example1" role="tab" aria-controls="pills-four-example1" aria-selected="
+              false"
+              data-target="#pills-four-example1"
+              data-link-group="groups"
+              data-animation-in="slideInUp">
                 <div style="" class="text-warning mr-2">
                     <small class="fas fa-star <% if(Product.dukkan_av>0){ %><% } else{ %>text-muted<% } %>"></small>
                     <small class="fas fa-star <% if(Product.dukkan_av>1){ %><% } else{ %>text-muted<% } %>"></small>
@@ -86,14 +92,30 @@
             </div>
             
           <div class="col-lg" style="float: right;">
-            <a href="#" class="text-white-6 font-size-13" ></a>
-            <button style="border-radius: 0px;   margin-left: 10px; margin-bottom: 5px; float: right;" type="button" class="btn btn-danger">
-            <i class="ec ec-favorites mr-1 font-size-15"></i> Favori Dükkanlara Ekle.
-            </button>
-            </a>
-            <button style="border-radius: 0px;  margin-bottom: 5px; float: right;" type="button" class="btn btn-secondary"  id="myBtn" style="  font-weight: bold;" data-toggle="modal" data-target="#myModal">
-              <span class="fa fa-send mr-1"></span>Mesaj Gönder
-            </button>
+            
+            <form id="isteklistesiekle" action="/isteklistesiekle/<%- Product.dukkanurl %>" method="post">
+            
+              <div class="flex-horizontal-center flex-wrap mb-4" style="float: right;">
+                <% if (myacc) { %>
+                  <% if (myacc[0].wishlist_Shop.some(item => item.dukkanurl === Product.dukkanurl)) { %>
+                    <a href="/isteklistesiekleDukkanRemove/<%- Product.dukkanurl %>" class="text-gray-6 font-size-13 add-to-favorites"><button style="border-radius: 0px;   margin-left: 10px; margin-bottom: 5px; float: right;" type="button" class="btn btn-danger">
+                      <i class="ec ec-favorites mr-1 font-size-15"></i> Favori Dükkanlardan Kaldır.
+                      </button></a>
+                  <% }else{ %>
+                  <a href="/isteklistesiekleDukkan/<%- Product.dukkanurl %>" class="text-gray-6 font-size-13 add-to-favorites"><button style="border-radius: 0px;   margin-left: 10px; margin-bottom: 5px; float: right;" type="button" class="btn btn-success">
+                    <i class="ec ec-favorites mr-1 font-size-15"></i> Favori Dükkanlara Ekle.
+                    </button></a>
+                  <% } %>
+                  <button style="border-radius: 0px; margin-left: 10px;  margin-bottom: 5px; float: right;" type="button" class="btn btn-secondary"  id="myBtn" style="  font-weight: bold;" data-toggle="modal" data-target="#myModal">
+                    <span class="fa fa-send mr-1"></span>Mesaj Gönder
+                  </button>
+                <% } %>
+                
+              
+              </div>
+              </form>
+            
+            
         </div>
           </div>
         </div>
@@ -163,8 +185,19 @@
 <hr>
 <script src="jquery-3.6.3.min.js"></script>
 <script>
-  
+$(document).ready(function() {
+  $("#pills-four-example1-tab").click(function(event) {
+    event.preventDefault(); // Varsayılan davranışı engelle
 
+    var hedefKonum = 800; // Sayfanın kaydırılacağı hedef konum (örneğin, piksel değeri)
+    var animasyonSuresi = 500; // Kaydırma animasyonunun süresi (ms cinsinden)
+
+    $("html, body").animate({ scrollTop: hedefKonum }, animasyonSuresi, function() {
+      // Kaydırma animasyonu tamamlandıktan sonra href değerine git
+      window.location.href = $("#pills-four-example1-tab").attr("href");
+    });
+  });
+});
 
 </script>
 
@@ -191,5 +224,46 @@ tablinks[i].className = tablinks[i].className.replace(" active", "");
 document.getElementById(tabName).style.display = "block";
 evt.currentTarget.className += " active";
 }
+</script>
+
+<script>
+ $(document).ready(function () {
+        // Favori ekleme işlemi
+        $('.add-to-favorites').click(function (e) {
+            e.preventDefault();
+            var link = $(this);
+            var originalText = link.text();
+            var href = link.attr('href');
+
+            // Add loading animation
+            link.html('<i class="fa fa-spinner fa-spin"></i> Yükleniyor...');
+
+            $.ajax({
+                url: href,
+                type: 'GET',
+                success: function (response) {
+                    if (response.status) {
+                        // Favori eklendi, bağlantıyı güncelle
+                        link.html('<button style="border-radius: 0px; margin-left: 10px; margin-bottom: 5px; float: right;" type="button" class="btn btn-danger"><i class="fa fa-times-circle mr-1 font-size-15"></i> Favori Dükkanlardan Kaldır.</button>').addClass('favorited');
+                        link.attr('href', '/isteklistesiekleDukkanRemove/' + extractProductUrl(href));
+                    } else {
+                        // Favori kaldırıldı, bağlantıyı güncelle
+                        link.html('<button style="border-radius: 0px; margin-left: 10px; margin-bottom: 5px; float: right;" type="button" class="btn btn-success"><i class="ec ec-favorites mr-1 font-size-15"></i> Favori Dükkanlardan Ekle.</button>').removeClass('favorited');
+
+                        link.attr('href', '/isteklistesiekleDukkan/' + extractProductUrl(href));
+                    }
+                },
+                error: function () {
+                    link.text(originalText); // Hata durumunda orijinal metni geri yükle
+                }
+            });
+        });
+
+        // Yardımcı fonksiyon: Ürün URL'sini çıkarma
+        function extractProductUrl(url) {
+            var parts = url.split('/');
+            return parts[parts.length - 1];
+        }
+    });
 </script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

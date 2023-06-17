@@ -118,6 +118,31 @@ const aramasayfa2 = async(req,res,next) =>{
 /* Gerekirse Açılacak Markaların Hangi Kategoride Kaç Tane olduğunu Hesaplar
 const urunleriayir = async(req,res,next) =>{
     try{
+        fucntion trtoen() {
+            return this.replaceAll("Ç","C")
+            .replaceAll("ç","c")
+            .replaceAll("Ğ","G")
+            .replaceAll("ğ","g")
+            .replaceAll("İ","I")
+            .replaceAll("ı","i")
+            .replaceAll("Ö","O")
+            .replaceAll("ö","o")
+            .replaceAll("Ş","S")
+            .replaceAll("ş","s")
+            .replaceAll("Ü","U")
+            .replaceAll("ü","u")
+            .replaceAll("-","-")
+            .replaceAll("_","-")
+            .replaceAll("&","ve")
+            .replaceAll("'","")
+            .replaceAll(" ","-")
+            .replaceAll("/","-")
+            .replaceAll("!","")
+            .replaceAll("+","-")
+            .replaceAll(",","")
+            .replaceAll(".","")
+            .replaceAll("*","");
+        };
         var liste2 = []
         var list = []
         const BrandListGenel = ["Peyzaj ve Mermer Grubu"] 
@@ -223,7 +248,8 @@ const fiyatagorelisteleSatici = async (req,res,next) => {
     try{
         /* http://localhost:8080/siralafiyatagore?sirala=fiyatagore&ProductName=weberkol%20serakol */
         const UrunAdi = req.query.ProductName
-        const urunbul = await Urun.find({product_name: UrunAdi})
+        console.log(UrunAdi)
+        const urunbul = await Urun.find({product_url: UrunAdi})
         const urunler = []
         if(req.query.sirala == "fiyatagoreartan"){
             const satanlar = urunbul[0].product_seller
@@ -348,6 +374,54 @@ const fiyatagorelisteleSatici = async (req,res,next) => {
         console.log(err)
     }
 };
+const FilterPoints = async (req,res,next) => {
+    try{
+        if(req.query.searchKey==undefined){
+            const markalar1 = await Urun.find({ product_category3: req.params.kategoriler }).sort({ avarage: -1 }).skip((req.query.pg * 20) - 20).limit(20)
+            var markalar1sirala = markalar1
+            if(markalar1.length==0){
+                var markalar = await Urun.find({product_category2: req.params.kategoriler }).sort({ avarage: -1 }).skip((req.query.pg*20)-20).limit(20);        
+                if (markalar.length == 0){
+                    const markalar2 = await Urun.find({product_category: req.params.kategoriler}).sort({ avarage: -1 }).skip((req.query.pg*20)-20).limit(20);
+                    res.json(markalar2)
+                }
+                else{
+                    res.json(markalar)
+                }
+            }
+            else{
+                res.json(markalar1sirala)
+            }
+        }
+    }
+    catch (err){
+        console.log(err)
+    }
+}
+const FilterPrice = async (req,res,next) => {
+    try{
+        if(req.query.searchKey==undefined){
+            const markalar1 = await Urun.find({ product_category3: req.params.kategoriler }).sort({ Product_Price: -1 }).skip((req.query.pg * 20) - 20).limit(20)
+            var markalar1sirala = markalar1
+            if(markalar1.length==0){
+                var markalar = await Urun.find({product_category2: req.params.kategoriler }).sort({ Product_Price: -1 }).skip((req.query.pg*20)-20).limit(20);        
+                if (markalar.length == 0){
+                    const markalar2 = await Urun.find({product_category: req.params.kategoriler}).sort({ Product_Price: -1 }).skip((req.query.pg*20)-20).limit(20);
+                    res.json(markalar2)
+                }
+                else{
+                    res.json(markalar)
+                }
+            }
+            else{
+                res.json(markalar1sirala)
+            }
+        }
+    }
+    catch (err){
+        console.log(err)
+    }
+}
 const FilterAtShop = async (req,res,next) => {
     try{
         const UserFind = await User.findOne({ dukkanurl: req.query.url });
@@ -484,16 +558,46 @@ const FilterCityCountrySearchMeslek = async (req,res,next) =>{
         const Cities = []
         const Country = []
         SearchedValue.forEach(element => {
-            Cities.push({dukkanili:{ "$regex": element.City, $options: 'i' }})
+            Cities.push({Meslek_City:{ "$regex": element.City, $options: 'i' }})
             element.Country.forEach(element => {
-                Country.push({dukkanilcesi:{ "$regex": element, $options: 'i' }})
+                Country.push({Meslek_Country:{ "$regex": element, $options: 'i' }})
             });
         });
         if(Country.length > 0){
-            var Value = await User.find({$and:[{userid: "5"},{$or: Cities},{$or: Country},{dukkanadi:{ "$regex": req.body.aranan, $options: 'i' }}]})
+            var Value = await User.find({$and:[{userid: "5"},{$or: Cities},{$or: Country},{$or: [{isim:{ "$regex": req.body.aranan, $options: 'i' }},{soyisim:{ "$regex": req.body.aranan, $options: 'i' }}]}]})
         }
         else{
-            var Value = await User.find({$and:[{userid: "5"},{$or: Cities},{dukkanadi:{ "$regex": req.body.aranan, $options: 'i' }}]})
+            var Value = await User.find({$and:[{userid: "5"},{$or: Cities},{$or: [{isim:{ "$regex": req.body.aranan, $options: 'i' }},{soyisim:{ "$regex": req.body.aranan, $options: 'i' }}]}]})
+        }
+        res.json(Value)
+    }
+    catch (err){
+        console.log(err)
+    }
+}
+const FilterCityCountrySearchMeslekKategori = async (req,res,next) =>{
+    try{
+        const SearchedValue = req.body.data
+        const Cities = []
+        const Country = []
+        SearchedValue.forEach(element => {
+            Cities.push({Meslek_City:{ "$regex": element.City, $options: 'i' }})
+            element.Country.forEach(element => {
+                Country.push({Meslek_Country:{ "$regex": element, $options: 'i' }})
+            });
+        });
+        if(Country.length > 0){
+            var Value = await User.find({$and:[{userid: "5"},{$or: Cities},{$or: Country},{Meslek_SubCategory: req.body.kategori}]})
+            if(Value.length == 0){
+                var Value = await User.find({$and:[{userid: "5"},{$or: Cities},{$or: Country},{Meslek_Category: req.body.kategori}]})
+            }
+        }
+        else{
+            var Value = await User.find({$and:[{userid: "5"},{$or: Cities},{Meslek_SubCategory: req.body.kategori}]})
+            if(Value.length == 0){
+                var Value = await User.find({$and:[{userid: "5"},{$or: Cities},{$or: Country},{Meslek_Category: req.body.kategori}]})
+            }
+
         }
         res.json(Value)
     }
@@ -508,10 +612,13 @@ module.exports = {
     FilterCityCountry,
     product_url,
     FilterBrandAtShop,
+    FilterPoints,
+    FilterPrice,
     FilterCityCountrySearch,
     FilterSearchText,
     FilterAtShop,
     FilterCityCountrySearchMeslek,
+    FilterCityCountrySearchMeslekKategori,
     aramagoster,
     filters,
 };

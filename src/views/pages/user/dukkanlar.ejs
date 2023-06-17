@@ -230,8 +230,7 @@ opacity: 0.4;
                                                             <h2 class="text-center">Hakkımızda</h2>
                                                             <hr>
                                                             <p class="mb-4">
-                                                                Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.
-                                                                Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source.
+                                                                <%-Product[0].Dukkan_About %>
                                                             </p>
                                                         </div>
                                                     </div>
@@ -327,11 +326,12 @@ opacity: 0.4;
                                                                                 <!-- Form -->
                                                                                 
                                                                                 <% Product.forEach(Product => { %>
-                                                                                    <form action="/yorumekledukkan/<%-Product.dukkanurl %> " method="post" class="js-validate">
+                                                                                    <form action="/yorumekledukkan/<%-Product.dukkanurl %> " method="post" class="js-validate" id="mesajformu">
                                                                                         <% }) %>
                                                                                     
                                                                                     <div class="row align-items-center mb-4">
                                                                                         <div class="col-md-4 col-lg-3">
+                                                                                            <div id="mesajDiv"></div>
                                                                                             <label for="rating" class="form-label mb-0">Derecelendirme</label>
                                                                                         </div>
                                                                                         <div class="col-md-8 col-lg-9">
@@ -596,4 +596,18 @@ opacity: 0.4;
           });
         });
         </script>
+
+<script>
+    document.getElementById("mesajformu").addEventListener("submit", function(event) {
+        // Form gönderildiğinde yapılacak işlemler
+        // ...
+
+        // Sayfayı scroll etmek için aşağıdaki kodu kullanabilirsiniz
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth"
+        });
+    });
+</script>
+
 </html>

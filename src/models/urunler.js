@@ -85,7 +85,8 @@ const UserSchema = new Schema({
         type:Array
     },
     avarage: {
-        type:Number
+        type:Number,
+        default: 0
     },
     product_category2: {
         type:String
@@ -95,6 +96,9 @@ const UserSchema = new Schema({
     },
     Product_MaximumPrice:{
         type:Object
+    },
+    Product_Price: {
+        type:Number
     },
     Product_WishlistAdder:{
         type:Array

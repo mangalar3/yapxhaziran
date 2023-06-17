@@ -42,6 +42,10 @@
     font-weight: bold;
     /* İl'leri kalın yap */
   }
+
+  .left-margin {
+  margin-left: 10px; /* İstediğiniz boşluğu burada belirleyebilirsiniz */
+}
 </style>
 
 <title>Yapx | Arama Sonuçları</title>
@@ -69,7 +73,7 @@
 
     <div class="container">
       <div class="row mb-8">
-        <div class="d-none d-xl-block col-xl-3 col-wd-2gdot5">
+        <div class="d-xl-block col-xl-3 col-wd-2gdot5">
           <div class="mb-8">
             <div class="border-bottom border-color-1 mb-5">
               <h3 class="section-title section-title__sm mb-0 pb-2 font-size-18">Filtrele</h3>
@@ -2066,7 +2070,8 @@
   for (var i = 0; i < iller.length; i++) {
     var il = iller[i].il;
 
-    var ilSecenek = document.createElement("li");
+    var ilSecenek = document.createElement("p");
+    ilSecenek.classList.add("form-control", "card-text");
     var ilCheckbox = document.createElement("input");
     ilCheckbox.type = "checkbox";
     ilCheckbox.id = il;
@@ -2074,6 +2079,7 @@
     ilSecenek.appendChild(ilCheckbox);
 
     var ilLabel = document.createElement("label");
+    ilLabel.classList.add("left-margin");
     ilLabel.innerHTML = il;
     ilSecenek.appendChild(ilLabel);
 
@@ -2109,7 +2115,8 @@
       for (var j = 0; j < seciliIlIlceler.length; j++) {
         var ilce = seciliIlIlceler[j];
 
-        var ilceSecenek = document.createElement("li");
+        var ilceSecenek = document.createElement("p");
+        ilceSecenek.classList.add("form-control", "card-text");
         var ilceCheckbox = document.createElement("input");
         ilceCheckbox.type = "checkbox";
         ilceCheckbox.id = ilce;
@@ -2117,6 +2124,7 @@
         ilceSecenek.appendChild(ilceCheckbox);
 
         var ilceLabel = document.createElement("label");
+        ilceLabel.classList.add("left-margin");
         ilceLabel.innerHTML = ilce;
         ilceSecenek.appendChild(ilceLabel);
 

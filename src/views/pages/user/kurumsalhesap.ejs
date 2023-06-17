@@ -329,6 +329,27 @@ form .user-details .input-box{
 	</script>
 <!--===============================================================================================-->
 	<script src="/general/js/main.js"></script>
+  <script>
+    $(document).ready(function() {
+      // E-posta inputunun değişikliğini yakalama
+      $("input[name='email']").on("input", function() {
+        // E-posta adresini al
+        var email = $(this).val();
+
+        // E-posta adresini post et
+        $.post("/checkEmail", { Email: email }, function(response) {
+          // Yanıtı kontrol et
+          console.log(response);
+          if (!response.status) {
+            alert("Bu eposta zaten kayıtlı!");
+          }
+        });
+      });
+    });
+  </script>
+
+
+
 <script>
 	var x, i, j, l, ll, selElmnt, a, b, c;
 /* Look for any elements with the class "custom-select": */

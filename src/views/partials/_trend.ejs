@@ -12,17 +12,22 @@
                 <div class="product-item__footer">
                     <div class="border-top pt-2 flex-center-between flex-wrap">
                         <% if (myacc) { %>
-                         
-                        
-                        <% if (myacc[0].wishlist.some(item => item.product_url === Product.product_url)) { %>
-                            <a href="/isteklistesiremove/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilerden Kaldır</a>
-                        <% }else{ %>
-                        <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
-                        <% } %>
-    
-                        <% }else{ %>
+                            <% if (myacc) { %>
+                             
+                            
+                            <% if (myacc[0].wishlist.some(item => item.product_url === Product.product_url)) { %>
+                                <a href="/isteklistesiremove/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-times-circle text-red mr-1 font-size-15"></i> Favorilerden Kaldır</a>
+                            <% }else{ %>
                             <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
                             <% } %>
+        
+                            <% }else{ %>
+                                <a href="/isteklistesiekle/<%- Product.product_url %>" class="text-gray-6 font-size-13 add-to-favorites"><i class="fa fa-heart mr-1 font-size-15"></i> Favorilere Ekle</a>
+                                <% } %>
+                                <% }
+                                else{ %>
+                                
+                                <% } %>
                     </div>
                 </div>
             </div>

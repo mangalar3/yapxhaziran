@@ -155,7 +155,7 @@ opacity: 0.4;
               <div class="carousel-item <% if (index == 0) { %>
               active
               <% } %>" >
-                <img class="d-block w-100" style="width:100%; height:450px; display:flex; justify-content:center; align-items:center;" src="/uploads/images/<%-Product %>" alt="">
+                <img class="d-block w-100" style="width:100%; height:450px; display:fleMeslekUserx; justify-content:center; align-items:center;" src="/uploads/images/<%-Product %>" alt="">
               </div>
             <% }) %>
           </div>
@@ -170,7 +170,12 @@ opacity: 0.4;
         </div>
         <div class="row col-md-12" style="padding:20px;">
           <div class="row" style="width: 100%;">
-          <img class="img-fluid" height="300" width="300" style="border-radius: 50%; border: 1px solid black; position: relative; top: -100px; left: 30px; margin-right: 50px; height: 200px; width: 200px;" src="/uploads/images/<%-MeslekUser.Meslek_Photos[0] %>" alt="">
+            <% if (MeslekUser.Meslek_Photos.length == 0) { %>
+              <img class="img-fluid" height="300" width="300" style="border-radius: 50%; border: 1px solid black; position: relative; top: -100px; left: 30px; margin-right: 50px; height: 200px; width: 200px;" src="/uploads/images/test.png" alt="">
+            <% }else{ %>
+                <img class="img-fluid" height="300" width="300" style="border-radius: 50%; border: 1px solid black; position: relative; top: -100px; left: 30px; margin-right: 50px; height: 200px; width: 200px;" src="/uploads/images/<%-MeslekUser.Meslek_Photos[0] %>" alt="">
+                <% }  %>
+          
             <div class="col-lg">
 
             
@@ -181,18 +186,34 @@ opacity: 0.4;
                     
                  
                 </div>
-                <span class="text-secondary font-size-13">( Oy Sayısı)</span>
+                <span class="text-secondary font-size-13">(<%-MeslekUser.dukkanoysayisi %>  Oy Sayısı)</span>
             </a>
             </div>
             </div>
             
           <div class="col-lg" style="float: right;">
-            <a href="#" class="text-white-6 font-size-13" ></a>
+            <form id="isteklistesiekle" action="/isteklistesiekleMeslek/<%- MeslekUser.Meslek_URL %>" method="post">
             
-            </a>
-            <button style="border-radius: 0px;  margin-bottom: 5px; float: right;" type="button" class="btn btn-secondary"  id="myBtn" style="  font-weight: bold;" data-toggle="modal" data-target="#myModal">
-              <span class="fa fa-send mr-1"></span>Mesaj Gönder
-            </button>
+              <div class="flex-horizontal-center flex-wrap mb-4" style="float: right;">
+                <% if (myacc) { %>
+                  <% if (myacc[0].wishlist_Meslek.some(item => item.Meslek_URL === MeslekUser.Meslek_URL)) { %>
+                    <a href="/isteklistesiekleMeslekRemove/<%- MeslekUser.Meslek_URL %>" class="text-gray-6 font-size-13 add-to-favorites"><button style="border-radius: 0px;   margin-left: 10px; margin-bottom: 5px; float: right;" type="button" class="btn btn-danger">
+                      <i class="ec ec-favorites mr-1 font-size-15"></i> Favori Dükkanlardan Kaldır.
+                      </button></a>
+                  <% }else{ %>
+                  <a href="/isteklistesiekleMeslek/<%- MeslekUser.Meslek_URL %>" class="text-gray-6 font-size-13 add-to-favorites"><button style="border-radius: 0px;   margin-left: 10px; margin-bottom: 5px; float: right;" type="button" class="btn btn-success">
+                    <i class="ec ec-favorites mr-1 font-size-15"></i> Favori Dükkanlara Ekle.
+                    </button></a>
+                  <% } %>
+                
+                  <button style="border-radius: 0px; margin-left: 10px;  margin-bottom: 5px; float: right;" type="button" class="btn btn-secondary"  id="myBtn" style="  font-weight: bold;" data-toggle="modal" data-target="#myModal">
+                    <span class="fa fa-send mr-1"></span>Mesaj Gönder
+                  </button>
+                  <% } %>
+                
+              
+              </div>
+                </form>
         </div>
           </div>
         </div>
@@ -210,7 +231,7 @@ opacity: 0.4;
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" style="background: none; border: none;">X</button>
                       </div>
                       <div class="modal-body">
-                        <form action="/sendMessage/" method="post" enctype="application/x-www-form-urlencoded" style="text-align: center;">
+                        <form action="/sendMessage/<%-MeslekUser.Meslek_URL %>" method="post" enctype="application/x-www-form-urlencoded" style="text-align: center;">
                           <div style=" margin-top: 10px;">
                               <div>
                                 <div>
@@ -324,54 +345,46 @@ opacity: 0.4;
                                                     <div class="row">
                                                         <div class="row">
                                                             <div class="col-xl-9 col-wd">
-                                                                <div class="min-width-1100-wd">
-                                                                  <% MeslekUser.Meslek_Projects.forEach(function(Product, index) { %>
-                                                                    <article class="card mb-13 border-0">
-                                                                        <div class="row">
-                                                                            <div class="col-lg-4 mb-5 mb-lg-0">
-                                                                                <div id="carouselExampleControls2" class="carousel slide row" data-ride="carousel">
-                                                                                  <div class="carousel-inner">
-                                                                                    <% Product.Project_Photos.forEach(function(Product2, index) { %>
-                                                                                      <div class="carousel-item <% if (index == 0) { %>
-                                                                                      active
-                                                                                      <% } %>" >
-                                                                                        <img class="d-block w-100" style="width:100%; height:450px; display:flex; justify-content:center; align-items:center;" src="/uploads/images/<%-Product2 %>" alt="">
-                                                                                      </div>
-                                                                                    <% }) %>
-                                                                                  </div>
-                                                                                    <a class="carousel-control-prev" href="#carouselExampleControls2" role="button" data-slide="prev">
-                                                                                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                                                      <span class="sr-only">Previous</span>
-                                                                                    </a>
-                                                                                    <a class="carousel-control-next" href="#carouselExampleControls2" role="button" data-slide="next">
-                                                                                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                                                      <span class="sr-only">Next</span>
-                                                                                    </a>
-                                                                                  </div>
-                                                                            </div>
-                                                                            <div class="col-lg-8">
-                                                                                <div class="card-body p-0">
-                                                                                    <h4 class="mb-3"><a href=""><%-Product.Project_Title %></a></h4>
-                                                                                    <div class="mb-3 pb-3 border-bottom">
-                                                                                        <div class="list-group list-group-horizontal flex-wrap list-group-borderless align-items-center mx-n0dot5">
-                                                                                            
-                                                                                            <a href="" class="mx-0dot5 text-gray-5">March 4, 2016</a>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <p><%-Product.Project_Content %></p>
-                                                                                    <div class="flex-horizontal-center">
-                                                                                       
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
+                                                              <div class="min-width-1100-wd">
+                                                                <% MeslekUser.Meslek_Projects.forEach(function(Product, index) { %>
+                                                                  <article class="card mb-13 border-0">
+                                                                    <div class="row">
+                                                                      <div class="col-lg-4 mb-5 mb-lg-0">
+                                                                        <div id="carouselExampleControls<%= index %>" class="carousel slide row" data-ride="carousel">
+                                                                          <div class="carousel-inner">
+                                                                            <% Product.Project_Photos.forEach(function(Product2, photoIndex) { %>
+                                                                              <div class="carousel-item <%= photoIndex === 0 ? 'active' : '' %>">
+                                                                                <img class="d-block w-100" style="width:100%; height:300px; display:flex; justify-content:center; align-items:center;" src="/uploads/images/<%- Product2 %>" alt="">
+                                                                              </div>
+                                                                            <% }) %>
+                                                                          </div>
+                                                                          <a class="carousel-control-prev" href="#carouselExampleControls<%= index %>" role="button" data-slide="prev">
+                                                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                                            <span class="sr-only">Previous</span>
+                                                                          </a>
+                                                                          <a class="carousel-control-next" href="#carouselExampleControls<%= index %>" role="button" data-slide="next">
+                                                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                                            <span class="sr-only">Next</span>
+                                                                          </a>
                                                                         </div>
-                                                                    </article>
-                                                                    <% }) %>
-                                                                    
-                                                                    
-                                                                   
-                                                                    
-                                                                </div>
+                                                                      </div>
+                                                                      <div class="col-lg-8">
+                                                                        <div class="card-body p-0">
+                                                                          <h4 class="mb-3"><a href=""><%- Product.Project_Title %></a></h4>
+                                                                          <div class="mb-3 pb-3 border-bottom">
+                                                                            <div class="list-group list-group-horizontal flex-wrap list-group-borderless align-items-center mx-n0dot5">
+                                                                              <a href="" class="mx-0dot5 text-gray-5"><%- Product.Project_Date %></a>
+                                                                            </div>
+                                                                          </div>
+                                                                          <p><%- Product.Project_Content %></p>
+                                                                          <div class="flex-horizontal-center">
+                                                                          </div>
+                                                                        </div>
+                                                                      </div>
+                                                                    </div>
+                                                                  </article>
+                                                                <% }) %>
+                                                              </div>
                                                             </div>
                                                             
                                                         </div>
@@ -529,45 +542,54 @@ opacity: 0.4;
                                                                         <div class="row mb-8">
                                                                             <div class="col-md-4">
                                                                               
-                                                                                <!-- Form -->
+
+                                                                                <form action="/yorumekleMeslek/<%-MeslekUser.Meslek_URL %> " method="post" class="js-validate">
                                                                                 
-                                                                                
-                                                                                    
-                                                                                    <div class="row align-items-center mb-4">
-                                                                                        <div class="col-md-4 col-lg-3">
-                                                                                            <label for="rating" class="form-label mb-0">Derecelendirme</label>
-                                                                                        </div>
-                                                                                        <div class="col-md-8 col-lg-9">
-                                                                                            <a href="#" class="d-block">
-                                                                                                <div name="rating" class="rating">
-                                                                                                
-                                                                                                    <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
-                                                                                                    <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
-                                                                                                    <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
-                                                                                                    <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
-                                                                                                    <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
-                                                                                                    
-                                                                                                </div>
-                                                                                            </a>
-                                                                                        </div>
+                                                                                <div class="row align-items-center mb-4">
+                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                        <label for="rating" class="form-label mb-0">Derecelendirme</label>
                                                                                     </div>
-                                                                                    <div class="js-form-message form-group mb-3 row">
-                                                                                        <div class="col-md-4 col-lg-3">
-                                                                                            <label for="descriptionTextarea" class="form-label">Yorumunuz</label>
-                                                                                        </div>
-                                                                                        <div class="col-md-8 col-lg-9">
-                                                                                            <textarea id="yorum" name="yorum" class="form-control" rows="10" data-msg="Please enter your message." data-error-class="u-has-error" data-success-class="u-has-success" required></textarea>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-12 col-lg-12">
-                                                                                            <button type="submit" class="btn btn-primary-dark  transition-3d-hover" style="float: right;">Yorumunuzu Ekleyin </button>
-                                                                                        </div>
+                                                                                    <div class="col-md-8 col-lg-9">
+                                                                                        <a href="#" class="d-block">
+                                                                                            <div name="rating" class="rating">
                                                                                             
-                                                                                        
+                                                                                                <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+                                                                                                <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+                                                                                                <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+                                                                                                <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+                                                                                                <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+                                                                                                
+                                                                                            </div>
+                                                                                        </a>
                                                                                     </div>
-                                                                                </form>
-                                                                                <!-- End Form -->
+                                                                                </div>
+                                                                                <div class="js-form-message form-group mb-3 row">
+                                                                                    <div class="col-md-4 col-lg-3">
+                                                                                        <label for="descriptionTextarea" class="form-label">Yorumunuz</label>
+                                                                                    </div>
+                                                                                    <div class="col-md-8 col-lg-9">
+                                                                                        <textarea id="yorum" name="yorum" class="form-control" rows="10" data-msg="Please enter your message." data-error-class="u-has-error" data-success-class="u-has-success" required></textarea>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col-md-12 col-lg-12">
+                                                                                        <button type="submit" class="btn btn-primary-dark  transition-3d-hover" style="float: right;">Yorumunuzu Ekleyin </button>
+                                                                                    </div>
+                                                                                        
+                                                                                    
+                                                                                </div>
+                                                                            </form>
+                                                                            <!-- End Form -->
+                                                                        </div>
+                                                                        <div class="col-md-1">
+
+                                                                        </div>
+                                                                        <div class="col-md-7">
+                                                                            <% MeslekUser.dukkanyorum.forEach(Product => { %>
+                                                                                <%- include('../../partials/_meslekyorum', {Product}) %> 
+                                                                            <% }) %>
+                                                                        </div>
+                                                                    </div>
                                                                             </div>
                                                                             <div class="col-md-1">
 
@@ -777,4 +799,46 @@ document.getElementById(tabName).style.display = "block";
 evt.currentTarget.className += " active";
 }
 </script>
+<script>
+  $(document).ready(function () {
+         // Favori ekleme işlemi
+         $('.add-to-favorites').click(function (e) {
+             e.preventDefault();
+             var link = $(this);
+             var originalText = link.text();
+             var href = link.attr('href');
+ 
+             // Add loading animation
+             link.html('<i class="fa fa-spinner fa-spin"></i> Yükleniyor...');
+ 
+             $.ajax({
+                 url: href,
+                 type: 'GET',
+                 success: function (response) {
+                     if (response.status) {
+                         // Favori eklendi, bağlantıyı güncelle
+                         link.html('<button style="border-radius: 0px; margin-left: 10px; margin-bottom: 5px; float: right;" type="button" class="btn btn-danger"><i class="fa fa-times-circle mr-1 font-size-15"></i> Favori Dükkanlardan Kaldır.</button>').addClass('favorited');
+                         link.attr('href', '/isteklistesiekleMeslekRemove/' + extractProductUrl(href));
+                     } else {
+                         // Favori kaldırıldı, bağlantıyı güncelle
+                         link.html('<button style="border-radius: 0px; margin-left: 10px; margin-bottom: 5px; float: right;" type="button" class="btn btn-success"><i class="ec ec-favorites mr-1 font-size-15"></i> Favori Dükkanlardan Ekle.</button>').removeClass('favorited');
+ 
+                         link.attr('href', '/isteklistesiekleMeslek/' + extractProductUrl(href));
+                     }
+                 },
+                 error: function () {
+                     link.text(originalText); // Hata durumunda orijinal metni geri yükle
+                 }
+             });
+         });
+ 
+         // Yardımcı fonksiyon: Ürün URL'sini çıkarma
+         function extractProductUrl(url) {
+             var parts = url.split('/');
+             return parts[parts.length - 1];
+         }
+     });
+ </script>
+
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

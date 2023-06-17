@@ -4,6 +4,7 @@ const User = require('../models/yapxUserModel');
 const Urun = require('../models/urunler');
 const Marka = require('../models/markaModel');
 const Messages = require('../models/messagesModel');
+const Forgetten = require('../models/Forgetten');
 const Categories = require('../models/Categories');
 const MeslekCategories = require('../models/meslekCategories');
 const bcrypt = require('bcryptjs');
@@ -232,10 +233,23 @@ const isteklistesi = async (req, res, next) => {
         const token = req.cookies.usertoken;
         const myacc = await User.find({ usertoken: token });
         let jwtSecretKey = process.env.JWT_SECRET_KEY;
-        const wishlist = myacc[0].wishlist
+        if(isNaN(Number(req.query.pg))){
+            var pageNumber = 1
+        }
+        else{
+            var pageNumber = Number(req.query.pg)
+        }
+        const wishListElementCount = myacc[0].wishlist.length
+        const wishlist = myacc[0].wishlist.slice((5*pageNumber)-5, (5*pageNumber))
+        for(let i = 0;i<wishlist.length;i++){
+            const ProductFinder = await Urun.findOne({product_url:wishlist[i].product_url})
+            if(ProductFinder.Product_MinimumPrice){
+                wishlist[i].Product_MinimumPrice.value = ProductFinder.Product_MinimumPrice.value
+            }           
+        }
         const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
             if (decoded) {
-                res.render('user/isteklistesi', { layout: '../layouts/logged', title: `Yapx | İstek Listesi`, description: ``, keywords: ``, wishlist, myacc })
+                res.render('user/isteklistesi', { layout: '../layouts/logged', title: `Yapx | Favori Listesi`, description: ``, keywords: ``, wishlist, myacc,wishListElementCount })
             } else {
                 res.render('user/giris', { layout: '../layouts/login', title: `Yapx | Giriş Yap`, description: ``, keywords: `` })
             }
@@ -246,6 +260,7 @@ const isteklistesi = async (req, res, next) => {
         res.render('user/404', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Hata`, description: ``, keywords: `` });
     }
 };
+
 const searchSelect = async (req,res,next) => {
     try{
         if (req.query.aranan == undefined) {
@@ -336,7 +351,6 @@ const arama = async (req, res, next) => {
         let sayfaurunleri = []
         let sayfalar = []
         const list = []
-        console.log(myacc)
         let arananurun = aranan.split(' ')
         let aranans = []
         for (let i = 0; i < arananurun.length; i++) {
@@ -390,6 +404,7 @@ const arama = async (req, res, next) => {
                             const count = Product.filter(element => element.product_marka === filteredkategorilist2[i]).length;
                             filteredkategorilist2[i] = filteredkategorilist2[i] + ':' + count
                         }
+                        const myacc = false
                         res.render('user/arama', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Arama`, description: ``, keywords: ``, Product, sayfaurunleri, sayfalar,myacc, filteredkategorilist2, aranan })
                     })
                 }
@@ -426,6 +441,7 @@ const arama = async (req, res, next) => {
                         for (i = 0; i < toplamsayfa; i++) {
                             sayfalar.push('/aramasayfa/' + 'dukkanara/' + aranan + ':' + (i + 1) + ':' + sayfano)
                         }
+                        const myacc = false
                         res.render('user/dukkanarama', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Arama`, description: ``, keywords: ``, Product, sayfaurunleri, sayfalar,myacc, filteredkategorilist2, aranan })
                     })
                 }
@@ -462,6 +478,7 @@ const arama = async (req, res, next) => {
                         for (i = 0; i < toplamsayfa; i++) {
                             sayfalar.push('/aramasayfa/' + 'dukkanara/' + aranan + ':' + (i + 1) + ':' + sayfano)
                         }
+                        const myacc = false
                         res.render('user/meslekarama', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Arama`, description: ``, keywords: ``, Product, sayfaurunleri, sayfalar,myacc, filteredkategorilist2, aranan })
                     })
                 }
@@ -644,7 +661,8 @@ const meslekPage = async (req, res, next) => {
             if (decoded) {
                 res.render('user/meslekPage', { layout: '../layouts/logged', title: `Yapx | Meslek Page`, description: ``, keywords: ``, myacc, MeslekUser })
             } else {
-                res.render('user/meslekPage', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Meslek Page`, description: ``, keywords: ``, MeslekUser })
+                const myacc = false
+                res.render('user/meslekPage', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Meslek Page`, description: ``, keywords: ``, MeslekUser,myacc })
             }
         })
 
@@ -657,9 +675,7 @@ const kayitolcodepost = async (req, res, next) => {
     try {
         const dogrulamakodu = await User.find({ dogrulama_token: req.cookies.dogrulamatoken })
         const SifreVarmi = await User.find(dogrulamakodu[0]);
-        console.log(SifreVarmi)
         const Sifrelegal = SifreVarmi[0].verfication_number;
-        console.log(Sifrelegal)
         if (Sifrelegal == req.body.code) {
             const data = {
                 time: Date(),
@@ -676,7 +692,6 @@ const kayitolcodepost = async (req, res, next) => {
             const uyeBilgileri = await User.find({ dogrulama_token: req.cookies.dogrulamatoken })
             await User.findByIdAndUpdate(uyeBilgileri[0]._id, numberdb);
             res.clearCookie('dogrulamatoken');
-            console.log('Hesap Başarı ile oluşturuldu.')
             res.redirect('/')
         }
         else {
@@ -788,8 +803,6 @@ const urundetaylari = async (req, res, next) => {
         const av = {
             avarage: isNaN(avarage) ? 0 : avarage
         };
-
-        console.log(av)
         await Urun.findByIdAndUpdate(Product[0]._id, av);
         const token = req.cookies.usertoken;
         const myacc = await User.find({ usertoken: token });
@@ -819,6 +832,7 @@ const urundetaylari = async (req, res, next) => {
                 })
             } else {
                 const urun_yorum = Product[0].urun_yorum
+                const myacc = false
                 res.render('user/urunpage', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Urun Sayfasi`, description: ``, keywords: ``, Product, urun_yorum, avarage, urunler, urunss, ozellik, satansayisi, myacc })
             }
         })
@@ -905,7 +919,6 @@ const dukkanlar = async (req, res, next) => {
                                 return count;
                             }, {});
 
-                            console.log(countByBrand);
                             res.render('user/benimdukkanim', { layout: '../layouts/logged', title: `Yapx | ` + myacc[0].dukkanadi, description: ``, keywords: ``, Product, urunler, dukkanyorum, myacc, formatted_Dukkan_RegisterDate, countByBrand })
                         })
                     }
@@ -933,7 +946,8 @@ const dukkanlar = async (req, res, next) => {
                             count[product.product_brand] = (count[product.product_brand] || 0) + 1;
                             return count;
                         }, {});
-                        res.render('user/dukkanlar', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Hakkımızda`, description: ``, keywords: ``, Product, urunler, dukkanyorum, formatted_Dukkan_RegisterDate, countByBrand })
+                        const myacc = false
+                        res.render('user/dukkanlar', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Hakkımızda`, description: ``, keywords: ``, Product,myacc, urunler, dukkanyorum, formatted_Dukkan_RegisterDate, countByBrand })
                     })
                 }
             })
@@ -1009,7 +1023,6 @@ const kategoriler = async (req, res, next) => {
         let kategori = req.params.kategoriler;
         var sayfanumarasi = req.query.pg
         const paramss = Number(sayfanumarasi)
-        console.log(sayfanumarasi)
         if (typeof sayfanumarasi == "undefined") {
             kategorisayfa = 0
             sayfanumarasi = 0
@@ -1039,8 +1052,8 @@ const kategoriler = async (req, res, next) => {
                 res.render('user/kategori', { layout: '../layouts/logged', title: `Yapx | Kategoriler`, description: ``, keywords: ``, Product, test1, myacc, filteredkategorilist, sayfalar, urunsayisi, paramss, BrandList, KategoriKac, kategori })
 
             } else {
-
-                res.render('user/kategori', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Kategoriler`, description: ``, keywords: ``, Product, test1, filteredkategorilist, sayfalar, urunsayisi, paramss, BrandList, KategoriKac, kategori })
+                const myacc = false
+                res.render('user/kategori', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Kategoriler`, description: ``, keywords: ``, Product, test1,myacc, filteredkategorilist, sayfalar, urunsayisi, paramss, BrandList, KategoriKac, kategori })
             }
         })
 
@@ -1078,7 +1091,6 @@ const kategori = async (req, res, next) => {
         const yazi = (Product[0].product_category2 + ':' + Product[0].product_category2 + ':' + Product[0].product_category3);
         const test1 = []
         test1.push(yazi)
-        console.log(test1[0])
         const urunsayisi = await Urun.count({ product_category2: kategori })
         const sayfalar = []
         for (let i = 0; i < parseInt(urunsayisi / 20) + 1; i++) {
@@ -1091,7 +1103,8 @@ const kategori = async (req, res, next) => {
 
             } else {
                 const yazi = Product[0]
-                res.render('user/kategori', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Kategoriler`, description: ``, keywords: ``, Product, test1, filteredkategorilist, sayfalar, urunsayisi, paramss, BrandList, KategoriKac, kategori })
+                const myacc = false
+                res.render('user/kategori', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Kategoriler`, description: ``, keywords: ``, Product,myacc, test1, filteredkategorilist, sayfalar, urunsayisi, paramss, BrandList, KategoriKac, kategori })
             }
         })
 
@@ -1108,14 +1121,26 @@ const meslekKategoriAlt = async (req, res, next) => {
         const token = req.cookies.usertoken;
         const myacc = await User.find({ usertoken: token });
         const getMeslekKategori = await User.find({ Meslek_SubCategory: req.params.id }).limit(20)
-        const getCategories = await MeslekCategories.findOne({ Meslek_Category: getMeslekKategori[0].Meslek_Category })
-        const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
-            if (decoded) {
-                res.render('user/kategoriMeslek', { layout: '../layouts/logged', title: `Yapx | Meslek Alt Kategoriler`, description: ``, keywords: ``, myacc, getMeslekKategori, getCategories })
-            } else {
-                res.render('user/kategoriMeslek', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Meslek Alt Kategoriler`, description: ``, keywords: ``, getMeslekKategori, getCategories })
-            }
-        })
+        if(getMeslekKategori.length > 0){
+            const getCategories = await MeslekCategories.findOne({ Meslek_Category: getMeslekKategori[0].Meslek_Category })
+            const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
+                if (decoded) {
+                    res.render('user/kategoriMeslek', { layout: '../layouts/logged', title: `Yapx | Meslek Alt Kategoriler`, description: ``, keywords: ``, myacc, getMeslekKategori, getCategories,meslekKategori:  req.params.id })
+                } else {
+                    res.render('user/kategoriMeslek', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Meslek Alt Kategoriler`, description: ``, keywords: ``, getMeslekKategori, getCategories,meslekKategori:  req.params.id})
+                }
+            })
+        }
+        else{
+            const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
+                if (decoded) {
+                    res.render('user/404', { layout: '../layouts/logged', title: `Yapx | Meslek Alt Kategoriler`, description: ``, keywords: ``, myacc })
+                } else {
+                    const myacc = false
+                    res.render('user/404', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Meslek Alt Kategoriler`, description: ``, keywords: ``,myacc })
+                }
+            })
+        }
     }
     catch (err) {
         console.log(err)
@@ -1123,7 +1148,30 @@ const meslekKategoriAlt = async (req, res, next) => {
 }
 const meslekKategoriUst = async (req, res, next) => {
     try {
-
+        let jwtSecretKey = process.env.JWT_SECRET_KEY;
+        const token = req.cookies.usertoken;
+        const myacc = await User.find({ usertoken: token });
+        const getMeslekKategori = await User.find({ Meslek_Category: req.params.id }).limit(20)
+        if(getMeslekKategori.length > 0){
+            const getCategories = await MeslekCategories.findOne({ Meslek_Category: getMeslekKategori[0].Meslek_Category })
+            const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
+                if (decoded) {
+                    res.render('user/kategoriMeslek', { layout: '../layouts/logged', title: `Yapx | Meslek Üst Kategoriler`, description: ``, keywords: ``, myacc, getMeslekKategori, getCategories,meslekKategori:  req.params.id })
+                } else {
+                    res.render('user/kategoriMeslek', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Meslek Üst Kategoriler`, description: ``, keywords: ``, getMeslekKategori, getCategories,meslekKategori:  req.params.id})
+                }
+            })
+        }
+        else{
+            const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
+                if (decoded) {
+                    res.render('user/404', { layout: '../layouts/logged', title: `Yapx | Meslek Alt Kategoriler`, description: ``, keywords: ``, myacc })
+                } else {
+                    const myacc = false
+                    res.render('user/404', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Meslek Alt Kategoriler`, description: ``, keywords: ``,myacc })
+                }
+            })
+        }
     }
     catch (err) {
         console.log(err)
@@ -1165,7 +1213,6 @@ const anakategori = async (req, res, next) => {
         const yazi = (Product[0].product_category + ':' + Product[0].product_category + ':' + Product[0].product_category);
         const test1 = []
         test1.push(yazi)
-        console.log(test1[0].split(':')[0] + test1[0].split(':')[2])
         const urunsayisi = await Urun.count({ product_category2: kategori })
         const sayfalar = []
         for (let i = 0; i < parseInt(urunsayisi / 20) + 1; i++) {
@@ -1178,7 +1225,8 @@ const anakategori = async (req, res, next) => {
 
             } else {
                 const yazi = Product[0]
-                res.render('user/kategori', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Kategoriler`, description: ``, keywords: ``, Product, test1, filteredkategorilist, sayfalar, urunsayisi, paramss, BrandList, KategoriKac, kategori })
+                const myacc = false
+                res.render('user/kategori', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Kategoriler`, description: ``, keywords: ``, Product, test1, filteredkategorilist, sayfalar,myacc, urunsayisi, paramss, BrandList, KategoriKac, kategori })
             }
         })
 
@@ -1217,7 +1265,6 @@ const urunekleurun = async (req, res, next) => {
         const pg = req.query.pg
         let jwtSecretKey = process.env.JWT_SECRET_KEY;
         const x = req.params.urunkategori
-        console.log(x)
         let StoreProduct = []
         const token = req.cookies.usertoken;
         const myacc = await User.find({ usertoken: token });
@@ -1310,15 +1357,49 @@ const urunekleArama = async (req, res, next) => {
         res.render('user/404', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Hata`, description: ``, keywords: `` });
     }
 };
-
-
+const SifremiUnuttumChange = async (req,res,next) => {
+    try{
+        const FindId = await Forgetten.findOne({ TransactionID: req.query.id})
+        if(FindId.firstTime){
+            let jwtSecretKey = process.env.JWT_SECRET_KEY;
+            await Forgetten.findOneAndUpdate(FindId._id,{firstTime: false})
+            const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
+                if (decoded) {
+                    res.redirect('/');
+                } else {
+                    res.render('user/login/changePasswordForget', { layout: '../layouts/login', title: `Yapx | Şifre Değiştir`, description: ``, keywords: ``,TransactionID: req.query.id })
+                }
+            })
+        }
+        else{
+            res.redirect('/giris')
+        }
+    }
+    catch (err){
+        console.log(err)
+        res.render('user/404', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Hata`, description: ``, keywords: `` });
+    }
+}
+const getWishList = async (req,res,next) => {
+    try{
+        const getUser = await User.findOne({usertoken: req.cookies.usertoken})
+        if(getUser != undefined){
+            res.json({status:true,data:getUser.wishlist})
+        }
+        else{
+            res.json({status:false})
+        }
+    }
+    catch (err) {
+        console.log(err)
+    }
+}
 
 // POST
 const urunbul = async (req, res, next) => {
     try {
         let jwtSecretKey = process.env.JWT_SECRET_KEY;
         const token = req.cookies.usertoken;
-        console.log(req.body)
         const banner = await User.find({ usertoken: token });
         const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
             if (decoded && banner[0].userid == '3') {
@@ -1478,12 +1559,11 @@ const kayitolpost = async (req, res, next) => {
                 bilgiler
             );
             await yenikullanici.save();
-            console.log(req.body.isim + ' başarı ile veritabanına eklendi.')
             var transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: 'izzeteminn@gmail.com',
-                    pass: 'ejxgjnpqlnuohsyl'
+                    user: 'info@yapx.com.tr',
+                    pass: 'qodgpxqzhvrjlwjf'
                 }
             });
             const data = {
@@ -1494,7 +1574,6 @@ const kayitolpost = async (req, res, next) => {
             res.clearCookie('dogrulamatoken');
             res.cookie('dogrulamatoken', jwtToken, { expires: new Date(Date.now() + (10 * 365 * 24 * 60 * 60)) });
             const token = ('dogrulamatoken', jwtToken);
-            console.log(token)
             const uyeVarMi = await User.count({ email: req.body.email });
             if (uyeVarMi > 0) {
                 const number = Math.floor(Math.random() * 1000000) + 99999;
@@ -1507,8 +1586,8 @@ const kayitolpost = async (req, res, next) => {
                 var mailOptions = {
                     from: 'izzeteminn@gmail.com',
                     to: req.body.email,
-                    subject: ('Verification Code is: ' + number),
-                    text: ('Verification Code is: ' + number)
+                    subject: ('Yapx Doğrulama Kodu'),
+                    html: (`<!DOCTYPE html><html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="x-apple-disable-message-reformatting"> <title></title> <link href="https://fonts.googleapis.com/css?family=Roboto:400,600" rel="stylesheet" type="text/css"> <!-- Web Font / @font-face : BEGIN --> <!--[if mso]> <style> * { font-family: 'Roboto', sans-serif !important; } </style> <![endif]--> <!--[if !mso]> <link href="https://fonts.googleapis.com/css?family=Roboto:400,600" rel="stylesheet" type="text/css"> <![endif]--> <!-- Web Font / @font-face : END --> <!-- CSS Reset : BEGIN --> <style> /* What it does: Remove spaces around the email design added by some email clients. */ /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */ html, body { margin: 0 auto !important; padding: 0 !important; height: 100% !important; width: 100% !important; font-family: 'Roboto', sans-serif !important; font-size: 14px; margin-bottom: 10px; line-height: 24px; color:#8094ae; font-weight: 400; } * { -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding: 0; } table, td { mso-table-lspace: 0pt !important; mso-table-rspace: 0pt !important; } table { border-spacing: 0 !important; border-collapse: collapse !important; table-layout: fixed !important; margin: 0 auto !important; } table table table { table-layout: auto; } a { text-decoration: none; } img { -ms-interpolation-mode:bicubic; } </style></head><body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: white;"><center style="width: 100%; background-color: #f5f6fa;"> <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="white"> <tr> <td style="padding: 40px 0;"> <table style="width:100%;max-width:620px;margin:0 auto;"> <tbody> <tr> <td style="text-align: center; padding-bottom:25px"> <a href="yapx.xyz"><img style="height: 80px; border-radius: 20px;" src="https://yapx.xyz/general/img/yapxlogom-min.jpg" alt="logo"></a> <p style="font-size: 14px; color: #6576ff; padding-top: 12px;"></p> </td> </tr> </tbody> </table> <table style="width:100%;max-width:620px;margin:0 auto;background-color:#ffffff; border-radius: 20px;"> <tbody> <tr> <td style="text-align:center;padding: 30px 30px 15px 30px;"> <h2 style="font-size: 18px; color: #1ee0ac; font-weight: 600; margin: 0;">ONAY KODU</h2> </td> </tr> <tr> <td style="text-align:center;padding: 0 30px 20px"> <p style="margin-bottom: 10px;"></p> <p style="font-size: 25px; border: 1px solid gray; padding: 20px; border-radius: 20px; letter-spacing: 8px;">${number}</p> </td> </tr> <tr> <td style="text-align:center;padding: 0 30px 40px"> <p style="margin: 0; font-size: 13px; line-height: 22px; color:#9ea8bb;">Bu e-mail otomatik olarak gönderilmiştir lütfen bu maile yanıtlamayın.Herhangibir sorun yaşıyorsanız info@yapx.com ile iletişime geçiniz.</p> </td> </tr> </tbody> </table> <table style="width:100%;max-width:620px;margin:0 auto;"> <tbody> <tr> <td style="text-align: center; padding:25px 20px 0;"> <p style="font-size: 18px;"></p> <p style="padding-top: 15px; font-size: 12px;">Copyright © 2023 Yapx Tüm hakları saklıdır. <a style="color: #6576ff; text-decoration:none;" href="yapx.com">yapx.com</a></p> </td> </tr> </tbody> </table> </td> </tr> </table> </center></body></html>`)
                 };
                 console.log(number)
                 transporter.sendMail(mailOptions, function (error, info) {
@@ -1531,11 +1610,8 @@ const kayitolpost = async (req, res, next) => {
 };
 const kurumsalpost = async (req, res, next) => {
     try {
-        console.log(req.body)
         const uyeVarMi = await User.count({ email: req.body.email });
-        console.log(uyeVarMi)
         if (uyeVarMi > 0) {
-            console.log('Bu üye sistemde var!');
             res.redirect('/giris');
         }
         else {
@@ -1575,7 +1651,6 @@ const kurumsalpost = async (req, res, next) => {
                     bilgiler
                 );
                 await yenikullanici.save();
-                console.log(req.body.dukkanadi + ' başarı ile veritabanına eklendi.')
             }
             else {
 
@@ -1604,8 +1679,8 @@ const loginUser = async (req, res, next) => {
                     var transporter = nodemailer.createTransport({
                         service: 'gmail',
                         auth: {
-                            user: 'izzeteminn@gmail.com',
-                            pass: 'azybjsmlxmvzkqsp'
+                            user: 'info@yapx.com.tr',
+                            pass: 'qodgpxqzhvrjlwjf'
                         }
                     });
                     const data = {
@@ -1681,15 +1756,12 @@ const loginUser = async (req, res, next) => {
                                         }
                                         const uyeBilgileri = await User.find({ email: req.body.email })
                                         await User.findByIdAndUpdate(uyeBilgileri[0]._id, numberdb);
-                                        console.log('yeni token:' + numberdb)
-                                        console.log('login basarili');
                                         res.redirect('/')
                                     }
                                 })
                             }
                             // Süresi Bitmişse Anasayfaya Gönder ve Para Ödeyin Kısmını Getir req.flash yazılcak
                             else {
-                                console.log('et')
                                 req.flash('validation_error', [{ msg: 'Hesabınızın Süresi Bitmiştir Lütfen Yöneticiye Ulaşınız.' }]);
                                 res.redirect('../giris')
                             }
@@ -1724,8 +1796,6 @@ const loginUser = async (req, res, next) => {
                                 }
                                 const uyeBilgileri = await User.find({ email: req.body.email })
                                 await User.findByIdAndUpdate(uyeBilgileri[0]._id, numberdb);
-                                console.log('yeni token:' + numberdb)
-                                console.log('login basarili');
                                 res.redirect('/')
                             }
                         })
@@ -1755,8 +1825,8 @@ const sifremiunuttumPost = async (req, res, next) => {
         var transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
-                user: 'izzeteminn@gmail.com',
-                pass: 'ejxgjnpqlnuohsyl'
+                user: 'info@yapx.com.tr',
+                pass: 'qodgpxqzhvrjlwjf'
             }
         });
         const data = {
@@ -1768,22 +1838,32 @@ const sifremiunuttumPost = async (req, res, next) => {
         res.clearCookie('dogrulamatoken');
         res.cookie('dogrulamatoken', jwtToken, { expires: new Date(Date.now() + 900000) });
         const token = ('dogrulamatoken', jwtToken);
-        console.log(token)
         const uyeVarMi = await User.count({ email: req.body.email });
+        
         if (uyeVarMi > 0) {
             const number = Math.floor(Math.random() * 1000000) + 99999;
-            console.log(number)
             const numberdb = {
                 verfication_number: number,
                 dogrulama_token: token
             }
+            const uid = uuidv4()
+            const informations = {
+                TransactionID: uid,
+                Email: req.body.email,
+                firstTime: true
+            }
+            const yenikullanici = new Forgetten(
+                informations
+            );
+            await yenikullanici.save();
             const uyeBilgileri = await User.find({ email: req.body.email })
             await User.findByIdAndUpdate(uyeBilgileri[0]._id, numberdb);
             var mailOptions = {
                 from: 'izzeteminn@gmail.com',
                 to: req.body.email,
-                subject: ('Verification Code is: ' + number),
-                text: ('Verification Code is: ' + number)
+                subject: ('Yapx Şifre Sıfırlama'),
+                
+                html: (`<!DOCTYPE html><html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <meta name="x-apple-disable-message-reformatting"> <title></title> <link href="https://fonts.googleapis.com/css?family=Roboto:400,600" rel="stylesheet" type="text/css"> <!-- Web Font / @font-face : BEGIN --> <!--[if mso]> <style> * { font-family: 'Roboto', sans-serif !important; } </style> <![endif]--> <!--[if !mso]> <link href="https://fonts.googleapis.com/css?family=Roboto:400,600" rel="stylesheet" type="text/css"> <![endif]--> <!-- Web Font / @font-face : END --> <!-- CSS Reset : BEGIN --> <style> /* What it does: Remove spaces around the email design added by some email clients. */ /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */ html, body { margin: 0 auto !important; padding: 0 !important; height: 100% !important; width: 100% !important; font-family: 'Roboto', sans-serif !important; font-size: 14px; margin-bottom: 10px; line-height: 24px; color:#8094ae; font-weight: 400; } * { -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; margin: 0; padding: 0; } table, td { mso-table-lspace: 0pt !important; mso-table-rspace: 0pt !important; } table { border-spacing: 0 !important; border-collapse: collapse !important; table-layout: fixed !important; margin: 0 auto !important; } table table table { table-layout: auto; } a { text-decoration: none; } img { -ms-interpolation-mode:bicubic; } </style></head><body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: white;"><center style="width: 100%; background-color: #f5f6fa;"> <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="white"> <tr> <td style="padding: 120px 0;"> <table style="width:100%;max-width:620px;margin:0 auto;"> <tbody> <tr> <td style="text-align: center; padding-bottom:25px"> <a href="yapx.xyz"><img style="height: 120px; border-radius: 20px;" src="https://yapx.xyz/general/img/yapxlogom-min.jpg" alt="logo"></a> <p style="font-size: 14px; color: #6576ff; padding-top: 12px;"></p> </td> </tr> </tbody> </table> <table style="width:100%;max-width:620px;margin:0 auto;background-color:#ffffff; border-radius: 20px;"> <tbody> <tr> <td style="text-align:center;padding: 20px 20px 20px 20px;"> <h2 style="font-size: 18px; color: #1ee0ac; font-weight: 600; margin: 0;">ONAY LİNKİ</h2> </td> </tr> <tr> <td style="text-align:center;padding: 0 30px 50px"> <p style="margin-bottom: 30px;"></p> <a href="https://yapx.xyz/changePasswordForget?id=${uid}" style="font-size: 25px; padding: 20px 40px 20px 40px; border-radius: 20px; background-color: #fed700; color: white;">Bağlantıya Git</a> </td> </tr> <tr> <td style="text-align:center;padding: 0 30px 40px"> <p style="margin: 0; font-size: 13px; line-height: 22px; color:#9ea8bb;">Bu e-mail otomatik olarak gönderilmiştir lütfen bu maile yanıtlamayın.Herhangibir sorun yaşıyorsanız info@yapx.com ile iletişime geçiniz.</p> </td> </tr> </tbody> </table> <table style="width:100%;max-width:620px;margin:0 auto;"> <tbody> <tr> <td style="text-align: center; padding:25px 20px 0;"> <p style="font-size: 18px;"></p> <p style="padding-top: 15px; font-size: 12px;">Copyright © 2023 Yapx Tüm hakları saklıdır. <a style="color: #6576ff; text-decoration:none;" href="yapx.com">yapx.com</a></p> </td> </tr> </tbody> </table> </td> </tr> </table> </center></body></html>` )
             };
 
             transporter.sendMail(mailOptions, function (error, info) {
@@ -1811,20 +1891,18 @@ const sifremiunuttumcodePost = async (req, res, next) => {
             service: 'gmail',
             auth: {
                 user: 'izzeteminn@gmail.com',
-                pass: 'ejxgjnpqlnuohsyl'
+                pass: 'iumdezcziubjzuxz'
             }
         });
         const token = req.cookies.dogrulamatoken;
         const uyeVarMi = await User.find({ dogrulama_token: token });
         const SifreVarmi = await User.find(uyeVarMi[0]);
-        console.log(token)
         const Sifrelegal = SifreVarmi[0].verfication_number;
-        console.log(Sifrelegal)
         if (Sifrelegal == req.body.code) {
             var mailOptions = {
                 from: 'izzeteminn@gmail.com',
                 to: SifreVarmi[0].email,
-                subject: ('Yapx Şifre Sıfırlama: ' + SifreVarmi[0].isim),
+                subject: ('Yapx Şifre Sıfırlama'),
                 text: ('Şifren: ' + SifreVarmi[0].sifre)
             };
 
@@ -1839,7 +1917,6 @@ const sifremiunuttumcodePost = async (req, res, next) => {
             });
         }
         else {
-            console.log('bok')
             res.redirect('/sifremiunuttumcode')
         }
     }
@@ -1900,7 +1977,6 @@ const yorumekle = async (req, res, next) => {
                     $push: { product_star: (req.body.rating) },
                     urun_oysayisi: Number(UrunFind[0].urun_oysayisi) + 1,
                 }
-                console.log(UrunFind[0])
                 await Urun.findByIdAndUpdate(UrunFind[0]._id, numberdb);
                 await Urun.findByIdAndUpdate(UrunFind[0]._id, star);
                 res.redirect('/urunler/' + UrunFind[0].product_url)
@@ -1914,34 +1990,62 @@ const yorumekle = async (req, res, next) => {
         console.log(err)
     }
 };
-const yorumekle2 = async (req, res, next) => {
+const yorumekleDukkan = async (req, res, next) => {
     try {
         const urunno = req.params.dukkan;
-        const uyeBilgileri = await User.find({ dukkanurl: urunno })
+        const UrunFind = await User.find({ dukkanurl: urunno })
         let jwtSecretKey = process.env.JWT_SECRET_KEY;
         const token = req.cookies.usertoken;
+        const today = dayjs().locale('tr'); // dayjs kullanarak günün tarihini alıyoruz
+        const day = today.format('DD'); // gün bilgisini alıyoruz
+        const month = today.format('MM'); // ay bilgisini alıyoruz
+        const year = today.format('YYYY'); // yıl bilgisini alıyoruz)
+        const hour = today.format('HH'); // saat bilgisini alıyoruz
+        const minute = today.format('mm'); // dakika bilgisini alıyoruz
         const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
             if (decoded) {
                 const uyeBilgileri2 = await User.find({ usertoken: token });
-                if (uyeBilgileri2[0].userid == '3') {
+                if (uyeBilgileri2[0].userid == '3' || uyeBilgileri2[0].userid == '2') {
                     var numberdb = {
-                        $push: { dukkanyorum: (uyeBilgileri2[0].dukkanadi + ':' + req.body.yorum + ':' + req.body.rating) },
+                        $push: {
+                            dukkanyorum: {
+                                CommenterName: uyeBilgileri2[0].dukkanadi,
+                                CommentedProduct: UrunFind[0].dukkanurl,
+                                Comment: req.body.yorum,
+                                CommentID: uuidv4(),
+                                CommentChild: [],
+                                Rating: req.body.rating,
+                                Time: `${day}.${month}.${year} - ${hour}:${minute}`
+                            },
+                        }
 
                     }
                 }
                 else {
                     var numberdb = {
-                        $push: { dukkanyorum: (uyeBilgileri2[0].isim + ':' + req.body.yorum + ':' + req.body.rating) },
+                        $push: {
+                            dukkanyorum: {
+                                CommenterName: uyeBilgileri2[0].isim,
+                                CommentedProduct: UrunFind[0].dukkanurl,
+                                Comment: req.body.yorum,
+                                CommentID: uuidv4(),
+                                CommentChild: [],
+                                Rating: req.body.rating,
+                                Time: `${day}.${month}.${year} - ${hour}:${minute}`
+                            },
+                        }
+
 
                     }
                 }
+
                 const star = {
                     $push: { dukkan_star: (req.body.rating) },
-                    dukkanoysayisi: Number(uyeBilgileri[0].dukkanoysayisi) + 1,
+                    dukkanoysayisi: Number(UrunFind[0].dukkanoysayisi) + 1,
                 }
-                await User.findByIdAndUpdate(uyeBilgileri[0]._id, numberdb);
-                await User.findByIdAndUpdate(uyeBilgileri[0]._id, star);
-                res.redirect('/dukkanlar/' + uyeBilgileri[0].dukkanurl)
+                await User.findByIdAndUpdate(UrunFind[0]._id, numberdb);
+                await User.findByIdAndUpdate(UrunFind[0]._id, star);
+                res.redirect('/dukkanlar/' + UrunFind[0].dukkanurl)
             } else {
                 res.render('user/giris', { layout: '../layouts/login', title: `Yapx | Kayıt OL`, description: ``, keywords: `` })
             }
@@ -1952,50 +2056,85 @@ const yorumekle2 = async (req, res, next) => {
         console.log(err)
     }
 };
-const sifreyidegistir = async (req, res, next) => {
+const yorumekleMeslek = async (req, res, next) => {
     try {
+        const urunno = req.params.dukkan;
+        const UrunFind = await User.find({ Meslek_URL: urunno })
+        let jwtSecretKey = process.env.JWT_SECRET_KEY;
         const token = req.cookies.usertoken;
-        const sifre = await User.find({ usertoken: token });
-        const id = sifre[0]._id
-        console.log(req.file)
-        if (req.file != undefined) {
-            const sifre = {
-                dukkanphoto: req.file.filename
-            };
+        const today = dayjs().locale('tr'); // dayjs kullanarak günün tarihini alıyoruz
+        const day = today.format('DD'); // gün bilgisini alıyoruz
+        const month = today.format('MM'); // ay bilgisini alıyoruz
+        const year = today.format('YYYY'); // yıl bilgisini alıyoruz)
+        const hour = today.format('HH'); // saat bilgisini alıyoruz
+        const minute = today.format('mm'); // dakika bilgisini alıyoruz
+        const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
+            if (decoded) {
+                const uyeBilgileri2 = await User.find({ usertoken: token });
+                if (uyeBilgileri2[0].userid == '3' || uyeBilgileri2[0].userid == '2') {
+                    var numberdb = {
+                        $push: {
+                            dukkanyorum: {
+                                CommenterName: uyeBilgileri2[0].dukkanadi,
+                                CommentedProduct: UrunFind[0].Meslek_URL,
+                                Comment: req.body.yorum,
+                                CommentID: uuidv4(),
+                                CommentChild: [],
+                                Rating: req.body.rating,
+                                Time: `${day}.${month}.${year} - ${hour}:${minute}`
+                            },
+                        }
 
-            await User.findByIdAndUpdate(id, sifre);
-            console.log('photo degisti')
-        }
-        else { }
-        if (sifre[0].sifre == req.body.guncelsifre && req.body.yenisifre == req.body.yenisifreonay) {
-            const sifre = {
-                sifre: req.body.yenisifre
-            };
+                    }
+                }
+                else {
+                    var numberdb = {
+                        $push: {
+                            dukkanyorum: {
+                                CommenterName: uyeBilgileri2[0].isim,
+                                CommentedProduct: UrunFind[0].Meslek_URL,
+                                Comment: req.body.yorum,
+                                CommentID: uuidv4(),
+                                CommentChild: [],
+                                Rating: req.body.rating,
+                                Time: `${day}.${month}.${year} - ${hour}:${minute}`
+                            },
+                        }
 
-            await User.findByIdAndUpdate(id, sifre);
-            console.log('sifre değişti')
-        }
-        else { }
-        if (req.body.isim != '') {
-            const isim = {
-                isim: req.body.isim
-            };
-            await User.findByIdAndUpdate(id, isim);
-        }
-        else { }
-        if (req.body.soyisim != '') {
-            const soyisim = {
-                soyisim: req.body.soyisim
-            };
-            await User.findByIdAndUpdate(id, soyisim);
-        }
-        else { }
-        res.redirect('../hesabim')
+
+                    }
+                }
+
+                const star = {
+                    $push: { dukkan_star: (req.body.rating) },
+                    dukkanoysayisi: Number(UrunFind[0].dukkanoysayisi) + 1,
+                }
+                await User.findByIdAndUpdate(UrunFind[0]._id, numberdb);
+                await User.findByIdAndUpdate(UrunFind[0]._id, star);
+                res.redirect('/meslekPage?id=' + UrunFind[0].Meslek_URL)
+            } else {
+                res.render('user/giris', { layout: '../layouts/login', title: `Yapx | Kayıt OL`, description: ``, keywords: `` })
+            }
+        })
+
     }
-    catch (err) {
+    catch {
         console.log(err)
     }
 };
+const addPhotoDukkan = async (req,res,next) => {
+    try{
+        const findDukkan = await User.findOne({usertoken: req.cookies.usertoken})
+        const Informations = {
+            dukkanphoto: req.file.filename
+        }
+        await User.findByIdAndUpdate(findDukkan._id,Informations)
+        res.redirect('/hesabim')
+    }
+    catch (err){
+        console.log(err)
+    }
+}
 const dukkanaekle = async (req, res, next) => {
     try {
         const { usertoken: token } = req.cookies;
@@ -2033,7 +2172,8 @@ const dukkanaekle = async (req, res, next) => {
                     value: Number(price),
                     Seller_Name: seller.dukkanadi,
                     Seller_Url: seller.dukkanurl
-                }
+                },
+                Product_Price: Number(price)
             };
 
             await Urun.findByIdAndUpdate(banner._id, minPrice);
@@ -2074,7 +2214,22 @@ const dukkanaekle = async (req, res, next) => {
         res.status(500).json({ error: 'Server error' });
     }
 };
-
+const changePassword = async (req,res,next) => {
+    try{
+        const findUser = await User.findOne({usertoken: req.cookies.usertoken})
+        const isMatch = await bcrypt.compare(req.body.guncelsifre, findUser.sifre);
+        if(isMatch){
+            const Informations = {
+                sifre: await bcrypt.hash(req.body.yenisifre, 10),
+            }
+            await User.findByIdAndUpdate(findUser._id,Informations)
+        }
+        res.redirect('/hesabim')
+    }
+    catch (err){
+        console.log(err)
+    }
+}
 const DukkanaEkleV2forAtTheUrunPage = async (req, res, next) => {
     try {
         const token = req.cookies.usertoken;
@@ -2133,7 +2288,8 @@ const DukkanaEkleV2forAtTheUrunPage = async (req, res, next) => {
                         value: Number(price),
                         Seller_Name: uyeBilgileri2[0].dukkanadi,
                         Seller_Url: uyeBilgileri2[0].dukkanurl
-                    }
+                    },
+                    Product_Price: Number(price)
                 };
                 await Urun.findByIdAndUpdate(banner[0]._id, minPrice);
             } else {
@@ -2193,7 +2349,7 @@ const urunuduzenle = async (req, res, next) => {
 };
 const urunukaldir = async (req, res, next) => {
     try{
-        const token = req.cookies.usertoken;
+    const token = req.cookies.usertoken;
     var uyeBilgileri2 = await User.find({ usertoken: token });
     var urun = await Urun.find({ product_url: req.params.url });
     try {
@@ -2204,7 +2360,6 @@ const urunukaldir = async (req, res, next) => {
     }
     const idurun = urun[0]._id
     const array = []
-    const array2 = []
     /*kullanicinin sattigi urunlerde degisiklik */
     for (let i = 0; i < uyeBilgileri2[0].dukkanurunleri.length; i++) {
         if (uyeBilgileri2[0].dukkanurunleri[i].product_url == req.params.url) {
@@ -2221,7 +2376,59 @@ const urunukaldir = async (req, res, next) => {
     /*urundeki satanlardaki degisiklik */
     for (let i = 0; i < urun[0].product_seller.length; i++) {
         if (urun[0].product_seller[i].seller_url == uyeBilgileri2[0].dukkanurl) {
+            const result = urun[0].product_seller.filter(product => Number(product.price) > Number(urun[0].product_seller[i].price)).length > 0;
+            const result2 = urun[0].product_seller.filter(product => Number(product.price) < Number(urun[0].product_seller[i].price)).length > 0;
             urun[0].product_seller.splice(i, 1)
+            var array2 = urun[0].product_seller
+            if(!result){
+                const changeFinder = urun[0]
+                if (changeFinder && changeFinder.product_seller.length > 0) {
+                const lowestPriceProduct = changeFinder.product_seller.reduce((prev, curr) => {
+                    if (Number(curr.price) < Number(prev.price)) {
+                    return curr;
+                    } else {
+                    return prev;
+                    }
+                });
+                const minPrice = {
+                    Product_MinimumPrice: {
+                        value: Number(lowestPriceProduct.price),
+                        Seller_Name: lowestPriceProduct.seller_Name,
+                        Seller_Url: lowestPriceProduct.seller_url
+                    }
+                };
+                await Urun.findOneAndUpdate(changeFinder._id,minPrice)
+                } 
+                else {
+                    await Urun.findOneAndUpdate(changeFinder._id,{ Product_MinimumPrice:{}})
+                }        
+            }
+            if(!result2){
+                const changeFinder = urun[0]
+
+                if (changeFinder && changeFinder.product_seller.length > 0) {
+                const highestPriceProduct = changeFinder.product_seller.reduce((prev, curr) => {
+                    if (Number(curr.price) > Number(prev.price)) {
+                    return curr;
+                    } else {
+                    return prev;
+                    }
+                });
+
+                const maxPrice = {
+                    Product_MaximumPrice: {
+                    value: Number(highestPriceProduct.price),
+                    Seller_Name: highestPriceProduct.seller_Name,
+                    Seller_Url: highestPriceProduct.seller_url
+                    }
+                };
+
+                await Urun.findByIdAndUpdate(changeFinder._id, maxPrice);
+                } else {
+                    await Urun.findOneAndUpdate(changeFinder._id,{ Product_MaximumPrice:{}})
+                }
+
+            }
         }
         else {
             array2.push(urun[0].product_seller[i])
@@ -2231,7 +2438,8 @@ const urunukaldir = async (req, res, next) => {
         product_seller: array2
     }
     await Urun.findByIdAndUpdate(idurun, yeniarray2);
-    res.redirect('/dukkanlar/' + uyeBilgileri2[0].dukkanurl);
+    var referer = req.get('referer');
+    res.redirect(referer);
     }
     catch (err){
         console.log(err)
@@ -2250,8 +2458,6 @@ const urunukaldirv2 = async (req, res, next) => {
             res.redirect('/giris/');
         }
         const idurun = urun[0]._id
-        const array = []
-        const array2 = []
 
         const updatedProducts = uyeBilgileri2[0].dukkanurunleri.filter(product => {
             return product.product_url !== req.body.url;
@@ -2262,15 +2468,75 @@ const urunukaldirv2 = async (req, res, next) => {
         };
 
         await User.findByIdAndUpdate(iduser, yeniarray);
-
+        for (let i = 0; i < urun[0].product_seller.length; i++) {
+            if (urun[0].product_seller[i].seller_url == uyeBilgileri2[0].dukkanurl) {
+                const result = urun[0].product_seller.filter(product => Number(product.price) > Number(urun[0].product_seller[i].price)).length > 0;
+                const result2 = urun[0].product_seller.filter(product => Number(product.price) < Number(urun[0].product_seller[i].price)).length > 0;
+                urun[0].product_seller.splice(i, 1)
+                var array2 = urun[0].product_seller
+                if(!result){
+                    const changeFinder = urun[0]
+                    if (changeFinder && changeFinder.product_seller.length > 0) {
+                    const lowestPriceProduct = changeFinder.product_seller.reduce((prev, curr) => {
+                        if (Number(curr.price) < Number(prev.price)) {
+                        return curr;
+                        } else {
+                        return prev;
+                        }
+                    });
+                    const minPrice = {
+                        Product_MinimumPrice: {
+                            value: Number(lowestPriceProduct.price),
+                            Seller_Name: lowestPriceProduct.seller_Name,
+                            Seller_Url: lowestPriceProduct.seller_url
+                        }
+                    };
+                    await Urun.findOneAndUpdate(changeFinder._id,minPrice)
+                    } 
+                    else {
+                        await Urun.findOneAndUpdate(changeFinder._id,{ Product_MinimumPrice:{}})
+                    }        
+                }
+                if(!result2){
+                    const changeFinder = urun[0]
+    
+                    if (changeFinder && changeFinder.product_seller.length > 0) {
+                    const highestPriceProduct = changeFinder.product_seller.reduce((prev, curr) => {
+                        if (Number(curr.price) > Number(prev.price)) {
+                        return curr;
+                        } else {
+                        return prev;
+                        }
+                    });
+    
+                    const maxPrice = {
+                        Product_MaximumPrice: {
+                        value: Number(highestPriceProduct.price),
+                        Seller_Name: highestPriceProduct.seller_Name,
+                        Seller_Url: highestPriceProduct.seller_url
+                        }
+                    };
+    
+                    await Urun.findByIdAndUpdate(changeFinder._id, maxPrice);
+                    } else {
+                        await Urun.findOneAndUpdate(changeFinder._id,{ Product_MaximumPrice:{}})
+                    }
+    
+                }
+            }
+            else {
+                array2.push(urun[0].product_seller[i])
+            }
+        }
         urun[0].product_seller = urun[0].product_seller.filter(seller => {
+            
             return seller.seller_url !== uyeBilgileri2[0].dukkanurl;
         });
 
         const yeniarray2 = {
             product_seller: urun[0].product_seller
         };
-
+        
         await Urun.findByIdAndUpdate(idurun, yeniarray2);
         res.json({ status: "Tamamlandı." })
     }
@@ -2297,7 +2563,6 @@ const filtre = async (req, res, next) => {
         const myacc = await User.find({ usertoken: token });
         let sayfaurunleri = []
         let sayfalar = []
-        console.log(req.body)
         const list = []
         if (req.cookies.aranan == 'urunara') {
             const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
@@ -2406,7 +2671,6 @@ const filtresayfa = async (req, res, next) => {
         let sayfalar = []
         const list = []
         const myacc = await User.find({ usertoken: token });
-        console.log(req.params.ara.split(':')[0])
         let sayfaurunleri = []
         if (req.params.aramasayfa == 'urunara') {
             const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
@@ -2599,6 +2863,7 @@ const MeslekRegister = async (req, res, next) => {
                 Meslek_Category: req.body.MeslekCategory,
                 Meslek_SubCategory: req.body.MeslekSubCategory,
                 Meslek_Referances: [],
+                Meslek_Photos: ['test.png'],
                 Meslek_URL: uuidv4(),
                 User_Status: "Aktif",
                 Meslek_About: "Kullanıcı Henüz Hakkındakileri Belirtmemiş.",
@@ -2734,6 +2999,110 @@ const childComment = async (req, res, next) => {
         console.log(err)
 }
 }
+const childCommentDukkan = async (req, res, next) => {
+    try {
+        const FindComment = await User.findOne({ dukkanurl: req.query.product_id });
+        const FindUser = await User.findOne({ usertoken: req.cookies.usertoken });
+        const today = dayjs().locale('tr');
+        const day = today.format('DD');
+        const month = today.format('MM');
+        const year = today.format('YYYY');
+        const hour = today.format('HH'); // saat bilgisini alıyoruz
+        const minute = today.format('mm'); // dakika bilgisini alıyoruz
+        for (let index = 0; index < FindComment.dukkanyorum.length; index++) {
+        const element = FindComment.dukkanyorum[index];
+        
+        if (element.CommentID == req.query.comment_id) {
+            const updatedCommentChild = element.CommentChild;
+
+            if (FindUser.userid == '3' || FindUser.userid == '2') {
+            var numberdb = {
+                CommenterName: FindUser.dukkanadi,
+                CommentedProduct: FindComment.dukkanurl,
+                Comment: req.body.yorum,
+                CommentID: uuidv4(),
+                CommentChild: [],
+                Time: `${day}.${month}.${year} - ${hour}:${minute}`
+            }
+            } else {
+            var numberdb = {
+                CommenterName: FindUser.isim,
+                CommentedProduct: FindComment.dukkanurl,
+                Comment: req.body.yorum,
+                CommentID: uuidv4(),
+                CommentChild: [],
+                Time: `${day}.${month}.${year} - ${hour}:${minute}`
+            }
+            }
+            
+            updatedCommentChild.push(numberdb);
+            FindComment.dukkanyorum[index].CommentChild = updatedCommentChild;
+
+            await User.updateOne(
+            { _id: FindComment._id, "dukkanyorum.CommentID": req.query.comment_id },
+            { $set: { "dukkanyorum.$.CommentChild": updatedCommentChild } }
+            );
+        }
+        }
+
+        res.redirect('/dukkanlar/'+FindComment.dukkanurl)
+    }
+    catch (err) {
+        console.log(err)
+}
+}
+const childCommentMeslek = async (req, res, next) => {
+    try {
+        const FindComment = await User.findOne({ Meslek_URL: req.query.product_id });
+        const FindUser = await User.findOne({ usertoken: req.cookies.usertoken });
+        const today = dayjs().locale('tr');
+        const day = today.format('DD');
+        const month = today.format('MM');
+        const year = today.format('YYYY');
+        const hour = today.format('HH'); // saat bilgisini alıyoruz
+        const minute = today.format('mm'); // dakika bilgisini alıyoruz
+        for (let index = 0; index < FindComment.dukkanyorum.length; index++) {
+        const element = FindComment.dukkanyorum[index];
+        
+        if (element.CommentID == req.query.comment_id) {
+            const updatedCommentChild = element.CommentChild;
+
+            if (FindUser.userid == '3' || FindUser.userid == '2') {
+            var numberdb = {
+                CommenterName: FindUser.dukkanadi,
+                CommentedProduct: FindComment.Meslek_URL,
+                Comment: req.body.yorum,
+                CommentID: uuidv4(),
+                CommentChild: [],
+                Time: `${day}.${month}.${year} - ${hour}:${minute}`
+            }
+            } else {
+            var numberdb = {
+                CommenterName: FindUser.isim,
+                CommentedProduct: FindComment.Meslek_URL,
+                Comment: req.body.yorum,
+                CommentID: uuidv4(),
+                CommentChild: [],
+                Time: `${day}.${month}.${year} - ${hour}:${minute}`
+            }
+            }
+            
+            updatedCommentChild.push(numberdb);
+            FindComment.dukkanyorum[index].CommentChild = updatedCommentChild;
+
+            await User.updateOne(
+            { _id: FindComment._id, "dukkanyorum.CommentID": req.query.comment_id },
+            { $set: { "dukkanyorum.$.CommentChild": updatedCommentChild } }
+            );
+        }
+        }
+
+        res.redirect('/meslekPage?id=' +FindComment.Meslek_URL)
+    }
+    catch (err) {
+        console.log(err)
+}
+}
 const deletes = async (req, res, next) => {
 
     const silinecekler = await Urun.find({ product_category3: "Sulama Sistemleri" })
@@ -2743,7 +3112,7 @@ const deletes = async (req, res, next) => {
 };
 const MeslekPhotoChange = async (req, res, next) => {
     try {
-        const FindUser = await User.findOne({ Meslek_URL: req.query.id })
+        const FindUser = await User.findOne({ usertoken: req.cookies.usertoken })
         const Photos = []
         req.files.forEach(element => {
             Photos.push(element.filename)
@@ -2760,7 +3129,7 @@ const MeslekPhotoChange = async (req, res, next) => {
 }
 const addProjectMeslek = async (req, res, next) => {
     try {
-        const FindUser = await User.findOne({ Meslek_URL: req.query.id })
+        const FindUser = await User.findOne({ usertoken: req.cookies.usertoken })
         const Photos = []
         req.files.forEach(element => {
             Photos.push(element.filename)
@@ -2769,6 +3138,7 @@ const addProjectMeslek = async (req, res, next) => {
             $push: {
                 Meslek_Projects: {
                     Project_Title: req.body.Project_Title,
+                    Project_Date: req.body.Project_Date,
                     Project_Content: req.body.Project_Content,
                     Project_UI: uuidv4(),
                     Project_Photos: Photos
@@ -2784,7 +3154,7 @@ const addProjectMeslek = async (req, res, next) => {
 }
 const addReferanceMeslek = async (req, res, next) => {
     try {
-        const FindUser = await User.findOne({ Meslek_URL: req.query.id })
+        const FindUser = await User.findOne({ usertoken: req.cookies.usertoken })
         const info = {
             $push: {
                 Meslek_Referances: {
@@ -2803,15 +3173,15 @@ const addReferanceMeslek = async (req, res, next) => {
 }
 const addAboutMeslek = async (req, res, next) => {
     try {
-        if (req.query.acc == "Meslek") {
-            const FindUser = await User.findOne({ Meslek_URL: req.query.id })
+        const FindUser = await User.findOne({ usertoken: req.cookies.usertoken })
+        if (FindUser.userid == "5") {
+            
             const info = {
                 Meslek_About: req.body.Meslek_About,
             }
             await User.findByIdAndUpdate(FindUser._id, info)
         }
-        if (req.query.acc == "Dukkan") {
-            const FindUser = await User.findOne({ dukkanurl: req.query.id })
+        if (FindUser.userid == "3") {
             const info = {
                 Dukkan_About: req.body.Dukkan_About,
             }
@@ -2825,8 +3195,8 @@ const addAboutMeslek = async (req, res, next) => {
 }
 const addMeslekThumbnails = async (req, res, next) => {
     try {
-        if (req.query.acc == "Meslek") {
-            const FindUser = await User.findOne({ Meslek_URL: req.query.id })
+        const FindUser = await User.findOne({ usertoken: req.cookies.usertoken })
+        if (FindUser.userid == "3") {
             const Photos = []
             req.files.forEach(element => {
                 Photos.push(element.filename)
@@ -2836,8 +3206,7 @@ const addMeslekThumbnails = async (req, res, next) => {
             }
             await User.findByIdAndUpdate(FindUser._id, info)
         }
-        if (req.query.acc == "Dukkan") {
-            const FindUser = await User.findOne({ dukkanurl: req.query.id })
+        if (FindUser.userid == "5") {
             const Photos = []
             req.files.forEach(element => {
                 Photos.push(element.filename)
@@ -2855,25 +3224,51 @@ const addMeslekThumbnails = async (req, res, next) => {
 }
 const addContanct = async (req, res, next) => {
     try {
-        if (req.query.acc == "Meslek") {
-            const FindUser = await User.findOne({ Meslek_URL: req.query.id })
-
+        const FindUser = await User.findOne({ usertoken: req.cookies.usertoken })
+        if (FindUser.userid == "5") {
+            
             const info = {
                 Meslek_Adres: req.body.adres,
                 gsmtelefon: req.body.telefon
             }
             await User.findByIdAndUpdate(FindUser._id, info)
         }
-        if (req.query.acc == "Dukkan") {
-            const FindUser = await User.findOne({ Meslek_URL: req.query.id })
-
+        if (FindUser.userid == "3") {
             const info = {
-                Meslek_Adres: req.body.adres,
+                sirketadresi: req.body.adres,
                 gsmtelefon: req.body.telefon
             }
             await User.findByIdAndUpdate(FindUser._id, info)
         }
         res.redirect('/hesabim')
+    }
+    catch (err) {
+        console.log(err)
+    }
+}
+const emailChecker = async (req, res, next) => {
+    try {
+        const findUser = await User.findOne({usertoken: req.cookies.usertoken})
+        if (findUser.userid == "5") {
+            if(req.body.isChecked == "True"){
+                await User.findByIdAndUpdate(findUser._id,{Email_Permission: true})
+            }
+            else{
+                await User.findByIdAndUpdate(findUser._id,{Email_Permission: false})
+            }
+            var referer = req.get('referer');
+            res.redirect(referer);
+        }
+        if (findUser.userid == "3") {
+            if(req.body.isChecked == "True"){
+                await User.findByIdAndUpdate(findUser._id,{Email_Permission: true})
+            }
+            else{
+                await User.findByIdAndUpdate(findUser._id,{Email_Permission: false})
+            }
+            var referer = req.get('referer');
+            res.redirect(referer);
+        }
     }
     catch (err) {
         console.log(err)
@@ -2907,6 +3302,69 @@ const FavoriDukkanlar = async (req, res, next) => {
     }
     catch (Err) {
         console.log(Err)
+    }
+}
+const FavoriMeslekler = async (req, res, next) => {
+    try {
+        const jwtSecretKey = process.env.JWT_SECRET_KEY;
+        const token = req.cookies.usertoken;
+        const dukkanurl = req.params.dukkanurl;
+        const uyeBilgileri = await User.find({ usertoken: token });
+
+        const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
+        if (decoded) {
+            const isDukkanEkli = uyeBilgileri[0].wishlist_Meslek.some(item => item.Meslek_URL === dukkanurl);
+            if (!isDukkanEkli) {
+                const ProductFind = await User.findOne({ Meslek_URL: dukkanurl });
+                const star = {
+                    $push: {
+                        wishlist_Meslek: ProductFind
+                    },
+                };
+                
+                await User.findByIdAndUpdate(uyeBilgileri[0]._id, star);
+                res.json({status:true})
+            }
+            else{   
+                res.json({status:false,errMessage:"Bir şey yanlış gitti."})
+            }
+            
+        } else {
+            res.json({status:false,errMessage:"Giriş Yapınız."})
+        }
+        });
+    }
+    catch (Err) {
+        console.log(Err)
+    }
+}
+const FavoriMesleklerRemove = async (req,res,next) =>{
+    try{
+        const jwtSecretKey = process.env.JWT_SECRET_KEY;
+        const token = req.cookies.usertoken;
+        const dukkanurl = req.params.dukkanurl;
+        const uyeBilgileri = await User.find({ usertoken: token });
+
+        const verified = jwt.verify(token, jwtSecretKey, async (e, decoded) => {
+        if (decoded) {
+            const isDukkanEkli = uyeBilgileri[0].wishlist_Meslek.some(item => item.Meslek_URL === dukkanurl);
+            if (isDukkanEkli) {
+            const star = {
+                $pull: {
+                    wishlist_Meslek: { Meslek_URL: dukkanurl }
+                },
+            };
+            
+            await User.findByIdAndUpdate(uyeBilgileri[0]._id, star);
+            }
+            next();
+        } else {
+            res.render('user/giris', { layout: '../layouts/login', title: `Yapx | Giriş Yap`, description: ``, keywords: `` });
+        }
+        });
+    }
+    catch(err){
+        console.log(err)
     }
 }
 const FavoriDukkanlarRemove = async (req,res,next) =>{
@@ -2977,14 +3435,65 @@ const meslekProfilePhotoDelete = async (req,res,next) => {
         console.log(err)
     }
 }
-
-
-
+const SifremiUnuttumChangePost = async (req,res,next) => {
+    try{
+        const FindId = await Forgetten.findOne({ TransactionID: req.query.id})
+        const findUser = await User.findOne({ email: FindId.Email })
+        const info = {
+            sifre: await bcrypt.hash(req.body.Password, 10)
+        }
+        await User.findByIdAndUpdate(findUser._id,info)
+        await Forgetten.findByIdAndRemove(FindId._id)
+        res.redirect('/giris')
+    }
+    catch (err){
+        console.log(err)
+        res.render('user/404', { layout: '../layouts/mainSecond_Layout', title: `Yapx | Hata`, description: ``, keywords: `` });
+    }
+}
+const checkEmail = async (req,res,next) => {
+    try{
+        const Email = req.body.Email
+        const UserCount = await User.count({email: Email})
+        if(UserCount == 0){
+            res.json({status:true})
+        }
+        else{
+            res.json({status:false,errMessage:"Bu Email Adresi Kayıtlı."})
+        }
+    }
+    catch (err){
+        console.log(err)
+    }
+}
+const UrunleriDuzelt = async (req,res,next) => {
+    try{
+        const FindUruns = await Urun.find({active : "1"})
+        var info = {
+            avarage : 0,
+            urun_oysayisi: 0,
+            product_seller: [],
+            tiklanmasayisi: 0,
+            Product_Price: 0,
+            Product_WishListCounter: 0,
+            urun_yorum: []
+        }
+        FindUruns.forEach(async element => {
+            await Urun.findOneAndUpdate(element._id,info)
+            console.log(element.product_name + ' başarı ile düzenlendi.')
+        });
+    }
+    catch (err){
+        console.log(err)
+    }
+}
 module.exports = {
     homeShow,
     meslekProfilePhotoDelete,
     homeYonlendirme,
     urunekleurun,
+    SifremiUnuttumChangePost,
+    UrunleriDuzelt,
     FavoriDukkanlar,
     arama,
     mesajgonderContinue,
@@ -2994,15 +3503,20 @@ module.exports = {
     FavoriDukkanlarRemove,
     addContanct,
     urunekleArama,
+    FavoriMeslekler,
     addAboutMeslek,
     sifremiunuttum,
     sifremiunuttumcode,
+    FavoriMesleklerRemove,
+    emailChecker,
     addProjectMeslek,
+    SifremiUnuttumChange,
     kayitolcodepost,
     addReferanceMeslek,
     aramasayfa,
     kayitolcodeget,
     MeslekRegister,
+    changePassword,
     IsDecoded,
     searchSelect,
     isteklistesi,
@@ -3013,17 +3527,20 @@ module.exports = {
     isteklistesiremove,
     MeslekPhotoChange,
     meslekKategoriAlt,
+    childCommentDukkan,
+    childCommentMeslek,
     meslekKategoriUst,
     giris,
+    checkEmail,
     kayitol,
     deletes,
     dortyuzdort,
     hesabim,
+    getWishList,
     messagePage,
     childComment,
     DukkanaEkleV2forAtTheUrunPage,
     urunukaldirv2,
-    sifreyidegistir,
     girisSecim,
     kayitolSecim,
     mesajlarim,
@@ -3036,12 +3553,14 @@ module.exports = {
     isteklistesiadd,
     kayitolpost,
     urunbul,
-    yorumekle2,
+    yorumekleDukkan,
+    yorumekleMeslek,
     filtresayfa,
     yorumekle,
     filtre,
     loginUser,
     kategori,
+    addPhotoDukkan,
     sifremiunuttumPost,
     sifremiunuttumcodePost,
     logout,

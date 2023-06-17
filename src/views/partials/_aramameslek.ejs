@@ -6,7 +6,14 @@
                     <div class="mb-2"><a href="/meslekPage?id=<%- Product.Meslek_URL %>" class="font-size-12 text-gray-5"><%- Product.Meslek_City %></a></div>
                     <h5 class="mb-1 product-item__title"><a href="/meslekPage?id=<%- Product.Meslek_URL %>" class="text-blue font-weight-bold"><%- Product.isim + " " + Product.soyisim %></a></h5>
                     <div class="mb-2">
-                        <a href="/meslekPage?id=<%- Product.Meslek_URL %>" class="d-block text-center"><img class="img-fluid" src="/uploads/images/<%- Product.Meslek_Photos[0] %>" alt="<%- Product.isim %>"></a>
+                        <a href="/meslekPage?id=<%- Product.Meslek_URL %>" class="d-block text-center"><% if (Product.Meslek_Photos.length == 0) { %>
+                            <img class="img-fluid"  src="/uploads/images/test.png" alt="">
+                          <% }else{ %>
+                              <img class="img-fluid" src="/uploads/images/<%-Product.Meslek_Photos[0] %>" alt="">
+                              <% }  %>
+                            
+                        
+                        </a>
                     </div> 
                 </div>
                 <div class="product-item__footer">
