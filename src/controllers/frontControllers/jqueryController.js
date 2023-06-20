@@ -377,12 +377,12 @@ const fiyatagorelisteleSatici = async (req,res,next) => {
 const FilterPoints = async (req,res,next) => {
     try{
         if(req.query.searchKey==undefined){
-            const markalar1 = await Urun.find({ product_category3: req.params.kategoriler }).sort({ avarage: -1 }).skip((req.query.pg * 20) - 20).limit(20)
+            const markalar1 = await Urun.find({ product_category3: req.params.kategoriler, avarage: { $gt: 0 } }).sort({ avarage: -1 }).skip((req.query.pg * 20) - 20).limit(20)
             var markalar1sirala = markalar1
             if(markalar1.length==0){
-                var markalar = await Urun.find({product_category2: req.params.kategoriler }).sort({ avarage: -1 }).skip((req.query.pg*20)-20).limit(20);        
+                var markalar = await Urun.find({product_category2: req.params.kategoriler, avarage: { $gt: 0 } }).sort({ avarage: -1 }).skip((req.query.pg*20)-20).limit(20);        
                 if (markalar.length == 0){
-                    const markalar2 = await Urun.find({product_category: req.params.kategoriler}).sort({ avarage: -1 }).skip((req.query.pg*20)-20).limit(20);
+                    const markalar2 = await Urun.find({product_category: req.params.kategoriler, avarage: { $gt: 0 }}).sort({ avarage: -1 }).skip((req.query.pg*20)-20).limit(20);
                     res.json(markalar2)
                 }
                 else{
@@ -400,21 +400,42 @@ const FilterPoints = async (req,res,next) => {
 }
 const FilterPrice = async (req,res,next) => {
     try{
-        if(req.query.searchKey==undefined){
-            const markalar1 = await Urun.find({ product_category3: req.params.kategoriler }).sort({ Product_Price: -1 }).skip((req.query.pg * 20) - 20).limit(20)
-            var markalar1sirala = markalar1
-            if(markalar1.length==0){
-                var markalar = await Urun.find({product_category2: req.params.kategoriler }).sort({ Product_Price: -1 }).skip((req.query.pg*20)-20).limit(20);        
-                if (markalar.length == 0){
-                    const markalar2 = await Urun.find({product_category: req.params.kategoriler}).sort({ Product_Price: -1 }).skip((req.query.pg*20)-20).limit(20);
-                    res.json(markalar2)
+        if(req.query.type == "artan"){
+            if(req.query.searchKey==undefined){
+                const markalar1 = await Urun.find({ product_category3: req.params.kategoriler, Product_Price: { $gt: 0 } }).sort({ Product_Price: -1 }).skip((req.query.pg * 20) - 20).limit(20)
+                var markalar1sirala = markalar1
+                if(markalar1.length==0){
+                    var markalar = await Urun.find({product_category2: req.params.kategoriler, Product_Price: { $gt: 0 } }).sort({ Product_Price: -1 }).skip((req.query.pg*20)-20).limit(20);        
+                    if (markalar.length == 0){
+                        const markalar2 = await Urun.find({product_category: req.params.kategoriler, Product_Price: { $gt: 0 }}).sort({ Product_Price: -1 }).skip((req.query.pg*20)-20).limit(20);
+                        res.json(markalar2)
+                    }
+                    else{
+                        res.json(markalar)
+                    }
                 }
                 else{
-                    res.json(markalar)
+                    res.json(markalar1sirala)
                 }
             }
-            else{
-                res.json(markalar1sirala)
+        }
+        if(req.query.type == "azalan"){
+            if(req.query.searchKey==undefined){
+                const markalar1 = await Urun.find({ product_category3: req.params.kategoriler, Product_Price: { $gt: 0 } }).sort({ Product_Price: +1 }).skip((req.query.pg * 20) - 20).limit(20)
+                var markalar1sirala = markalar1
+                if(markalar1.length==0){
+                    var markalar = await Urun.find({product_category2: req.params.kategoriler, Product_Price: { $gt: 0 } }).sort({ Product_Price: +1 }).skip((req.query.pg*20)-20).limit(20);        
+                    if (markalar.length == 0){
+                        const markalar2 = await Urun.find({product_category: req.params.kategoriler, Product_Price: { $gt: 0 }}).sort({ Product_Price: +1 }).skip((req.query.pg*20)-20).limit(20);
+                        res.json(markalar2)
+                    }
+                    else{
+                        res.json(markalar)
+                    }
+                }
+                else{
+                    res.json(markalar1sirala)
+                }
             }
         }
     }

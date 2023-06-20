@@ -1563,7 +1563,7 @@ const kayitolpost = async (req, res, next) => {
                 service: 'gmail',
                 auth: {
                     user: 'info@yapx.com.tr',
-                    pass: 'qodgpxqzhvrjlwjf'
+                    pass: 'fxhxlmidibkzhwxt'
                 }
             });
             const data = {
@@ -1617,13 +1617,15 @@ const kurumsalpost = async (req, res, next) => {
         else {
             if (req.body.sifre == req.body.sifretekrar) {
                 const bilgiler = {
-                    dukkanadi: req.body.Dükkan_Adı,
+                    dukkanadi: req.body.dukkanadi,
+                    isim: req.body.isim,
                     email: req.body.email,
+                    soyisim: req.body.soyisim,
                     wishlist: [],
                     sifre: await bcrypt.hash(req.body.sifre, 10),
                     verfication_number: 's',
                     sabittelefon: req.body.Sabit_telefon,
-                    dukkanyorum: 'Yapx: Bu dükkan yorumlarınızı bekliyor.:5',
+                    dukkanyorum: {},
                     dukkanili: req.body.Iller,
                     dukkanilcesi: req.body.Ilceler,
                     gsmtelefon: req.body.GSM_telefon,
@@ -1680,7 +1682,7 @@ const loginUser = async (req, res, next) => {
                         service: 'gmail',
                         auth: {
                             user: 'info@yapx.com.tr',
-                            pass: 'qodgpxqzhvrjlwjf'
+                            pass: 'fxhxlmidibkzhwxt'
                         }
                     });
                     const data = {
@@ -1826,7 +1828,7 @@ const sifremiunuttumPost = async (req, res, next) => {
             service: 'gmail',
             auth: {
                 user: 'info@yapx.com.tr',
-                pass: 'qodgpxqzhvrjlwjf'
+                pass: 'fxhxlmidibkzhwxt'
             }
         });
         const data = {
@@ -2304,9 +2306,11 @@ const DukkanaEkleV2forAtTheUrunPage = async (req, res, next) => {
             }
             await User.findByIdAndUpdate(uyeBilgileri2[0]._id, numberdb);
             await Urun.findByIdAndUpdate(banner[0]._id, star);
-            res.redirect('/dukkanlar/' + uyeBilgileri2[0].dukkanurl);
+            var referer = req.get('referer');
+            res.redirect(referer);
         } else {
-            res.redirect('/dukkanlar/' + uyeBilgileri2[0].dukkanurl);
+            var referer = req.get('referer');
+            res.redirect(referer);
         }
     } catch (err) {
         console.log(err);
@@ -2325,7 +2329,8 @@ const urunuduzenle = async (req, res, next) => {
     /*kullanicinin sattigi urunlerde degisiklik */
     for (let i = 0; i < uyeBilgileri2[0].dukkanurunleri.length; i++) {
         if (uyeBilgileri2[0].dukkanurunleri[i].product_url == req.params.url) {
-            uyeBilgileri2[0].dukkanurunleri[i] = (urun[0].product_url + ':' + req.body.fiyat + ':' + req.body.stok)
+            uyeBilgileri2[0].dukkanurunleri[i].price = req.body.fiyat
+            uyeBilgileri2[0].dukkanurunleri[i].stock = req.body.stok
         }
         array.push(uyeBilgileri2[0].dukkanurunleri[i])
     }
@@ -2336,7 +2341,57 @@ const urunuduzenle = async (req, res, next) => {
     /*urundeki satanlardaki degisiklik */
     for (let i = 0; i < urun[0].product_seller.length; i++) {
         if (urun[0].product_seller[i].seller_url == uyeBilgileri2[0].dukkanurl) {
-            urun[0].product_seller[i] = (uyeBilgileri2[0].dukkanurl + ':' + req.body.fiyat + ':' + req.body.stok)
+            const result = urun[0].product_seller.filter(product => Number(product.price) > Number(urun[0].product_seller[i].price)).length > 0;
+            const result2 = urun[0].product_seller.filter(product => Number(product.price) < Number(urun[0].product_seller[i].price)).length > 0;
+            urun[0].product_seller[i].price = req.body.fiyat
+            urun[0].product_seller[i].stock = req.body.stok
+            if(!result){
+                const changeFinder = urun[0]
+                if (changeFinder && changeFinder.product_seller.length > 0) {
+                const lowestPriceProduct = changeFinder.product_seller.reduce((prev, curr) => {
+                    if (Number(curr.price) < Number(prev.price)) {
+                    return curr;
+                    } else {
+                    return prev;
+                    }
+                });
+                const minPrice = {
+                    Product_MinimumPrice: {
+                        value: Number(lowestPriceProduct.price),
+                        Seller_Name: lowestPriceProduct.seller_Name,
+                        Seller_Url: lowestPriceProduct.seller_url
+                    },
+                    Product_Price: Number(lowestPriceProduct.price)
+                };
+                await Urun.findOneAndUpdate(changeFinder._id,minPrice)
+                }       
+            }
+            if(!result2){
+                const changeFinder = urun[0]
+
+                if (changeFinder && changeFinder.product_seller.length > 0) {
+                const highestPriceProduct = changeFinder.product_seller.reduce((prev, curr) => {
+                    if (Number(curr.price) > Number(prev.price)) {
+                    return curr;
+                    } else {
+                    return prev;
+                    }
+                });
+
+                const maxPrice = {
+                    Product_MaximumPrice: {
+                    value: Number(highestPriceProduct.price),
+                    Seller_Name: highestPriceProduct.seller_Name,
+                    Seller_Url: highestPriceProduct.seller_url
+                    }
+                };
+
+                await Urun.findByIdAndUpdate(changeFinder._id, maxPrice);
+                } else {
+                    await Urun.findOneAndUpdate(changeFinder._id,{ Product_MaximumPrice:{}})
+                }
+
+            }
         }
         array2.push(urun[0].product_seller[i])
     }
@@ -2400,7 +2455,8 @@ const urunukaldir = async (req, res, next) => {
                 await Urun.findOneAndUpdate(changeFinder._id,minPrice)
                 } 
                 else {
-                    await Urun.findOneAndUpdate(changeFinder._id,{ Product_MinimumPrice:{}})
+
+                    await Urun.findOneAndUpdate(changeFinder._id,{ Product_MinimumPrice:{},Product_Price: 0})
                 }        
             }
             if(!result2){
@@ -2494,7 +2550,7 @@ const urunukaldirv2 = async (req, res, next) => {
                     await Urun.findOneAndUpdate(changeFinder._id,minPrice)
                     } 
                     else {
-                        await Urun.findOneAndUpdate(changeFinder._id,{ Product_MinimumPrice:{}})
+                        await Urun.findOneAndUpdate(changeFinder._id,{ Product_MinimumPrice:{},Product_Price: 0})
                     }        
                 }
                 if(!result2){
@@ -3202,7 +3258,7 @@ const addMeslekThumbnails = async (req, res, next) => {
                 Photos.push(element.filename)
             });
             const info = {
-                Meslek_Thumbnails: Photos
+                Dukkan_Thumbnails: Photos
             }
             await User.findByIdAndUpdate(FindUser._id, info)
         }
@@ -3212,7 +3268,7 @@ const addMeslekThumbnails = async (req, res, next) => {
                 Photos.push(element.filename)
             });
             const info = {
-                Dukkan_Thumbnails: Photos
+                Meslek_Thumbnails: Photos
             }
             await User.findByIdAndUpdate(FindUser._id, info)
         }
@@ -3476,7 +3532,10 @@ const UrunleriDuzelt = async (req,res,next) => {
             tiklanmasayisi: 0,
             Product_Price: 0,
             Product_WishListCounter: 0,
-            urun_yorum: []
+            urun_yorum: [],
+            product_star: [],
+            Product_MaximumPrice: {},
+            Product_MinimumPrice: {}
         }
         FindUruns.forEach(async element => {
             await Urun.findOneAndUpdate(element._id,info)

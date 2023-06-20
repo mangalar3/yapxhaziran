@@ -54,7 +54,6 @@ router.get('/FilterPrice/:kategoriler',jqueryController.FilterPrice);
 router.get('/FilterBrandAtShop',jqueryController.FilterBrandAtShop)
 router.get('/mesajlarim',homeController.mesajlarim);
 router.get('/siralafiyatagore',jqueryController.fiyatagorelisteleSatici);
-router.get('/duzelt',homeController.UrunleriDuzelt);
 // POST
 router.post('/dukkanaekle',homeController.dukkanaekle)
 router.post('/dukkanaeklev2',homeController.DukkanaEkleV2forAtTheUrunPage)

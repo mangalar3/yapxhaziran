@@ -221,50 +221,50 @@ form .user-details .input-box{
       <div class="title">Yapx Kurumsal Kayıt</div>
 		
       <div class="content">
-        <form action="#">
+        <form action="/kurumsalpost" method="post" >
           <div class="user-details">
             <div class="input-box">
               <span class="details">Ad</span>
               
-              <input type="text" placeholder="Adınız" required>
+              <input name="isim" type="text" placeholder="Adınız" required>
             </div>
             <div class="input-box">
               <span class="details">Soyad</span>
-              <input type="text" placeholder="Soyadınız" required>
+              <input name="soyisim" type="text" placeholder="Soyadınız" required>
             </div>
             <div class="input-box">
               <span class="details">Email</span>
-              <input type="email" placeholder="ornek@hotmail.com" required>
+              <input name="email" type="email" placeholder="ornek@hotmail.com" required>
             </div>
             
             <div class="input-box">
               <span class="details">GSM Telefon</span>
-              <input type="text" placeholder="5385553856" required>
+              <input name="GSM_telefon" type="text" placeholder="5385553856" required>
             </div>
             <div class="input-box">
               <span class="details">Sabit Telefon</span>
-              <input type="text" placeholder="02164426598" required>
+              <input name="Sabit_telefon" type="text" placeholder="02164426598" required>
             </div>
             <div class="input-box">
               <span class="details">Dükkan Adı</span>
-              <input type="text" placeholder="Örnek Dükkanı" required>
+              <input name="dukkanadi" type="text" placeholder="Örnek Dükkanı" required>
             </div>
             
             <div class="input-box">
               <span class="details">Şifre</span>
-              <input type="password" placeholder="Sifreniz" required>
+              <input type="password" name="sifre" placeholder="Sifreniz" required>
             </div>
             <div class="input-box">
               <span class="details">Şifre Tekrarı</span>
-              <input type="password" placeholder="Sifre tekrarı" required>
+              <input type="password" name="sifretekrar" placeholder="Sifre tekrarı" required>
             </div>
             <div class="input-box">
               <span class="details">TC Kimlik No</span>
-              <input type="text" placeholder="5385553856" required>
+              <input type="text" name="Tc_kimlikno" placeholder="5385553856" required>
             </div>
             <div class="input-box">
               <span class="details">Vergi Kimlik No</span>
-              <input type="text" placeholder="5385553856" required>
+              <input type="text" name="Vergi_kimlikno" placeholder="5385553856" required>
             </div>
             <div class="input-box">
               <span class="details">Şehir</span>
@@ -280,7 +280,7 @@ form .user-details .input-box{
             </div>
             <div class="input-box">
               <span class="details">Adres</span>
-              <input id="adres" type="text" placeholder="Atatürk Cad. Yıldırım sok." required>
+              <input id="adres" name="sirket_adresi" type="text" placeholder="Atatürk Cad. Yıldırım sok." required>
             </div>
           </div>
           <div class="gender-details">
