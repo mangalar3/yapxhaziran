@@ -39319,18 +39319,25 @@ blockquote:not(.blockquote) p {
     height: 400px;
 
   }
+  .tooltip {
+    display: none;
+  }
 
   @media only screen and (max-width: 480px) {
     .resize-on-mobile {
-      height: 200px;
+      height: 600px;
     }
     .button-yeri{
-      float: right;
-      margin-right: 10%;
+      float: left;
+      margin-right: 5%;
+      margin-top: 80px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+
       
     }
     .foto-yeri{
-      float: left;
+      float: right;
     }
   }
 /*------------------------------------

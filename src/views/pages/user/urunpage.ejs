@@ -84,6 +84,76 @@
   .left-margin {
   margin-left: 10px; /* İstediğiniz boşluğu burada belirleyebilirsiniz */
 }
+    /* Masaüstü görünümü */
+    .filtre-button {
+        display: none;
+    }
+    
+
+    /* Mobil görünümü */
+    @media (max-width: 767px) {
+        .filtre-button {
+            display: block;
+            text-align: center;
+            justify-content: center;
+            border-radius: 2px;
+        }
+
+        .fixed-button {
+  position: fixed;
+  bottom: 20px; /* İstenilen alttan uzaklık */
+  left: 20px;
+  right: 20px;
+  text-align: center;
+  justify-content: center;
+  z-index: 9999;
+  
+  cursor: pointer; /* Diğer öğelerin üzerinde olmasını sağlar */
+
+  /* Opsiyonel stillendirmeler */
+  /* width: 150px; */
+  /* height: 50px; */
+  /* background-color: #fff; */
+  /* border: 1px solid #ccc; */
+  /* border-radius: 5px; */
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); */
+}
+
+/* Opsiyonel stillendirmeler */
+.fixed-button button {
+ width: 100%;
+ border-radius: 0%;
+  /* height: 100%; */
+  /* padding: 10px; */
+  /* font-size: 16px; */
+  /* color: #fff; */
+}
+
+    }
+
+    .filtre-menu {
+        display: none;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 9999;
+        background-color: #fff;
+        overflow-y: scroll;
+        padding: 20px;
+    }
+
+    .filtre-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 24px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+
 </style>
 <% Product.forEach(Product=> { %>
   <title>Yapx | <%-Product.product_name %> </title>
@@ -157,7 +227,8 @@
               aria-labelledby="Jpills-one-example1-tab">
               <div class="row no-gutters">
                 <% if (satansayisi> 0) { %>
-                  <div class="col mb-6 mb-md-0 col-md-2">
+                  
+                  <div class="col mb-6 mb-md-0 col-md-2 d-xl-block">
 
                     <ul class="list-unstyled ">
                       <div class="panel-body  " style="background-color: #f4f4f4;">
@@ -168,9 +239,10 @@
 
 
                                 <a class="u-header-collapse__submenu-nav-link u-header-collapse__nav-pointer card-header"
-                                  href="javascript:;" data-target="#headerSidebarPages-Filtre-Collapse" role="button"
-                                  data-toggle="collapse" aria-expanded="true" aria-controls="headerSidebarPagesCollapse"
-                                  style="padding: 10px; font-weight: bold;">Konum</a>
+                                href="javascript:;" data-target="#headerSidebarPages-Filtre-Collapse" role="button"
+                                data-toggle="collapse" aria-expanded="false" aria-controls="headerSidebarPagesCollapse"
+                                style="padding: 10px; font-weight: bold;">Konum</a>
+                             
 
 
                                 <div id="headerSidebarPages-Filtre-Collapse" style="background-color: #fdfdfd;">
@@ -219,20 +291,21 @@
 
                     </ul>
                   </div>
+                  <div id="filtreMenu" class="filtre-menu">
+                    <span id="filtreClose" class="filtre-close">&times;</span>
+                  </div>
+                
                   <% } %>
                     <div class="col mb-6 mb-md-0 col-md-10">
                       <% if (satansayisi> 0) { %>
                         <div style="margin-bottom: 16px;">
                           <div id="sira" class=" flex-center-between  py-1 "
                             style="height: 36px; background-color: #fdfdfd;">
-                            <div class="d-xl-none">
+                            <div class="d-xl-block">
                               <!-- Account Sidebar Toggle Button -->
-                              <a id="sidebarNavToggler1" class="btn btn-sm py-1 font-weight-normal" href="javascript:;"
-                                role="button" aria-controls="sidebarContent1" aria-haspopup="true" aria-expanded="false"
-                                data-unfold-event="click" data-unfold-hide-on-scroll="false"
-                                data-unfold-target="#sidebarContent1" data-unfold-type="css-animation"
-                                data-unfold-animation-in="fadeInLeft" data-unfold-animation-out="fadeOutLeft"
-                                data-unfold-duration="500">
+                              <a  class="u-header-collapse__submenu-nav-link   btn btn-sm py-1 font-weight-normal"
+                              href="javascript:;" data-target="#headerSidebarPages-Filtre-Collapse" role="button"
+                              data-toggle="collapse" aria-expanded="true" aria-controls="headerSidebarPagesCollapse">
                                 <i class="fas fa-sliders-h"></i> <span class="ml-1">Filtrele</span>
                               </a>
                               <!-- End Account Sidebar Toggle Button -->
@@ -244,7 +317,6 @@
                                     href="#pills-one-example1" role="tab" aria-controls="pills-one-example1"
                                     aria-selected="false">
                                     <div class="d-md-flex justify-content-md-center align-items-md-center">
-                                      <i class="fa fa-th"></i>
                                     </div>
                                   </a>
                                 </li>
@@ -419,6 +491,12 @@
     </body>
 
     </html>
+    <script>
+      $(document).ready(function() {
+  $("#headerSidebarPages-Filtre-Collapse").collapse("hide");
+});
+
+    </script>
     <script>
       $(document).ready(function () {
         $('#siralasehir').click(function () {
@@ -2487,6 +2565,15 @@
 
 
     </script>
-    <script>
-      
-    </script>
+
+<script>
+  function toggleFilterCollapse() {
+  var collapseElement = document.getElementById("headerSidebarPages-Filtre-Collapse");
+  if (collapseElement.classList.contains("show")) {
+    collapseElement.classList.remove("show");
+  } else {
+    collapseElement.classList.add("show");
+  }
+}
+
+</script>

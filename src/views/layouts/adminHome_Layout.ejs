@@ -43,29 +43,94 @@
                 <div class="container-fluid">
                     <div class="header-mobile-inner">
 
+                        <img class="mr-2" height="40" width="40" src="/general/img/yapxlogom-min.jpg" alt="" ></a>
+                        <h5 style="color: #666; font-weight: normal;">Yönetim Paneli</h5>
                         <button class="hamburger hamburger--slider" type="button">
                             <span class="hamburger-box">
                                 <span class="hamburger-inner"></span>
                             </span>
                         </button>
+                        
                     </div>
                 </div>
             </div>
             <nav class="navbar-mobile">
                 <div class="container-fluid">
                     <ul class="navbar-mobile__list list-unstyled">
+                        
+                        <li>
+                            <a href="/yapxadminlogin/urunekle">
+                                <i class="fas fa-plus"></i>Ürün Ekleme</a>
+                        </li>
+                        <li>
+                            <a href="/yapxadminlogin/adminEkle">
+                                <i class="fas fa-plus"></i>Admin Ekle</a>
+                        </li> 
+                        <li>
+                            <a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                <i class="fas fa-users"></i>Kullanıcı İşlemleri  <i class="fas fa-angle-down" style="margin-left: 5px;"> </i></a>
+                                <div class="collapse" id="collapseExample">
+                                    <div class="card card-body">
+                                      <a href="/yapxadminlogin/tables/1">Bireysel Kullanıcılar</a>
+                                      <a href="/yapxadminlogin/tables/4">Kurumsal Kullanıcılar</a>
+                                      <a href="/yapxadminlogin/tables/2">Bireysel Dükkanlar</a>
+                                      <a href="/yapxadminlogin/tables/3">Kurumsal Dükkanlar</a>
+                                      <a href="/yapxadminlogin/tables/">Adminler</a>
+                                      <a href="/yapxadminlogin/tables/5">Meslekler</a>
+                                    </div>
+                                  </div>
+                        </li>
+                        <li>
+                            <a href="/yapxadminlogin/tablesurun">
+                            <i class="fas fa-database"></i>Ürün İşlemleri</a>
+                        </li>
+                        <li>
+                            <a href="/yapxadminlogin/trafik">
+                                <i class="fas fa-area-chart"></i>Site Trafik Verileri</a>
+                        </li>
+
+                        <li>
+                            <a href="/yapxadminlogin/panelmesajlar">
+                                <i class="fas fa-comments"></i>Gelen Mesajlar</a>
+                        </li>
                         <li class="has-sub">
-                            <a class="js-arrow" href="#">
-                                <i class="fas fa-tachometer-alt"></i>Dashboard</a>
+                            <a data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample2">
+                                <i class="fas fa-users"></i>Profil Ayarları  <i class="fas fa-angle-down" style="margin-left: 5px;"> </i></a>
+                                <div class="collapse" id="collapseExample2">
+                                    <div class="card card-body">
+                                        <div class="info clearfix">
+                                            <div class="row">
+                                                <div class="col-auto">
+                                                    <div class="image">
+                                                        <!-- loggeduser.img tarzı yap linki ekle -->
+                                                        <img src="/uploads/images/adminPhotos/<%-LoggedUser[0].Admin_Photo %>" class="rounded-circle" style="width: 50px;" alt="Avatar" />
+                                                        <a href="#"></a>
+                                                    </div>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="content">
+                                                        <h5 class="name">
+                                                            <a href="#"><%-LoggedUser[0].isim %></a>
+                                                        </h5>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+
+                                        <a href="/yapxadminlogin/islemkullanici">
+                                            <i class="zmdi zmdi-settings"></i>Bilgiler ve Ayarlar</a>
+                                    </div>
+                                
+                                </div>
                         </li>
+                        
+
                         <li>
-                            <a href="/yapxadminlogin/charts">
-                                <i class="fas fa-chart-bar"></i>Yönetim</a>
-                        </li>
-                        <li>
-                            <a href="/yapxadminlogin/tables">
-                                <i class="fas fa-table"></i>Tablo</a>
-                        </li>                       
+                            <a href="#">
+                                <i class="zmdi zmdi-power" style="color: red;"></i>Çıkış Yap</a>
+                        </li>          
                     </ul>
                 </div>
             </nav>
@@ -129,7 +194,7 @@
         <!-- PAGE CONTAINER-->
         <div class="page-container">
             <!-- HEADER DESKTOP-->
-            <header class="header-desktop">
+            <header class="header-desktop d-none d-lg-block">
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
                         <div class="header-wrap">

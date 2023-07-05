@@ -97,8 +97,8 @@
 
             <div class="container">
                 <div class="row mb-8">
-                    <button id="filtreButton" class="btn btn-warning btn-lg filtre-button" style="width:100%;"><i class="fa fa-filter mr-2" aria-hidden="true"></i>Filtrele</button>
-
+                    <!--<button id="filtreButton" class="btn btn-warning btn-lg filtre-button" style="width:100%;"><i class="fa fa-filter mr-2" aria-hidden="true"></i>Filtrele</button>
+                    -->
                     <div id="filtreMenu" class="filtre-menu">
                         <span id="filtreClose" class="filtre-close">&times;</span>
                         <div class="d-xl-block col-xl-12 col-wd-2gdot5">
@@ -308,16 +308,11 @@
                     </div>
                     <div class="col-xl-9 col-wd-9gdot5">
                       <div id="sira" class="bg-gray-1 flex-center-between borders-radius-9 py-1 ">
-                        <div class="d-xl-none">
+                        <div class="">
                           <!-- Account Sidebar Toggle Button -->
-                          <a id="sidebarNavToggler1" class="btn btn-sm py-1 font-weight-normal" href="javascript:;"
-                            role="button" aria-controls="sidebarContent1" aria-haspopup="true" aria-expanded="false"
-                            data-unfold-event="click" data-unfold-hide-on-scroll="false"
-                            data-unfold-target="#sidebarContent1" data-unfold-type="css-animation"
-                            data-unfold-animation-in="fadeInLeft" data-unfold-animation-out="fadeOutLeft"
-                            data-unfold-duration="500">
+                          <button id="filtreButton" class="btn btn-sm py-1 font-weight-normal d-xl-none">
                             <i class="fas fa-sliders-h"></i> <span class="ml-1">Filtrele</span>
-                          </a>
+                          </button>
                           <!-- End Account Sidebar Toggle Button -->
                         </div>
                         <div class="px-3 d-none d-xl-block">
@@ -327,7 +322,6 @@
                                 href="#pills-one-example1" role="tab" aria-controls="pills-one-example1"
                                 aria-selected="false">
                                 <div class="d-md-flex justify-content-md-center align-items-md-center">
-                                  <i class="fa fa-th"></i>
                                 </div>
                               </a>
                             </li>
@@ -2021,4 +2015,15 @@ data.forEach(Product => {
           return parts[parts.length - 1];
         }
       });
+</script>
+<script>
+  document.getElementById('filtreButton').addEventListener('click', function() {
+      document.getElementById('filtreMenu').style.display = 'block';
+  });
+  document.getElementById('filtreClose').addEventListener('click', function() {
+      document.getElementById('filtreMenu').style.display = 'none';
+  });
+  document.getElementById('filtreClosez').addEventListener('click', function() {
+      document.getElementById('filtreMenu').style.display = 'none';
+  });
 </script>

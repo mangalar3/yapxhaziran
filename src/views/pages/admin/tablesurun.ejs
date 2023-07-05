@@ -126,6 +126,166 @@ outline: 0;
 
 
 </style>
+
+
+<style>
+
+  @media (max-width: 767px) {
+      .col-md-4 {
+        margin-bottom: 20px;
+      }
+      .kategoridivi{
+      color: #34bcec;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .isimdivi{
+      font-size: 13px;
+    }
+    .buttonfooter{
+      text-align: center; 
+      margin: 25px; 
+      display: flex;
+      padding-left: 1px;
+    }
+    .searchbox{
+      margin-top: 20px;
+    }
+    .banneralan{
+      margin-top: 20px;
+    }
+
+
+    }
+    
+    .icon-wrapper {
+      text-align: center;
+      margin-bottom: 10px;
+      background-color: #fed8002c;
+    }
+    
+    #iconArama {
+      width: 100px;
+      height: 100px;
+      background-color: #b91802;
+      color: white;
+      border-radius: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    
+    #iconArama .iconaramaici {
+      font-size: 30px;
+    }
+    #iconArama2 {
+      width: 100px;
+      height: 100px;
+      background-color: #95BA47;
+      color: white;
+      border-radius: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    
+    #iconArama2 .iconaramaici {
+      font-size: 30px;
+    }
+    #iconArama3 {
+      width: 100px;
+      height: 100px;
+      color: white;
+      border-radius: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    
+    #iconArama3 .iconaramaici {
+      font-size: 30px;
+    }
+    
+    .category-info {
+      margin-top: 30px;
+      text-align: center;
+      color: #34bcec;
+    }
+    .category-info:hover{
+    }
+    
+    .category-name {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    
+    .category-altname {
+      color: gray;
+      margin-bottom: 5px;
+      padding-top: 20px;
+    }
+    .kategoridivi{
+      color: gray;
+      font-weight: bold;
+    }
+    .buttonfooter{
+      text-align: center; 
+      margin: 25px; 
+      display: flex;
+    }
+    .buttonfooterbutton{
+      width: 200px; 
+      height: 50px;
+    }
+    .containerz {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.form-group {
+    flex-basis: calc(25% - 10px);
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#filterdiv {
+            display: none; /* İlk başta div gizli olacak */
+        }
+    
+.searchbox{
+  display: flex;
+}
+  </style>
             <!-- MAIN CONTENT-->
             <div class="main-content">
                 
@@ -237,249 +397,134 @@ outline: 0;
 
 
                   
-                  <% }) %>    
-                  
-                <div class="section__content section__content--p30">
-                    <div class="container-fluid">
+                  <% }) %>   
+                <div class="containerz">
+                    
+                      
                         <div class="row">
-                          
-                          
-                                            <div class="col-md-6 pb-3">
-                                              
-                                                <div class="overview-wrap" style="">
-                                                  
-                                                  
-                                                  
-                                                  <div class="form-group" style="margin-left: 240px;  padding: 2%; background: linear-gradient(90deg, #fed700, #ffffff); border-radius: 5%;" id="aramacılır">
-                                                    <h4 style="padding: 5%;">Kategori Arama</h4>
-                                                      <div class="col-md-4">
-                                                        <form action="/yapxadminlogin/filtreKategori" method="post" enctype="application/x-www-form-urlencoded">
-                                                          <select name="subject" id="subject">
-                                                              <option  value="" selected="selected">Ana Kategori</option>
-                                                            </select>
-                                                            <br><br>
-                                                          <select name="topic" id="topic">
-                                                              <option value="" selected="selected">Alt Kategori</option>
-                                                            </select>
-                                                            <br><br>
-                                                          <select name="chapter" id="chapter">
-                                                              <option value="" selected="selected">Cins</option>
-                                                            </select>
-                                                            <br><br>
-                                                            <button   class="au-btn--submit" id="search-button" style="color: white; ">Ara</button>  
-                                                          </form>
-                                                        </div>
-                                                      </div>
-
-
-                                                  <div style="margin-bottom: 20px; margin-left: 50px; margin-right: 50px;  padding: 2%; background: linear-gradient(-90deg, #fed700, #ffffff); border-radius: 5%;" id="aramacılır2">
-                                                    <form action="/yapxadminlogin/urunara" method="post"  enctype="application/x-www-form-urlencoded">
-                                                      <h4 style="padding: 2%; padding-left: 2px;">Ürün Arama</h4>
-                                                      <div style=" width: 500px;">
-
-                                                      
-                                                        <input class="au-input "
-                                                        type="text"
-                                                        id="search-input"
-                                                        name="aranan"
-                                                        placeholder="Ürünlerin adına göre arama yapın..."
-                                                        style="width: 435px;"
-                                                        
-                                                      />
-                                                      <button type="submit" class="au-btn--submit" id="search-button" style="color: white; float: right; ">Ara </button>
-                                                    </form>
-                                                    
-                  
-                                                    
-                                                      
-                                                  </div>
-                                                  <div style=" margin-top: 50px; margin-left: 80px; width: 300px; height: 100px;">
-                            
-                                                    <button class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal3" style="width: 300px; height: 50px;">
-                                                      <i class="fas fa-info"></i>
-                                                      Banner Bilgileri
+                          <!-- Account Sidebar Toggle Button -->
+                          <div class="col-md-1"></div>
+                          <button id="filtreButton" class="btn btn-sm py-1 font-weight-normal col-md-2" onclick="toggleDiv()">
+                            <i class="fas fa-sliders-h"></i> <span class="ml-1">Filtrele ve Banner</span>
+                          </button>
+                          <div class="col-md-8">
+                            <form action="/yapxadminlogin/urunara" method="post" enctype="application/x-www-form-urlencoded">
+                              
+                              <div class="searchbox">
+                                  <input class="au-input" type="text" id="search-input" name="aranan" placeholder="Ürünlerin adına göre arama yapın..." style="width: 85%; height: 60px;">
+                                  <button type="submit" class="au-btn--submit" id="search-button" style="color: white; width: 10%; height: 60px; padding: 2px;">Ara</button>
+                              </div>
+                          </form>
+                          </div>
+                          <!-- End Account Sidebar Toggle Button -->
+                        </div>
                         
-                                                    </button>
-                                                  </div>
-                                                  
-                                              </div>
-                                           
-                                                    
-                                                    
-                                                    
+                    
+                    
+                  
+                </div>
+                  <div class="containerz" id="filterdiv">
 
-                                            </div>
-                                        </div>
-                                        <div class="row m-t-25">
-                                            
-                                          <div id="myBackDiv" style="margin-left: 700px; display: none;">
-                                            <button ><a href="/yapxadminlogin/tablesurun" style="font-size: 20px;"><i class="fa fa-angle-left" style="font-size: 30px; padding-right: 10px;"></i>Ürünlere Geri Dön </a></button>
-                                          </div>
-                                            
-                                        </div>
-                                         <hr>                     
-                                        <div class="row">
-                                          <!--<h2 style="margin-left: 15px;">Ürünler</h2>  -->
-                                          
-                                            <div class="col-lg-12 m-t-25" >
-                                                
-                                                
-                                                
-                                                    <table id="product-table">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>Ürün Adı</th>
-                                                                <th>Ana Kategori</th>
-                                                                <th>Alt Kategori</th>
-                                                                <th >Cins</th>
-                                                                <th>Marka</th>
-                                                                <th>Dükkan Sayısı (Ait)</th>
-                                                                <th>Toplam Stok</th>
-                                                                <th>Ortalama Fiyat</th>
-                                                                <th>Fotoğrafları</th>
-                                                                <th >Detaylar ve Banner Ekleme</th>
-                                                            </tr>
-                                                        </thead>                                      
-                                                            <tbody id="">
-                                                                <% Urunler.forEach(Product => { %>
-                                                                <tr>
-                                                                    <td><%-Product.product_name %></td>
-                                                                    <td><%-Product.product_category %></td>
-                                                                    <td><%-Product.product_category2 %></td>
-                                                                    <td><%-Product.product_category3 %></td>
-                                                                    <td><%-Product.product_marka %></td>
-                                                                    <td><%-Product.product_seller.length %></td>
-                                                                    <td><%-Product.totalstock  %></td>
-                                                                    <td><%-Product.avg %> ₺</td>
-                                                                    
-                                                                    <td>
-                                                                        <% let i = 0 %>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <form action="/yapxadminlogin/filtreKategori" method="post" enctype="application/x-www-form-urlencoded">
+                              <h4 class="mb-4">Kategori Arama</h4>
+                                <select name="subject" id="subject">
+                                    <option value="" selected="selected">Ana Kategori</option>
+                                </select>
+                                <br><br>
+                                <select name="topic" id="topic">
+                                    <option value="" selected="selected">Alt Kategori</option>
+                                </select>
+                                <br><br>
+                                <select name="chapter" id="chapter">
+                                    <option value="" selected="selected">Cins</option>
+                                </select>
+                                <br><br>
+                                <button class="au-btn--submit" id="search-button" style="color: white; float: right; width: 100%;">Kategori Ara</button>
+                            </form>
+                        </div>
+                        <div class="col-md-6">
+                            
+                                
+                                <div class="banneralan">
+                                  <h4 class="mb-4">Banner İşlemler</h4>
+                                    <button class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal3" style="width: 100%; height: 50px;">
+                                        <i class="fas fa-info"></i>
+                                        Banner Bilgileri
+                                    </button>
+                                </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                
+
+                  <div class="m-t-25">
+                    <div class="row ml-2 mr-2">
+                      <% Urunler.forEach(Product => { %>
+                      <div class="col-md-4">
+                        <div class="card" style="border-radius: 10px;">
+                          <div class="card-body">
+                            
+                              <div class="icon-wrapper">
+                                <div id="iconArama3">
+                                  <% let i = 0 %>
                                                                         <% Product.product_photo.forEach((item) => { %>
                                                                         <form action="/yapxadminlogin/PhoteDelete?id=<%-Product.product_url %>&index=<%= i %>" method="post" enctype="application/x-www-form-urlencoded">
                                                                           <% if (Product.product_photo.length>1) { %>
                                                                             <button type="submit" class="ml-3" style="color: red; font-weight: bold;"> <img  src="/uploads/images/<%-Product.product_category3 %>/<%- item%>" width="20" height="20"><div>X</button> 
                                                                           <% } else { %>
-                                                                            <img  src="/uploads/images/<%-Product.product_category3 %>/<%- item%>" width="20" height="20">
+                                                                            <img style="border-radius: 10%; padding: 5px; box-shadow: 0 0 10px rgb(0, 0, 0);"  src="/uploads/images/<%-Product.product_category3 %>/<%- item%>">
                                                                             <% } %>
                                                                               
                                                                         </form>
                                                                         <% i++ %>
                                                                             <% }) %>
-                                                                    </td>
-                                                                    
-                                                                    <td>
-                                                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#<%-Product.product_url %>" style="width: 50px; height: 50px;"><i class="fa fa-search"> </i></button>
-                                                                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#<%-Product.product_photo[0].split('.')[0] %>" style="width: 50px; height: 50px;"><i class="fa fa-plus"> </i></button>
-                                                                    </td>
-                                                                    
-                                                                      
-                                                                    
-                                                                </tr>
-                                                                
-                                                                  <div class="modal fade" id="<%-Product.product_photo[0].split('.')[0] %>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                                    <div class="modal-dialog" role="document">
-                                                                      <div class="modal-content">
-                                                                        <div class="modal-header">
-                                                                          <h4 class="modal-title" id="exampleModalLabel" >Banner Ekleme</h4>
-                                                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                          </button>
-                                                                        </div>
-                                                                        
-                                                                        
-                                                                       
-                                                                        
-                                                                          
-                                                                            <% if (Product.banner == 1) { %>
-                                                                              <form action="/yapxadminlogin/banner2/<%-Product.product_url %>" method="post"  enctype="application/x-www-form-urlencoded">
-                                                                                <button type="submit" class="btn btn-danger">Bannerdan Kaldır</button>
-                                                                              </form>
-                                                                            <% } else { %>
-                                                                              <form action="/yapxadminlogin/banner/<%-Product.product_url %>" method="post"  enctype="application/x-www-form-urlencoded">
-                                                                                <div class="modal-body">
-                                                                            
-                                                                                  <hr>
-                                                                                  <div style="width: 450px; height: 200px; background-color: gray;">
-                                                                                    <div style="float: right; margin: 20px; width: 150px; height: 100px; background-color: white;">
-                                                                                      <img src="/uploads/images/<%-Product.product_category3 %>/<%-Product.product_photo[0] %>" alt="">
-                                                                                    </div>
-                                                                                    <div style="float: left; margin-top: 30px; margin-left: 10px; ">
-                                                                                      <h6 style="color: #34bcec;" id="myHeading">Banner Üst Yazı</h6>
-                                                                                      <h6 style="margin-top: 10px;" id="myHeading2">Banner Açıklama</h6>
-                                                                                    </div>
-                                                                                    <div style="float:left; color:black; background-color: #fed500; margin-left: 20px; margin-top: 80px; padding: 1%; border-radius: 5%;">Ürüne Git</div>
-                                                      
-                                                                                  </div>
-                                                                                  <hr>
-                                                                                  
-                                                                                   <span class="ml-3" style="font-weight: normal;"> <div class="input-group">
-                                                                                    <div class="input-group-prepend">
-                                                                                      <span class="input-group-text">Banner Üst Başlık</span>
-                                                                                      
-                                                                                    </div>
-                                                                                    <textarea name="bannerustyazi" class="form-control" aria-label="With textarea" id="myTextarea" required></textarea>
-                                                                                  </div> </span> 
-                                                                                  <hr>
-                                                                                   <span class="ml-3" style="font-weight: normal;"> <div class="input-group">
-                                                                                    <div class="input-group-prepend">
-                                                                                      <span class="input-group-text">Banner Açıklama</span>
-                                                                                    </div>
-                                                                                    <textarea name="banneryazi" class="form-control" aria-label="With textarea" id="myTextarea2" required></textarea>
-                                                                                  </div> </span>
-                                                                                  <hr>
-                                                                                  <h5>Fotoğraf Ekle:<span class="ml-3" style="font-weight: normal; float: right;">
-                                                                                    <div class="custom-file">
-                                                                                      <input accept="image/*" type='file' id="images" name="images">
-                                                                                    </div>
-                                                                                    <div class="pb-3"></div>
-                                                                                    </span> </h5>
-                                                                                  <hr>
-                                                                                  <div class="modal-footer">
-                                                                                </div>
-                                                                                <button type="submit" class="btn btn-primary">Değişiklikleri Kaydet</button>
-                                                                              </form>
-                                                                            <% } %>
-                                                                          
-                                                                        </div>
-                                                                      </div>
-                                                                    </div>
-                                                                  </div>
-                                                                
-                                                                <% }) %>                  
-                                                            </tbody>  
-                                                    </table>
-                                                    <div style="text-align: center; padding: 2%;">
-                                                      <a href="/yapxadminlogin/tablesurun?pg=<%-  %>"><i class="fas fa-angle-left"></i></a>
-                                                      <label for="" style="padding: 2%;"> <%- 1 %></label>
-                                                      <a href="/yapxadminlogin/tablesurun?pg=<%- 2 %>"><i class="fas fa-angle-right"></i></a>
-                                                  </div>
-                                                   
-                                                  
-                                                   
-                                                   
-                                                
-                            </div>
-                            <!-- END MAIN CONTENT-->
-                            <!-- END PAGE CONTAINER-->
+                                </div>
+                              </div>
+                              <div class="category-info">
+                                <p class="category-name"><%- Product.product_name %></p>
+                                <p class="category-altname"><span class="mr-2 kategoridivi ">Ana Kategori:</span> <span class="isimdivi"><%-Product.product_category %></span> </p>
+                                <p class="category-altname"><span class="mr-2 kategoridivi ">Alt Kategori:</span><span class="isimdivi"><%-Product.product_category2 %> </span></p>
+                                <p class="category-altname"><span class="mr-2 kategoridivi ">Cins:</span><span class="isimdivi"><%-Product.product_category3 %> </span></p>
+                                <p class="category-altname"><span class="mr-2 kategoridivi ">Marka:</span><span class="isimdivi"><%-Product.product_marka %> </span></p>
+                                <p class="category-altname"><span class="mr-2 kategoridivi ">Dükkan Sayısı (Ait):</span><span class="isimdivi"><%-Product.product_seller.length %> </span></p>
+                                <p class="category-altname"><span class="mr-2 kategoridivi ">Toplam Stok:</span><span class="isimdivi"><%-Product.totalstock  %> </span></p>
+                                <p class="category-altname"><span class="mr-2 kategoridivi ">Ortalama Fiyat:</span><span class="isimdivi"><%-Product.avg %> ₺ </span></p>
+                              </div>
+                              <div class="buttonfooter">
+                                <button type="button" class="btn btn-primary mb-2 mr-2 ml-2 buttonfooterbutton" data-toggle="modal" data-target="#<%-Product.product_url %>" ><i class="fa fa-search mr-2"> </i>Düzenle</button>
+                                <button type="button" class="btn btn-secondary mb-2 ml-2 buttonfooterbutton" data-toggle="modal" data-target="#<%-Product.product_photo[0].split('.')[0] %>"><i class="fa fa-plus mr-2"> </i>Banner</button>
+
+                              </div>
+                            
+                          </div>
                         </div>
-                
+                      </div>
+                      <% }) %>
                     </div>
-                        </div>
+                  </div>
+
+                  <div class="row" id="paginationContainer" style="background: #384359;  text-align: center; justify-content: center; padding-top: 10px; padding-bottom: 10px; margin: 10px;">
+                    <button class="btn btn-secondary mr-2" id="geriDugmesi">Geri</button>
+                    <span class="btn btn-secondary mr-2" id="sayfaNumarasi" style="color: white; font-weight: bold; background-color: #395FA9;"></span>
+                    <button class="btn btn-secondary mr-2" id="ileriDugmesi">İleri</button>
+            
+                </div>
+                
                         
-                                <!-- END DATA TABLE -->
-                            </div>
-                        </div>
-                        
-                        
+                        <!--
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="copyright">
-                                    <p>Copyright © 2023 Yapx. All rights reserved. Template by <a href="localhost:8080">Yapaax</a>.</p>
+                                    <p>Copyright © 2023 Yapx. All rights reserved. Template by <a href="/anasayfa">Yapx</a>.</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                        -->
             </div>
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
             <script>
@@ -658,3 +703,65 @@ $(document).ready(function(){
 
 
             </script>
+            <script>
+                    function toggleDiv() {
+                      var div = document.getElementById("filterdiv");
+                      if (div.style.display === "" || div.style.display === "none") {
+                div.style.display = "block";
+            } else {
+                div.style.display = "none";
+            }
+                  }
+              </script>
+
+<script>
+  $(document).ready(function() {
+    // Sayfa numarasını al
+    var sayfaNumarasi = getUrlParameter('pg') || 1;
+  
+    // Sayfa numarasını güncelleyen bir fonksiyon
+    function sayfaDegistir(yeniSayfaNumarasi) {
+      // Geçerli URL'yi al
+      var url = window.location.href;
+  
+      // URL'deki mevcut parametreleri ayrıştır
+      var urlParams = new URLSearchParams(window.location.search);
+  
+      // pg parametresini güncelle veya ekle
+      urlParams.set('pg', yeniSayfaNumarasi);
+  
+      // Yeni parametreleri URL'ye ekle
+      var yeniURL = window.location.origin + window.location.pathname + '?' + urlParams.toString();
+  
+      // Sayfayı yeniden yönlendir
+      window.location.href = yeniURL;
+    }
+  
+    // İleri düğmesine tıklama olayı
+    $('#ileriDugmesi').on('click', function() {
+      sayfaNumarasi++;
+      sayfaDegistir(sayfaNumarasi);
+    });
+  
+    // Geri düğmesine tıklama olayı
+    $('#geriDugmesi').on('click', function() {
+      if (sayfaNumarasi > 1) {
+        sayfaNumarasi--;
+        sayfaDegistir(sayfaNumarasi);
+      }
+    });
+    
+    // Sayfa numarasını göster
+    $('#sayfaNumarasi').text('Sayfa ' + sayfaNumarasi);
+    
+    // URL'den parametre değerini almak için yardımcı bir fonksiyon
+    function getUrlParameter(name) {
+      name = name.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
+      var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+      var results = regex.exec(window.location.search);
+      return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    }
+  });
+  
+  
+  </script>

@@ -3,6 +3,7 @@
                 <!-- End Topbar -->
 <style>
     
+    
     @media (max-width:578px) {
         .fotodenemek{
         z-index: 1;
@@ -10,23 +11,48 @@
         
         position: relative;
         width: 40%;
-        top: -80px;
+        top: 0px;
         left: -130px
         
       }
-      .marginbanner{
-        margin-top: 0px; 
-        margin-bottom: 0px;
-    }
-       .marginphoto{
-        margin-top: 0px; 
-        margin-bottom: 0px;
-    }
       
        
       
     }
-    
+    @media only screen and (max-width: 767px) {
+  .font-size-46 {
+    font-size: 20px;
+  }
+  .col-xl-7.d-none {
+    display: none;
+  }
+  .mobilcarousel{
+    width: 180px;
+    height: 150px;
+    padding-bottom: 20px;
+    padding-left: 40px;
+  }
+  .mobilcarousel.d-none {
+    display: inline-block;
+  }
+  .mobilyazi{
+    font-size: 14px;
+  }
+  .mobillogom{
+    text-align: center;
+    justify-content: center;
+  }
+  
+}
+@media only screen and (max-width: 1199px) {
+  .d-none.d-xl-flex {
+    display: none;
+  }
+}
+
+    .mobilcarousel{
+    display: none;
+    }
     .marginbanner{
         margin-top: 20px; 
         margin-bottom: 50px;
@@ -74,29 +100,30 @@ function changeSectionTitle(newTitle) {
                     <!-- Nav Classic -->
                     <div class="position-relative bg-white text-center z-index-2">
                         <ul class="nav nav-classic nav-tab justify-content-center" id="pills-tab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active js-animation-link" id="pills-one-example1-tab" data-toggle="pill" href="#pills-one-example1" role="tab" aria-controls="pills-one-example1" aria-selected="true"
-                                    data-target="#pills-one-example1"
-                                    data-link-group="groups"
-                                    data-animation-in="slideInUp">
-                                    <div class="d-md-flex justify-content-md-center align-items-md-center">
-                                        Kampanyalı Ürünler
-                                    </div>
-                                </a>
-                            </li>
-                            
-                            <li class="nav-item">
-                                <a class="nav-link js-animation-link" id="pills-three-example1-tab" data-toggle="pill" href="#pills-three-example1" role="tab" aria-controls="pills-three-example1" aria-selected="false"
-                                    data-target="#pills-three-example1"
-                                    data-link-group="groups"
-                                    data-animation-in="slideInUp">
-                                    <div class="d-md-flex justify-content-md-center align-items-md-center">
-                                        En Çok Oy Alan Ürünler
-                                    </div>
-                                </a>
-                            </li>
+                          <li class="nav-item">
+                            <a class="nav-link active js-animation-link" id="pills-one-example1-tab" data-toggle="pill" href="#pills-one-example1" role="tab" aria-controls="pills-one-example1" aria-selected="true"
+                               data-target="#pills-one-example1"
+                               data-link-group="groups"
+                               data-animation-in="slideInUp">
+                              <div class="d-flex justify-content-center align-items-center flex-wrap mobilyazi">
+                                Kampanyalı Ürünler
+                              </div>
+                            </a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link js-animation-link" id="pills-three-example1-tab" data-toggle="pill" href="#pills-three-example1" role="tab" aria-controls="pills-three-example1" aria-selected="false"
+                               data-target="#pills-three-example1"
+                               data-link-group="groups"
+                               data-animation-in="slideInUp">
+                              <div class="d-flex justify-content-center align-items-center flex-wrap mobilyazi">
+                                En Çok Oy Alan Ürünler
+                              </div>
+                            </a>
+                          </li>
                         </ul>
-                    </div>
+                      </div>
+                      
+                      
                     <!-- End Nav Classic -->
                     <!-- Tab Content -->
                     <div class="tab-content" id="pills-tabContent">
@@ -162,7 +189,7 @@ function changeSectionTitle(newTitle) {
                 <!-- End Trending Products -->
             </div>
             <!-- Products-8-1 -->
-            <div class="products-group-8-1 space-1 bg-gray-7 mb-6" style="border: 2px solid #fed500; border-radius: 8%;">
+            <div class="products-group-8-1 space-1 bg-gray-7 mb-6" style="">
                 <h2 class="sr-only">Products Grid</h2>
                 <div class="container">
                     <!-- Nav nav-pills -->

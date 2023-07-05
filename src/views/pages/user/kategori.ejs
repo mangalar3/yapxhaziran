@@ -1,3 +1,76 @@
+<style>
+  /* Masaüstü görünümü */
+  .filtre-button {
+      display: none;
+  }
+
+  /* Mobil görünümü */
+  @media (max-width: 767px) {
+      .filtre-button {
+          display: block;
+          text-align: center;
+          justify-content: center;
+          border-radius: 2px;
+      }
+
+      .fixed-button {
+position: fixed;
+bottom: 20px; /* İstenilen alttan uzaklık */
+left: 20px;
+right: 20px;
+text-align: center;
+justify-content: center;
+z-index: 9999;
+
+cursor: pointer; /* Diğer öğelerin üzerinde olmasını sağlar */
+
+/* Opsiyonel stillendirmeler */
+/* width: 150px; */
+/* height: 50px; */
+/* background-color: #fff; */
+/* border: 1px solid #ccc; */
+/* border-radius: 5px; */
+/* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); */
+}
+
+/* Opsiyonel stillendirmeler */
+.fixed-button button {
+width: 100%;
+border-radius: 0%;
+/* height: 100%; */
+/* padding: 10px; */
+/* font-size: 16px; */
+/* color: #fff; */
+}
+
+  }
+
+  .filtre-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 9999;
+      background-color: #fff;
+      overflow-y: scroll;
+      padding: 20px;
+  }
+
+  .filtre-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+  }
+
+
+</style>
+
+
 <% test1.forEach(Product=> { %>
   <title>Yapx | <%-Product.split(':')[1] %> </title>
   <% }) %>
@@ -28,7 +101,118 @@
 
         <div class="container">
           <div class="row">
-            <div class="d-xl-block col-xl-3 col-wd-2gdot5">
+
+            <div id="filtreMenu" class="filtre-menu">
+              <span id="filtreClose" class="filtre-close">&times;</span>
+              <div class="d-xl-block col-xl-12 col-wd-2gdot5">
+                  <div class="mb-8">
+                      <div class="border-bottom border-color-1 mb-5">
+                          <h3 class="section-title section-title__sm mb-0 pb-2 font-size-18">Filtrele</h3>
+                      </div>
+                      
+                      <!--Mobil Filtre Var Burda -->
+                      <ul class="list-unstyled">
+                          <div class="panel-body" style="background-color: #ffffff;">
+                              <form action="/filtre" method="post" role="form product-form">
+                                  <div class="form-group">
+                                      <form role="form product-form">
+                                          
+                                              <a class="u-header-collapse__submenu-nav-link u-header-collapse__nav-pointer card-header" href="javascript:;" data-target="#headerSidebarPages-Filtre-Collapse" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="headerSidebarPagesCollapse" style="padding: 10px; font-weight: bold;">Marka</a>
+                                              
+                                              <div id="headerSidebarPages-Filtre-Collapse" style="background-color: #f4f4f4;">
+                                                  <div class="filtreicin resize-on-mobile mb-3" style="overflow-y: scroll; height: 500px;">
+                                                      <form id="Brands" class="form-deneme" action="/filtre" method="post" role="form product-form">
+                                                          <div class="card bg-light mb-3" style="max-width: 20rem;">
+                                                              <div class="card-body">
+                                                                  <form action="/filtre" method="post" role="form product-form">
+                                                                      <% BrandList.forEach(Product => { %>
+                                                                          <div class="input-group mb-3">
+                                                                              <div class="input-group-prepend">
+                                                                                  <div class="input-group-text">
+                                                                                      <input type="checkbox" id="brand-filter" value="<%-Product %>" aria-label="Checkbox for following text input">
+                                                                                  </div>
+                                                                              </div>
+                                                                              <p type="text" class="form-control card-text" aria-label="Text input with checkbox">
+                                                                                  <%-Product.split(':')[0] %>
+                                                                                  <span class="badge badge-primary badge-pill" style="float: right; justify-content: center;">
+                                                                                      <%-(Product.split(':')[1]) %>
+                                                                                  </span>
+                                                                              </p>
+                                                                          </div>
+                                                                      <% }) %>
+                                                                  </form>
+                                                              </div>
+                                                          </div>
+                                                          
+                                                      </form>
+                                                  </div>
+                                              </div>
+                                              <!--
+                                              <div class="card bg-light mb-3" style="max-width: 22rem;">
+                                                  <a class="u-header-collapse__submenu-nav-link u-header-collapse__nav-pointer card-header" href="javascript:;" data-target="#headerSidebarPages-Filtre-Collapse2" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="headerSidebarPagesCollapse" style="padding: 10px; font-weight: bold;">Arama</a>
+                                              
+                                              <div id="headerSidebarPages-Filtre-Collapse2" style="background-color: #f8f9fa;">
+                                                  <div class="card-body">
+                                                   
+                                                    <p class="card-text">
+                                                      <form id="Brands" class="form-deneme" action="/filtre" method="post" role="form product-form">
+                                                          <div class="input-group mb-3">
+                                                              <input type="text" class="form-control" placeholder="Ürün adına göre arama yapın" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                                                              <div class="input-group-append">
+                                                                <button class="btn btn-outline-secondary" type="button">Ara</button>
+                                                              </div>
+                                                            </div>
+                                                          
+                                                      </form>
+                                                      
+                                                    </p>
+                                                  </div>
+                                                  
+                                                </div>
+                                          </div>
+                                          <div class="card bg-light mb-3" style="max-width: 22rem;">
+                                              <a class="u-header-collapse__submenu-nav-link u-header-collapse__nav-pointer card-header" href="javascript:;" data-target="#headerSidebarPages-Filtre-Collapse3" role="button" data-toggle="collapse" aria-expanded="true" aria-controls="headerSidebarPagesCollapse" style="padding: 10px; font-weight: bold;">Fiyat</a>
+                                              <div id="headerSidebarPages-Filtre-Collapse3" style="background-color: #f8f9fa;">
+                                                <div class="card-body">
+                                                  <div id="slider" style="margin-top: 30px; position: relative; height: 5px; background-color: rgb(232, 229, 229); user-select: none;">
+                                                      <div id="min-handle" style="position: absolute; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 15px solid #fed500; cursor: pointer;"></div>
+                                                      <div id="max-handle" style="position: absolute; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 15px solid #fed500; cursor: pointer;"></div>
+                                                  </div>
+                                                  
+                                                  <p style="margin-top: 30px; text-align: center; justify-content: center; font-weight: bold;">
+                                                      <span class="mr-2">Fiyat Aralığı: </span>  
+                                                      <span id="min-price" style=" font-size: 16px ;"></span>₺ -
+                                                      <span id="max-price" style=" font-size: 16px ;"></span>₺
+                                                  </p>
+                                                  <div style="text-align: center; justify-content: center;">
+                                                      <button class="btn btn-outline-secondary" type="button">Ara</button>
+                                                  </div>
+                                                    
+                                                </div>
+                                              </div>
+                                            </div>
+                                            
+                                          -->
+                                      </form>
+                                  </div>
+                              </form>
+                              
+                                
+                                </div>
+                      </ul>
+                  </div>
+                  <div class="fixed-button" id="filtreClosez">
+                      <button class="btn btn-success btn-lg">
+                        <i class="fa fa-arrow-left mr-2" aria-hidden="true"></i>Geri Dön
+                      </button>
+                    </div>
+                    
+              </div>
+          </div>
+
+
+
+            <div class="d-xl-block col-xl-3 col-wd-2gdot5 d-none">
               <div class="mb-8 border border-width-2 border-color-3 borders-radius-6">
                 <!-- List -->
                 <a class="u-header-collapse__submenu-nav-link u-header-collapse__nav-pointer" href="javascript:;"
@@ -143,16 +327,11 @@
                 </div>
                 <% }) %>
                   <div id="sira" class="bg-gray-1 flex-center-between borders-radius-9 py-1 ">
-                    <div class="d-xl-none">
+                    <div class="">
                       <!-- Account Sidebar Toggle Button -->
-                      <a id="sidebarNavToggler1" class="btn btn-sm py-1 font-weight-normal" href="javascript:;"
-                        role="button" aria-controls="sidebarContent1" aria-haspopup="true" aria-expanded="false"
-                        data-unfold-event="click" data-unfold-hide-on-scroll="false"
-                        data-unfold-target="#sidebarContent1" data-unfold-type="css-animation"
-                        data-unfold-animation-in="fadeInLeft" data-unfold-animation-out="fadeOutLeft"
-                        data-unfold-duration="500">
+                      <button id="filtreButton" class="btn btn-sm py-1 font-weight-normal d-xl-none" >
                         <i class="fas fa-sliders-h"></i> <span class="ml-1">Filtrele</span>
-                      </a>
+                      </button>
                       <!-- End Account Sidebar Toggle Button -->
                     </div>
                     <div class="px-3 d-none d-xl-block">
@@ -162,7 +341,6 @@
                             href="#pills-one-example1" role="tab" aria-controls="pills-one-example1"
                             aria-selected="false">
                             <div class="d-md-flex justify-content-md-center align-items-md-center">
-                              <i class="fa fa-th"></i>
                             </div>
                           </a>
                         </li>
@@ -2011,6 +2189,8 @@ $.ajax({
         })
       })
     </script>
+    
+    <!--
     <script name="caktirma">
       $("input[type=checkbox]").change(function () {
         var checkedValues = $('input:checkbox:checked').map(function () {
@@ -2024,6 +2204,7 @@ $.ajax({
         }
       })
     </script>
+    -->
     <script name="BrandFilter">
       $("input[type=checkbox]").change(function () {
         var checkedValues = $('input:checkbox:checked').map(function () {
@@ -2561,5 +2742,16 @@ $.ajax({
           var parts = url.split('/');
           return parts[parts.length - 1];
         }
+      });
+    </script>
+    <script>
+      document.getElementById('filtreButton').addEventListener('click', function() {
+          document.getElementById('filtreMenu').style.display = 'block';
+      });
+      document.getElementById('filtreClose').addEventListener('click', function() {
+          document.getElementById('filtreMenu').style.display = 'none';
+      });
+      document.getElementById('filtreClosez').addEventListener('click', function() {
+          document.getElementById('filtreMenu').style.display = 'none';
       });
     </script>
