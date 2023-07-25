@@ -14,6 +14,8 @@ router.get('/sifremiunuttumcode', homeController.sifremiunuttumcode);
 router.get('/urunler/:urunno', homeController.urundetaylari,homeController.yorumekle);
 router.get('/kayitol', homeController.kayitol);
 router.get('/giris', homeController.giris);
+router.get('/kayitbasarili',homeController.kayitbasarili);
+router.get('/meslekkayitbasarili',homeController.meslekkayitbasarili);
 router.get('/girisSecim', homeController.girisSecim);
 router.get('/kayitolSecim', homeController.kayitolSecim);
 router.get('/kurumsalhesap', homeController.kurumsalregister);
